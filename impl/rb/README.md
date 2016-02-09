@@ -1,3 +1,6 @@
+[![Gem Version](https://badge.fury.io/rb/predicator.svg)](http://badge.fury.io/rb/predicator)
+[![Build Status](https://travis-ci.org/johnnyt/predicator.svg?branch=master)](https://travis-ci.org/johnnyt/predicator)
+
 # Predicator
 
 Predicator is a predicate engine
