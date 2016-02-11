@@ -5,6 +5,17 @@
 
 Predicator is a predicate engine
 
+## Usage
+
+Example usage:
+
+```ruby
+require "predicator"
+
+pred = Predicator.parse "and(true, 3 = 4)"
+pred.satisfied?
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
