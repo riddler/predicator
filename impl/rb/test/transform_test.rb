@@ -8,6 +8,10 @@ module Predicator
       @transform = Predicator::Transform.new
     end
 
+    def test_integer_transform
+      assert_equal 1, transform.apply(:integer => "1")
+    end
+
     def test_boolean_transform
       assert_equal Predicates::True.new, transform.apply(:boolean => "true")
       assert_equal Predicates::False.new, transform.apply(:boolean => "false")

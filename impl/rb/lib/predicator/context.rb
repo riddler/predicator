@@ -13,8 +13,10 @@ module Predicator
       entities[name.to_s] = value
     end
 
-    def value_for identifier
-      name, attr = identifier.split "."
+    def value_for input
+      return input unless input.kind_of? Predicator::Variable
+
+      name, attr = input.identifier.split "."
       entity = entities[name]
       if entity.nil?
         raise ArgumentError, "Unknown entity #{name}"

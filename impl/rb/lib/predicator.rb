@@ -13,6 +13,7 @@ require "predicator/version"
 require "predicator/context"
 require "predicator/parser"
 require "predicator/transform"
+require "predicator/variable"
 
 require "predicator/predicates/and"
 require "predicator/predicates/equals"

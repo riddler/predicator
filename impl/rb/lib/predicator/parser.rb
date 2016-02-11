@@ -6,6 +6,7 @@ module Predicator
     rule(:question) { s("?") }
     rule(:period) { s(".") }
     rule(:comma)  { s(",") }
+    rule(:equals) { s("=") }
     rule(:lparen) { s("(") }
     rule(:rparen) { s(")") }
 
@@ -33,6 +34,14 @@ module Predicator
       (identifier >> period >> identifier >> question.maybe).as(:variable) >> space?
     end
 
+    rule :expression do
+      variable | value
+    end
+
+    rule :value do
+      integer
+    end
+
     rule :not_predicate do
       (not_op >> lparen >> predicate >> rparen).as(:not)
     end
@@ -49,8 +58,12 @@ module Predicator
       rparen).as(:or)
     end
 
+    rule :equals_predicate do
+      (expression.as(:left) >> equals >> expression.as(:right)).as(:equals)
+    end
+
     rule :predicate do
-      boolean | not_predicate | or_predicate | and_predicate
+      boolean | not_predicate | or_predicate | and_predicate | equals_predicate
     end
 
     root :predicate

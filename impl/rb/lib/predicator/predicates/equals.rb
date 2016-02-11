@@ -8,7 +8,7 @@ module Predicator
       end
 
       def satisfied? context=Context.new
-        @left == @right
+        context.value_for(left) == context.value_for(right)
       end
 
       def == other
