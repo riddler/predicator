@@ -20,6 +20,12 @@ class ParserTest < Minitest::Test
     assert p.parse("-1")
   end
 
+  def test_variable_parsing
+    p = parser.variable
+    assert p.parse("user.age"), "Should parse 'user.age'"
+    assert p.parse("user.valid?"), "Should parse 'user.valid?'"
+  end
+
   def test_or_parsing
     p = parser.or_predicate
     assert p.parse("or(true)")
@@ -32,9 +38,11 @@ class ParserTest < Minitest::Test
     assert p.parse("and(true, or(true,false))")
   end
 
-  def test_variable_parsing
-    p = parser.variable
-    assert p.parse("user.age"), "Should parse 'user.age'"
-    assert p.parse("user.valid?"), "Should parse 'user.valid?'"
+  def test_equals_parsing
+    p = parser.equals_predicate
+    assert p.parse("1 = 0")
+    assert p.parse("foo.bar = 2")
+    assert p.parse("2 = foo.bar")
+    assert p.parse("baz.wat = foo.bar")
   end
 end
