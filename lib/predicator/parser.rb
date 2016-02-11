@@ -2,18 +2,27 @@ module Predicator
   class Parser < Parslet::Parser
     rule(:space)  { match[" "].repeat(1) }
     rule(:space?) { space.maybe }
-    rule(:comma) { s(",") }
+
+    rule(:question) { s("?") }
+    rule(:period) { s(".") }
+    rule(:comma)  { s(",") }
     rule(:lparen) { s("(") }
     rule(:rparen) { s(")") }
+
     rule(:and_op) { s("and") }
     rule(:or_op)  { s("or") }
     rule(:not_op) { s("!") | s("not") }
+
     rule :boolean do
       (s("true") | s("false")).as :boolean
     end
 
-    rule(:predicate) do
-      boolean | not_predicate | or_predicate | and_predicate
+    rule :identifier do
+      (match['a-z'] >> match['\w\d'].repeat)
+    end
+
+    rule :variable do
+      (identifier >> period >> identifier >> question.maybe).as(:variable) >> space?
     end
 
     rule :not_predicate do
@@ -30,6 +39,10 @@ module Predicator
       (or_op >> lparen >>
       (predicate >> (comma >> predicate).repeat.maybe).as(:array) >>
       rparen).as(:or)
+    end
+
+    rule :predicate do
+      boolean | not_predicate | or_predicate | and_predicate
     end
 
     root :predicate

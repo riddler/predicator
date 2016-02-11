@@ -24,4 +24,10 @@ class ParserTest < Minitest::Test
     assert p.parse("and(true)")
     assert p.parse("and(true, or(true,false))")
   end
+
+  def test_variable_parsing
+    p = parser.variable
+    assert p.parse("user.age"), "Should parse 'user.age'"
+    assert p.parse("user.valid?"), "Should parse 'user.valid?'"
+  end
 end
