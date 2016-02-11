@@ -13,6 +13,13 @@ class ParserTest < Minitest::Test
     assert p.parse("false")
   end
 
+  def test_integer_parsing
+    p = parser.integer
+    assert p.parse("1")
+    assert p.parse("0")
+    assert p.parse("-1")
+  end
+
   def test_or_parsing
     p = parser.or_predicate
     assert p.parse("or(true)")

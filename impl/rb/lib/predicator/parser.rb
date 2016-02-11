@@ -13,6 +13,14 @@ module Predicator
     rule(:or_op)  { s("or") }
     rule(:not_op) { s("!") | s("not") }
 
+    rule(:digit)  { match["0-9"] }
+
+    rule :integer do
+      (str("-").maybe >>
+       ((match["1-9"] >> digit.repeat) | digit)
+      ).as(:integer) >> space?
+    end
+
     rule :boolean do
       (s("true") | s("false")).as :boolean
     end

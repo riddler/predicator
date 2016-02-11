@@ -1,10 +1,17 @@
 module Predicator
   class Transform < Parslet::Transform
-    rule(:boolean => simple(:b)) { !!(b.match /true/) }
     rule(:array => subtree(:a)) { Array(a) }
 
-    rule(:not => subtree(:sub)) { Predicator::Predicates::Not.new sub }
-    rule(:or => subtree(:sub)) { Predicator::Predicates::Or.new sub }
-    rule(:and => subtree(:sub)) { Predicator::Predicates::And.new sub }
+    rule(:boolean => simple(:b)) do
+      if b.match /true/
+        Predicates::True.new
+      else
+        Predicates::False.new
+      end
+    end
+
+    rule(:not => subtree(:sub)) { Predicates::Not.new sub }
+    rule(:or => subtree(:sub)) { Predicates::Or.new sub }
+    rule(:and => subtree(:sub)) { Predicates::And.new sub }
   end
 end
