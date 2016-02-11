@@ -12,6 +12,7 @@ require "predicator/version"
 
 require "predicator/parser"
 require "predicator/transform"
+require "predicator/context"
 
 require "predicator/predicates/not"
 require "predicator/predicates/and"
