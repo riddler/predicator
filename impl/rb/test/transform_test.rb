@@ -12,6 +12,10 @@ module Predicator
       assert_equal 1, transform.apply(:integer => "1")
     end
 
+    def test_variable_transform
+      assert_equal Predicator::Variable.new("foo.bar"), transform.apply(:variable => "foo.bar")
+    end
+
     def test_boolean_transform
       assert_equal Predicates::True.new, transform.apply(:boolean => "true")
       assert_equal Predicates::False.new, transform.apply(:boolean => "false")
