@@ -6,6 +6,8 @@ module Predicator
     SPACE   = /[ \t\r\n]/
     DOT     = /\./
     EQUAL   = /=/
+    LPAREN  = /\(/
+    RPAREN  = /\)/
     DATE    = /(\d{4})-(\d{2})-(\d{2})/i
     FLOAT   = /[+-]?(?:[0-9_]+\.[0-9_]*|\.[0-9_]+|\d+(?=[eE]))(?:[eE][+-]?[0-9_]+)?\b/
     INTEGER = /[+-]?\d(_?\d)*\b/
@@ -39,6 +41,12 @@ module Predicator
 
         when text = @ss.scan(EQUAL)
           @tokens.push [:tEQUAL, text]
+
+        when text = @ss.scan(LPAREN)
+          @tokens.push [:tLPAREN, text]
+
+        when text = @ss.scan(RPAREN)
+          @tokens.push [:tRPAREN, text]
 
         when text = @ss.scan(DATE)
           args = [ @ss[1], @ss[2], @ss[3] ].map(&:to_i)

@@ -652,57 +652,58 @@ module Predicator
 ##### State transition tables begin ###
 
 racc_action_table = [
-     5,     6,    11,    12,    13,    14,    15,    11,    12,    13,
-    14,    15,    18,    17,    19,    16,    21 ]
+     6,     7,    12,    13,    14,    15,    16,    20,    19,     4,
+     6,     7,    12,    13,    14,    15,    16,    21,    22,     4,
+    12,    13,    14,    15,    16,    17,    24 ]
 
 racc_action_check = [
-     0,     0,     0,     0,     0,     0,     0,    17,    17,    17,
-    17,    17,    15,     4,    16,     1,    18 ]
+     0,     0,     0,     0,     0,     0,     0,    16,     5,     0,
+     4,     4,     4,     4,     4,     4,     4,    17,    18,     4,
+    19,    19,    19,    19,    19,     1,    20 ]
 
 racc_action_pointer = [
-    -2,    15,   nil,   nil,     3,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,   nil,     3,    14,     3,     8,   nil,
-   nil,   nil ]
+    -2,    25,   nil,   nil,     8,    -2,   nil,   nil,   nil,   nil,
+   nil,   nil,   nil,   nil,   nil,   nil,    -2,    17,     6,    16,
+    18,   nil,   nil,   nil,   nil ]
 
 racc_action_default = [
-   -15,   -15,    -1,    -2,   -15,    -4,    -5,    -6,    -7,    -8,
-    -9,   -10,   -11,   -12,   -13,   -15,   -15,   -15,   -15,    22,
-    -3,   -14 ]
+   -16,   -16,    -1,    -2,   -16,   -16,    -5,    -6,    -7,    -8,
+    -9,   -10,   -11,   -12,   -13,   -14,   -16,   -16,   -16,   -16,
+   -16,    25,    -3,    -4,   -15 ]
 
 racc_goto_table = [
-     4,     3,     2,     1,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,   nil,   nil,   nil,    20 ]
+     1,    23,   nil,   nil,    18 ]
 
 racc_goto_check = [
-     4,     3,     2,     1,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,   nil,   nil,   nil,     4 ]
+     1,     4,   nil,   nil,     1 ]
 
 racc_goto_pointer = [
-   nil,     3,     2,     1,     0,   nil,   nil,   nil,   nil ]
+   nil,     0,   nil,   nil,   -18,   nil,   nil,   nil,   nil ]
 
 racc_goto_default = [
-   nil,   nil,   nil,   nil,   nil,     7,     8,     9,    10 ]
+   nil,   nil,     2,     3,     5,     8,     9,    10,    11 ]
 
 racc_reduce_table = [
   0, 0, :racc_error,
-  1, 12, :_reduce_none,
-  1, 12, :_reduce_none,
-  3, 13, :_reduce_3,
-  1, 14, :_reduce_4,
-  1, 14, :_reduce_5,
-  1, 15, :_reduce_none,
-  1, 15, :_reduce_none,
-  1, 16, :_reduce_none,
-  1, 16, :_reduce_none,
-  1, 18, :_reduce_10,
-  1, 19, :_reduce_11,
-  1, 19, :_reduce_12,
-  1, 19, :_reduce_13,
-  3, 17, :_reduce_14 ]
+  1, 14, :_reduce_none,
+  1, 14, :_reduce_none,
+  3, 14, :_reduce_none,
+  3, 15, :_reduce_4,
+  1, 16, :_reduce_5,
+  1, 16, :_reduce_6,
+  1, 17, :_reduce_none,
+  1, 17, :_reduce_none,
+  1, 18, :_reduce_none,
+  1, 18, :_reduce_none,
+  1, 20, :_reduce_11,
+  1, 21, :_reduce_12,
+  1, 21, :_reduce_13,
+  1, 21, :_reduce_14,
+  3, 19, :_reduce_15 ]
 
-racc_reduce_n = 15
+racc_reduce_n = 16
 
-racc_shift_n = 22
+racc_shift_n = 25
 
 racc_token_table = {
   false => 0,
@@ -715,9 +716,11 @@ racc_token_table = {
   :tDATE => 7,
   :tIDENTIFIER => 8,
   :tDOT => 9,
-  :tEQUAL => 10 }
+  :tEQUAL => 10,
+  :tLPAREN => 11,
+  :tRPAREN => 12 }
 
-racc_nt_base = 11
+racc_nt_base = 13
 
 racc_use_result_var = false
 
@@ -749,6 +752,8 @@ Racc_token_to_s_table = [
   "tIDENTIFIER",
   "tDOT",
   "tEQUAL",
+  "tLPAREN",
+  "tRPAREN",
   "$start",
   "predicate",
   "equals_predicate",
@@ -769,25 +774,25 @@ Racc_debug_parser = false
 
 # reduce 2 omitted
 
-module_eval(<<'.,.,', 'parser.y', 9)
-  def _reduce_3(val, _values)
-     Predicator::Predicates::Equals.new val[0], val[2] 
-  end
-.,.,
+# reduce 3 omitted
 
-module_eval(<<'.,.,', 'parser.y', 12)
+module_eval(<<'.,.,', 'parser.y', 10)
   def _reduce_4(val, _values)
-     Predicator::Predicates::True.new 
+     Predicator::Predicates::Equals.new val[0], val[2] 
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 13)
   def _reduce_5(val, _values)
-     Predicator::Predicates::False.new 
+     Predicator::Predicates::True.new 
   end
 .,.,
 
-# reduce 6 omitted
+module_eval(<<'.,.,', 'parser.y', 14)
+  def _reduce_6(val, _values)
+     Predicator::Predicates::False.new 
+  end
+.,.,
 
 # reduce 7 omitted
 
@@ -795,32 +800,34 @@ module_eval(<<'.,.,', 'parser.y', 13)
 
 # reduce 9 omitted
 
-module_eval(<<'.,.,', 'parser.y', 24)
-  def _reduce_10(val, _values)
-     val[0] 
-  end
-.,.,
+# reduce 10 omitted
 
-module_eval(<<'.,.,', 'parser.y', 27)
+module_eval(<<'.,.,', 'parser.y', 25)
   def _reduce_11(val, _values)
-     val[0].to_f 
+     val[0] 
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 28)
   def _reduce_12(val, _values)
-     val[0].to_i 
+     val[0].to_f 
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 29)
   def _reduce_13(val, _values)
+     val[0].to_i 
+  end
+.,.,
+
+module_eval(<<'.,.,', 'parser.y', 30)
+  def _reduce_14(val, _values)
      Date.new *val[0] 
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 32)
-  def _reduce_14(val, _values)
+module_eval(<<'.,.,', 'parser.y', 33)
+  def _reduce_15(val, _values)
      Predicator::Variable.new val[0], val[2] 
   end
 .,.,
