@@ -1,14 +1,10 @@
 module Predicator
   module Predicates
-    class Equals
+    class Relation
       attr_reader :left, :right
 
       def initialize left, right
         @left, @right = left, right
-      end
-
-      def satisfied? context=Predicator::Context.new
-        context.value_for(left) == context.value_for(right)
       end
 
       def == other

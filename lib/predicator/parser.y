@@ -4,26 +4,31 @@ prechigh
   right tBANG
   left  tAND tOR
 preclow
-token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL
-      tLPAREN tRPAREN tAND tOR tBANG
+token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tAND tOR
+      tDOT tLPAREN tRPAREN tBANG tEQ tNEQ tLEQ tGEQ tLT tGT
 rule
   predicate
-    : equals_predicate
+    : relation_predicate
     | boolean_predicate
     | logical_predicate
     | tLPAREN predicate tRPAREN
     ;
-  equals_predicate
-    : value tEQUAL value { Predicator::Predicates::Equals.new val[0], val[2] }
+  relation_predicate
+    : value tEQ value           { Predicator::Predicates::Equal.new val[0], val[2] }
+    | value tGT value           { Predicator::Predicates::GreaterThan.new val[0], val[2] }
+    | value tLT value           { Predicator::Predicates::LessThan.new val[0], val[2] }
+    | value tGEQ value          { Predicator::Predicates::GreaterThanOrEqual.new val[0], val[2] }
+    | value tLEQ value          { Predicator::Predicates::LessThanOrEqual.new val[0], val[2] }
+    | value tNEQ value          { Predicator::Predicates::NotEqual.new val[0], val[2] }
     ;
   boolean_predicate
-    : tTRUE { Predicator::Predicates::True.new }
-    | tFALSE { Predicator::Predicates::False.new }
+    : tTRUE                     { Predicator::Predicates::True.new }
+    | tFALSE                    { Predicator::Predicates::False.new }
     ;
   logical_predicate
-    : predicate tAND predicate { Predicator::Predicates::And.new [val[0], val[2]] }
-    | predicate tOR predicate  { Predicator::Predicates::Or.new [val[0], val[2]] }
-    | tBANG predicate          { Predicator::Predicates::Not.new val[0] }
+    : predicate tAND predicate  { Predicator::Predicates::And.new [val[0], val[2]] }
+    | predicate tOR predicate   { Predicator::Predicates::Or.new [val[0], val[2]] }
+    | tBANG predicate           { Predicator::Predicates::Not.new val[0] }
     ;
   value
     : scalar

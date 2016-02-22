@@ -5,10 +5,15 @@ module Predicator
   class Lexer
     SPACE   = /[ \t\r\n]/
     DOT     = /\./
-    BANG    = /!/
-    EQUAL   = /=/
     LPAREN  = /\(/
     RPAREN  = /\)/
+    NEQ     = /!=/
+    GEQ     = />=/
+    LEQ     = /<=/
+    GT      = />/
+    LT      = /</
+    EQ      = /=/
+    BANG    = /!/
     DATE    = /(\d{4})-(\d{2})-(\d{2})/i
     FLOAT   = /[+-]?(?:[0-9_]+\.[0-9_]*|\.[0-9_]+|\d+(?=[eE]))(?:[eE][+-]?[0-9_]+)?\b/
     INTEGER = /[+-]?\d(_?\d)*\b/
@@ -42,17 +47,32 @@ module Predicator
         when text = @ss.scan(DOT)
           @tokens.push [:tDOT, text]
 
-        when text = @ss.scan(BANG)
-          @tokens.push [:tBANG, text]
-
-        when text = @ss.scan(EQUAL)
-          @tokens.push [:tEQUAL, text]
-
         when text = @ss.scan(LPAREN)
           @tokens.push [:tLPAREN, text]
 
         when text = @ss.scan(RPAREN)
           @tokens.push [:tRPAREN, text]
+
+        when text = @ss.scan(NEQ)
+          @tokens.push [:tNEQ, text]
+
+        when text = @ss.scan(GEQ)
+          @tokens.push [:tGEQ, text]
+
+        when text = @ss.scan(LEQ)
+          @tokens.push [:tLEQ, text]
+
+        when text = @ss.scan(GT)
+          @tokens.push [:tGT, text]
+
+        when text = @ss.scan(LT)
+          @tokens.push [:tLT, text]
+
+        when text = @ss.scan(EQ)
+          @tokens.push [:tEQ, text]
+
+        when text = @ss.scan(BANG)
+          @tokens.push [:tBANG, text]
 
         when text = @ss.scan(DATE)
           args = [ @ss[1], @ss[2], @ss[3] ].map(&:to_i)
