@@ -17,13 +17,7 @@ module Predicator
     def value_for input
       return input unless input.kind_of? Predicator::Variable
 
-      entity_name = input.entity.to_s
-      entity = entities[entity_name]
-      if entity.nil?
-        raise ArgumentError, "Unknown entity #{entity_name}"
-      else
-        entity.send input.attribute
-      end
+      input.value_in self
     end
     alias :[] :value_for
   end
