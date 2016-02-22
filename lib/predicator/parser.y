@@ -4,13 +4,14 @@ prechigh
   right tBANG
   left  tAND tOR
 preclow
-token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tAND tOR
+token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tAND tOR tBETWEEN
       tDOT tLPAREN tRPAREN tBANG tEQ tNEQ tLEQ tGEQ tLT tGT
 rule
   predicate
     : relation_predicate
     | boolean_predicate
     | logical_predicate
+    | value tBETWEEN value tAND value { Predicator::Predicates::Between.new val[0], val[2], val[4] }
     | tLPAREN predicate tRPAREN
     ;
   relation_predicate
