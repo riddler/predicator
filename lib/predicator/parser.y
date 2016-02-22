@@ -1,10 +1,16 @@
 class Predicator::GeneratedParser
 options no_result_var
-token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL tLPAREN tRPAREN
+prechigh
+  right tBANG
+  left  tAND tOR
+preclow
+token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL
+      tLPAREN tRPAREN tAND tOR tBANG
 rule
   predicate
     : equals_predicate
     | boolean_predicate
+    | logical_predicate
     | tLPAREN predicate tRPAREN
     ;
   equals_predicate
@@ -13,6 +19,11 @@ rule
   boolean_predicate
     : tTRUE { Predicator::Predicates::True.new }
     | tFALSE { Predicator::Predicates::False.new }
+    ;
+  logical_predicate
+    : predicate tAND predicate { Predicator::Predicates::And.new [val[0], val[2]] }
+    | predicate tOR predicate  { Predicator::Predicates::Or.new [val[0], val[2]] }
+    | tBANG predicate          { Predicator::Predicates::Not.new val[0] }
     ;
   value
     : scalar

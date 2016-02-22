@@ -5,6 +5,7 @@ module Predicator
   class Lexer
     SPACE   = /[ \t\r\n]/
     DOT     = /\./
+    BANG    = /!/
     EQUAL   = /=/
     LPAREN  = /\(/
     RPAREN  = /\)/
@@ -13,6 +14,8 @@ module Predicator
     INTEGER = /[+-]?\d(_?\d)*\b/
     TRUE    = /true\b/
     FALSE   = /false\b/
+    AND     = /and/i
+    OR      = /or/i
     STRING  = /(["])(?:\\?.)*?\1/
     IDENTIFIER = /[a-z][A-Za-z0-9_]*/
 
@@ -39,6 +42,9 @@ module Predicator
         when text = @ss.scan(DOT)
           @tokens.push [:tDOT, text]
 
+        when text = @ss.scan(BANG)
+          @tokens.push [:tBANG, text]
+
         when text = @ss.scan(EQUAL)
           @tokens.push [:tEQUAL, text]
 
@@ -63,6 +69,12 @@ module Predicator
 
         when text = @ss.scan(FALSE)
           @tokens.push [:tFALSE, text]
+
+        when text = @ss.scan(AND)
+          @tokens.push [:tAND, text]
+
+        when text = @ss.scan(OR)
+          @tokens.push [:tOR, text]
 
         when text = @ss.scan(STRING)
           @tokens.push [:tSTRING, text[1..-2]]

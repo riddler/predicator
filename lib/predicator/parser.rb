@@ -7,6 +7,9 @@ require "predicator/variable"
 require "predicator/predicates/equals"
 require "predicator/predicates/true"
 require "predicator/predicates/false"
+require "predicator/predicates/and"
+require "predicator/predicates/or"
+require "predicator/predicates/not"
 
 module Predicator
   class ParseError < StandardError; end
