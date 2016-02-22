@@ -1,3 +1,4 @@
+require "predicator/context"
 require "predicator/lexer"
 require "predicator/parser"
 require "predicator/version"
