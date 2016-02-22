@@ -4,9 +4,14 @@ token tTRUE tFALSE tINTEGER tIDENTIFIER tDOT tEQUAL
 rule
   predicate
     : equals_predicate
+    | boolean_predicate
     ;
   equals_predicate
     : value tEQUAL value { Predicator::Predicates::Equals.new val[0], val[2] }
+    ;
+  boolean_predicate
+    : tTRUE { Predicator::Predicates::True.new }
+    | tFALSE { Predicator::Predicates::False.new }
     ;
   value
     : scalar
