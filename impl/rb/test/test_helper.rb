@@ -1,8 +1,6 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
-
 require "coveralls"
+Coveralls.wear! "test_frameworks"
 require "minitest/autorun"
 require "minitest/pride"
-
-Coveralls.wear! "test_frameworks"
 require "predicator"
