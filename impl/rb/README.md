@@ -1,5 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/predicator.svg)](http://badge.fury.io/rb/predicator)
 [![Build Status](https://travis-ci.org/johnnyt/predicator.svg?branch=master)](https://travis-ci.org/johnnyt/predicator)
+[![Dependency Status](https://img.shields.io/gemnasium/johnnyt/predicator.svg)](https://gemnasium.com/johnnyt/predicator)
+[![Coverage Status](https://coveralls.io/repos/github/johnnyt/predicator/badge.svg?branch=master)](https://coveralls.io/github/johnnyt/predicator?branch=master)
 
 # Predicator
 
@@ -12,8 +14,12 @@ Example usage:
 ```ruby
 require "predicator"
 
-pred = Predicator.parse "and(true, 3 = 4)"
-pred.satisfied?
+pred = Predicator.parse "a.b = 5"
+
+context = Predicator::Context.new
+context[:a] = {b:5}
+
+pred.satisfied? context
 ```
 
 ## Installation
