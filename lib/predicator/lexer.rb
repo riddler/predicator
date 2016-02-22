@@ -7,6 +7,8 @@ module Predicator
     DOT     = /\./
     EQUAL   = /=/
     INTEGER = /[+-]?\d(_?\d)*\b/
+    TRUE    = /true\b/
+    FALSE   = /false\b/
     IDENTIFIER = /[a-z][A-Za-z0-9_]*/
 
     def initialize string_or_io
@@ -37,6 +39,12 @@ module Predicator
 
         when text = @ss.scan(INTEGER)
           @tokens.push [:tINTEGER, text]
+
+        when text = @ss.scan(TRUE)
+          @tokens.push [:tTRUE, text]
+
+        when text = @ss.scan(FALSE)
+          @tokens.push [:tFALSE, text]
 
         when text = @ss.scan(IDENTIFIER)
           @tokens.push [:tIDENTIFIER, text]

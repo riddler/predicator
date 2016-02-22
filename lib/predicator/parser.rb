@@ -1,7 +1,10 @@
 require "predicator/generated_parser"
 require "predicator/lexer"
 require "predicator/variable"
+
 require "predicator/predicates/equals"
+require "predicator/predicates/true"
+require "predicator/predicates/false"
 
 module Predicator
   class ParseError < StandardError; end

@@ -7,6 +7,14 @@ class ParserTest < Minitest::Test
     @parser = Predicator::Parser.new
   end
 
+  def test_true_predicate_parsing
+    assert parser.parse("true")
+  end
+
+  def test_false_predicate_parsing
+    assert parser.parse("false")
+  end
+
   def test_integer_equals_parsing
     assert parser.parse("1=1")
     assert parser.parse("0 = -1")
