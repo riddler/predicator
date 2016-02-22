@@ -80,4 +80,8 @@ class ParserTest < Minitest::Test
   def test_integer_less_than_or_equal_parsing
     assert parser.parse("1<=2")
   end
+
+  def test_integer_between_parsing
+    assert parser.parse("2 between 1 and 3")
+  end
 end
