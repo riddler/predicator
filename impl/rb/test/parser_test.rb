@@ -15,6 +15,18 @@ class ParserTest < Minitest::Test
     assert parser.parse("false")
   end
 
+  def test_float_equals_parsing
+    assert parser.parse("1.0=1.0")
+  end
+
+  def test_string_equals_parsing
+    assert parser.parse('"foo"="foo"')
+  end
+
+  def test_date_equals_parsing
+    assert parser.parse("2016-01-01 = 2016-01-01")
+  end
+
   def test_integer_equals_parsing
     assert parser.parse("1=1")
     assert parser.parse("0 = -1")
