@@ -4,5 +4,5 @@ require "coveralls"
 require "minitest/autorun"
 require "minitest/pride"
 
-Coveralls.wear!
+Coveralls.wear! "test_frameworks"
 require "predicator"
