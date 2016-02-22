@@ -1,81 +1,26 @@
+require "predicator/generated_parser"
+require "predicator/lexer"
+require "predicator/variable"
+require "predicator/predicates/equals"
+
 module Predicator
-  class Parser < Parslet::Parser
-    rule(:space)  { match[" "].repeat(1) }
-    rule(:space?) { space.maybe }
+  class ParseError < StandardError; end
 
-    rule(:question) { s("?") }
-    rule(:period) { s(".") }
-    rule(:comma)  { s(",") }
-    rule(:equals) { s("=") }
-    rule(:lparen) { s("(") }
-    rule(:rparen) { s(")") }
-
-    rule(:and_op) { s("and") }
-    rule(:or_op)  { s("or") }
-    rule(:not_op) { s("!") | s("not") }
-
-    rule(:digit)  { match["0-9"] }
-
-    rule :integer do
-      (str("-").maybe >>
-       ((match["1-9"] >> digit.repeat) | digit)
-      ).as(:integer) >> space?
+  class Parser < GeneratedParser
+    def next_token
+      @lexer.next_token
     end
 
-    rule :boolean do
-      (s("true") | s("false")).as :boolean
+    def parse string
+      @lexer = Lexer.new string
+      do_parse
     end
 
-    rule :identifier do
-      (match['a-z'] >> match['\w\d'].repeat)
-    end
-
-    rule :variable do
-      (identifier >> period >> identifier >> question.maybe).as(:variable) >> space?
-    end
-
-    rule :expression do
-      variable | value
-    end
-
-    rule :value do
-      integer
-    end
-
-    rule :not_predicate do
-      (not_op >> lparen >> predicate >> rparen).as(:not)
-    end
-
-    rule :and_predicate do
-      (and_op >> lparen >>
-      (predicate >> (comma >> predicate).repeat.maybe).as(:array) >>
-      rparen).as(:and)
-    end
-
-    rule :or_predicate do
-      (or_op >> lparen >>
-      (predicate >> (comma >> predicate).repeat.maybe).as(:array) >>
-      rparen).as(:or)
-    end
-
-    rule :equals_predicate do
-      (expression.as(:left) >> equals >> expression.as(:right)).as(:equals)
-    end
-
-    rule :predicate do
-      boolean | not_predicate | or_predicate | and_predicate | equals_predicate
-    end
-
-    root :predicate
-
-  private
-    # Defines a string followed by any number of spaces.
-    def s str, name=nil
-      if name
-        str(str).as(name) >> space?
-      else
-        str(str) >> space?
-      end
+    def on_error type, val, values
+      super
+    rescue Racc::ParseError => e
+      trace = values.each_with_index.map{|l, i| "#{' ' * i}#{l}"}
+      raise ParseError, "\nparse error on value #{val.inspect}\n#{trace.join("\n")}"
     end
   end
 end

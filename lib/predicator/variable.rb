@@ -1,14 +1,16 @@
 module Predicator
   class Variable
-    attr_reader :identifier
+    attr_reader :entity, :attribute
 
-    def initialize identifier
-      @identifier = identifier
+    def initialize entity, attribute
+      @entity = entity
+      @attribute = attribute
     end
 
     def == other
       other.kind_of?(self.class) &&
-        other.identifier == identifier
+        other.entity == entity &&
+        other.attribute == attribute
     end
   end
 end
