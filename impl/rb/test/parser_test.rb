@@ -21,6 +21,7 @@ class ParserTest < Minitest::Test
 
   def test_nested_predicate_parsing
     assert parser.parse("(true)")
+    assert parser.parse("((true))")
   end
 
   def test_true_predicate_parsing
@@ -58,5 +59,25 @@ class ParserTest < Minitest::Test
     assert_raises Predicator::ParseError do
       parser.parse("a=1")
     end
+  end
+
+  def test_integer_not_equal_parsing
+    assert parser.parse("1!=2")
+  end
+
+  def test_integer_greater_than_parsing
+    assert parser.parse("1>2")
+  end
+
+  def test_integer_greater_than_or_equal_parsing
+    assert parser.parse("1>=2")
+  end
+
+  def test_integer_less_than_parsing
+    assert parser.parse("1<2")
+  end
+
+  def test_integer_less_than_or_equal_parsing
+    assert parser.parse("1<=2")
   end
 end
