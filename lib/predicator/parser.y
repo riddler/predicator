@@ -1,6 +1,6 @@
 class Predicator::GeneratedParser
 options no_result_var
-token tTRUE tFALSE tINTEGER tIDENTIFIER tDOT tEQUAL
+token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL
 rule
   predicate
     : equals_predicate
@@ -18,10 +18,16 @@ rule
     | variable
     ;
   scalar
-    : literal
+    : string
+    | literal
+    ;
+  string
+    : tSTRING   { val[0] }
     ;
   literal
-    : tINTEGER   { val[0].to_i }
+    : tFLOAT    { val[0].to_f }
+    | tINTEGER  { val[0].to_i }
+    | tDATE     { Date.new *val[0] }
     ;
   variable
     : tIDENTIFIER tDOT tIDENTIFIER { Predicator::Variable.new val[0], val[2] }

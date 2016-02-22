@@ -6,9 +6,12 @@ module Predicator
     SPACE   = /[ \t\r\n]/
     DOT     = /\./
     EQUAL   = /=/
+    DATE    = /(\d{4})-(\d{2})-(\d{2})/i
+    FLOAT   = /[+-]?(?:[0-9_]+\.[0-9_]*|\.[0-9_]+|\d+(?=[eE]))(?:[eE][+-]?[0-9_]+)?\b/
     INTEGER = /[+-]?\d(_?\d)*\b/
     TRUE    = /true\b/
     FALSE   = /false\b/
+    STRING  = /(["])(?:\\?.)*?\1/
     IDENTIFIER = /[a-z][A-Za-z0-9_]*/
 
     def initialize string_or_io
@@ -37,6 +40,13 @@ module Predicator
         when text = @ss.scan(EQUAL)
           @tokens.push [:tEQUAL, text]
 
+        when text = @ss.scan(DATE)
+          args = [ @ss[1], @ss[2], @ss[3] ].map(&:to_i)
+          @tokens.push [:tDATE, args]
+
+        when text = @ss.scan(FLOAT)
+          @tokens.push [:tFLOAT, text]
+
         when text = @ss.scan(INTEGER)
           @tokens.push [:tINTEGER, text]
 
@@ -45,6 +55,9 @@ module Predicator
 
         when text = @ss.scan(FALSE)
           @tokens.push [:tFALSE, text]
+
+        when text = @ss.scan(STRING)
+          @tokens.push [:tSTRING, text[1..-2]]
 
         when text = @ss.scan(IDENTIFIER)
           @tokens.push [:tIDENTIFIER, text]

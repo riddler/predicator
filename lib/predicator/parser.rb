@@ -1,3 +1,5 @@
+require "date"
+
 require "predicator/generated_parser"
 require "predicator/lexer"
 require "predicator/variable"
