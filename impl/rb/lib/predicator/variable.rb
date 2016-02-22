@@ -1,15 +1,25 @@
 module Predicator
   class Variable
-    attr_reader :entity, :attribute
+    attr_reader :model, :attribute
 
-    def initialize entity, attribute
-      @entity = entity
+    def initialize model, attribute
+      @model = model
       @attribute = attribute
+    end
+
+    def value_in context
+      entity_name = model.to_s
+      entity = context.entities[model]
+      if entity.nil?
+        raise ArgumentError, "Unknown entity #{entity_name}"
+      else
+        entity.send attribute
+      end
     end
 
     def == other
       other.kind_of?(self.class) &&
-        other.entity == entity &&
+        other.model == model &&
         other.attribute == attribute
     end
   end
