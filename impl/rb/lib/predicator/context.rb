@@ -12,17 +12,19 @@ module Predicator
       value = OpenStruct.new(value) if value.kind_of? Hash
       entities[name.to_s] = value
     end
+    alias :[]= :bind
 
     def value_for input
       return input unless input.kind_of? Predicator::Variable
 
-      name, attr = input.identifier.split "."
-      entity = entities[name]
+      entity_name = input.entity.to_s
+      entity = entities[entity_name]
       if entity.nil?
-        raise ArgumentError, "Unknown entity #{name}"
+        raise ArgumentError, "Unknown entity #{entity_name}"
       else
-        entity.send attr
+        entity.send input.attribute
       end
     end
+    alias :[] :value_for
   end
 end
