@@ -1,10 +1,11 @@
 class Predicator::GeneratedParser
 options no_result_var
-token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL
+token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tDOT tEQUAL tLPAREN tRPAREN
 rule
   predicate
     : equals_predicate
     | boolean_predicate
+    | tLPAREN predicate tRPAREN
     ;
   equals_predicate
     : value tEQUAL value { Predicator::Predicates::Equals.new val[0], val[2] }

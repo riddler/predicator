@@ -7,6 +7,10 @@ class ParserTest < Minitest::Test
     @parser = Predicator::Parser.new
   end
 
+  def test_nested_predicate_parsing
+    assert parser.parse("(true)")
+  end
+
   def test_true_predicate_parsing
     assert parser.parse("true")
   end
