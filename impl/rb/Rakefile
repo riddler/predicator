@@ -11,5 +11,5 @@ task :default => :test
 
 desc "Compile and generate the parser"
 task :compile do
-  sh "racc -E lib/predicator/parser.y -o lib/predicator/generated_parser.rb"
+  sh "racc lib/predicator/parser.y -o lib/predicator/generated_parser.rb"
 end
