@@ -1,3 +1,8 @@
+### 0.3.0 / 2016-03-11
+
+* Adds more relation predicates (GT, LT, GTE, LTE, NEQ)
+* Adds between predicate
+
 ### 0.2.1 / 2016-02-22
 
 * Makes RACC a development dependency (trying to get working on MagLev)
