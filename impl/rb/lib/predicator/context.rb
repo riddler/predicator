@@ -2,17 +2,16 @@ require "ostruct"
 
 module Predicator
   class Context
-    attr_reader :entities
+    attr_reader :bindings
 
     def initialize
-      @entities = {}
+      @bindings = {}
     end
 
     def bind name, value
       value = OpenStruct.new(value) if value.kind_of? Hash
-      entities[name.to_s] = value
+      bindings[name.to_s] = value
     end
-    alias :[]= :bind
 
     def value_for input
       return input unless input.kind_of? Predicator::Variable

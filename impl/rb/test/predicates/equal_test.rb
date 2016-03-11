@@ -41,7 +41,7 @@ class EqualTest < Minitest::Test
 
   def test_integer_equals_variable
     context = Predicator::Context.new
-    context[:a] = {b:1}
+    context.bind :a, {b:1}
     variable = Predicator::Variable.new "a", "b"
 
     pred = Predicator::Predicates::Equal.new 1, variable
