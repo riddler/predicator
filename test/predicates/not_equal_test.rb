@@ -41,7 +41,7 @@ class NotEqualTest < Minitest::Test
 
   def test_integer_not_equal_variable
     context = Predicator::Context.new
-    context[:a] = {b:1}
+    context.bind :a, {b:1}
     variable = Predicator::Variable.new "a", "b"
 
     pred = Predicator::Predicates::NotEqual.new 2, variable

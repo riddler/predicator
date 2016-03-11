@@ -21,7 +21,7 @@ class ContextTest < Minitest::Test
 
   def test_value_for_variable
     variable = Predicator::Variable.new "a", "b"
-    context[:a] = {b:1}
+    context.bind :a, {b:1}
 
     assert_equal 1, context.value_for(variable)
   end

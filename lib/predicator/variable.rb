@@ -9,7 +9,7 @@ module Predicator
 
     def value_in context
       entity_name = model.to_s
-      entity = context.entities[model]
+      entity = context.bindings[model]
       if entity.nil?
         raise ArgumentError, "Unknown entity #{entity_name}"
       else
