@@ -22,6 +22,8 @@ module Predicator
     AND     = /and/i
     OR      = /or/i
     BETWEEN = /between/i
+    BLANK   = /blank\?/i
+    PRESENT = /present\?/i
     STRING  = /(["])(?:\\?.)*?\1/
     IDENTIFIER = /[a-z][A-Za-z0-9_]*/
 
@@ -99,6 +101,12 @@ module Predicator
 
         when text = @ss.scan(BETWEEN)
           @tokens.push [:tBETWEEN, text]
+
+        when text = @ss.scan(BLANK)
+          @tokens.push [:tBLANK, text]
+
+        when text = @ss.scan(PRESENT)
+          @tokens.push [:tPRESENT, text]
 
         when text = @ss.scan(STRING)
           @tokens.push [:tSTRING, text[1..-2]]
