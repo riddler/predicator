@@ -25,4 +25,11 @@ class ContextTest < Minitest::Test
 
     assert_equal 1, context.value_for(variable)
   end
+
+  def test_eval
+    string = "a.b is {{ a.b }}"
+    context.bind :a, {b:1}
+
+    assert_equal "a.b is 1", context.eval(string)
+  end
 end
