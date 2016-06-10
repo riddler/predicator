@@ -1,3 +1,9 @@
+### 0.4.0 / 2016-06-09
+
+* Adds double dispatch for relation predicates
+* Adds method predicate (.blank? and .present?)
+* Adds Context#eval
+
 ### 0.3.0 / 2016-03-11
 
 * Adds more relation predicates (GT, LT, GTE, LTE, NEQ)
