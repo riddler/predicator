@@ -8,8 +8,16 @@ module Predicator
       end
 
       def satisfied? context=Predicator::Context.new
-        context.value_for(value) >= context.value_for(left) &&
-          context.value_for(value) <= context.value_for(right)
+        value_node = context.node_for value
+        left_node = context.node_for left
+        right_node = context.node_for right
+        method = "compare_to_#{value_node.type}"
+
+        left_value = left_node.send method
+        right_value = right_node.send method
+
+        (value_node.value >= left_value) &&
+          (value_node.value <= right_value)
       end
 
       def == other
