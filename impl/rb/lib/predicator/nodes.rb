@@ -1,0 +1,6 @@
+require "predicator/nodes/base_node"
+require "predicator/nodes/date_node"
+require "predicator/nodes/fixnum_node"
+require "predicator/nodes/float_node"
+require "predicator/nodes/nil_class_node"
+require "predicator/nodes/string_node"
