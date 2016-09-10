@@ -13,16 +13,22 @@ module Predicator
         Visitors::Each.new(block).accept self
       end
 
-      def to_s
-        Visitors::String.new.accept self
+      def to_dot
+        Visitors::Dot.new.accept self
+      end
+
+      def to_instructions
+        instructions = []
+        Visitors::Instructions.new(instructions).accept self
+        instructions
       end
 
       def to_predicate
         Visitors::Predicate.new.accept self
       end
 
-      def to_dot
-        Visitors::Dot.new.accept self
+      def to_s
+        Visitors::String.new.accept self
       end
 
       def type
@@ -36,23 +42,16 @@ module Predicator
       alias :symbol :left
     end
 
-    class Literal < Terminal
-      def type; :LITERAL; end
-    end
+    #class Literal < Terminal
+    #  def type; :LITERAL; end
+    #end
 
     class Variable < Terminal
       def type; :VARIABLE; end
       def variable?; true; end
     end
 
-    class String < Terminal
-      def type; :STRING; end
-      def to_s
-        "'#{left}'"
-      end
-    end
-
-    %w[ True False Integer ].each do |t|
+    %w[ True False Integer String ].each do |t|
       class_eval <<-eoruby, __FILE__, __LINE__ + 1
         class #{t} < Terminal;
           def type; :#{t.upcase}; end
