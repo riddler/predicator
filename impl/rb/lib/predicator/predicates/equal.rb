@@ -1,9 +1,12 @@
 module Predicator
   module Predicates
-    class Equal < Predicator::Predicates::Relation
+    class NilValueError < StandardError; end
+
+    class Equal < Comparison
       def compare_values lhs, rhs
         lhs == rhs
       end
     end
+
   end
 end

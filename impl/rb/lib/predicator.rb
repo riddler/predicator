@@ -1,13 +1,10 @@
-require "date"
-
-require "predicator/context"
-require "predicator/errors"
-require "predicator/lexer"
-require "predicator/nodes"
 require "predicator/parser"
-require "predicator/predicates"
+
 require "predicator/variable"
-require "predicator/version"
+require "predicator/context"
+require "predicator/predicates"
+
+require "predicator/evaluator"
 
 module Predicator
   def self.parse string
