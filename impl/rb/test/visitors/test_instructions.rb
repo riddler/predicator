@@ -45,6 +45,16 @@ module Predicator
         ]
       end
 
+      def test_false_or_true_and_true
+        skip
+        assert_instructions "false or true and true", [
+          {op: "lit", lit: true},
+          {op: "jump_if_true", label: "will_be_substituted"},
+          {op: "lit", lit: false},
+          {op: "label", label: "will_be_substituted"},
+        ]
+      end
+
       def test_false_or_integer_equal_integer
         assert_instructions "false or 1=1", [
           {op: "lit", lit: false},
@@ -67,8 +77,9 @@ module Predicator
           if expected.key? :label
             expected[:label] = generated[:label]
           end
-          assert_equal expected, generated
         end
+
+        assert_equal expected_instructions, instructions
       end
     end
   end
