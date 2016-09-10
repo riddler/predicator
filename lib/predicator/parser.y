@@ -14,8 +14,8 @@ rule
     | comparison_predicate
     ;
   boolean_predicate
-    : TRUE                      { AST::True.new val.first }
-    | FALSE                     { AST::False.new val.first }
+    : TRUE                      { AST::True.new true }
+    | FALSE                     { AST::False.new false }
     ;
   logical_predicate
     : BANG predicate            { AST::Not.new val.last }
@@ -40,7 +40,7 @@ rule
     : STRING                    { AST::String.new val.first }
     ;
   literal
-    | INTEGER                   { AST::Integer.new val.first }
+    | INTEGER                   { AST::Integer.new val.first.to_i }
     ;
   variable
     : IDENTIFIER                { AST::Variable.new val.first }

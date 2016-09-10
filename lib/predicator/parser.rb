@@ -180,11 +180,11 @@ Racc_debug_parser = false
 # reduce 4 omitted
 
 def _reduce_5(val, _values)
- AST::True.new val.first 
+ AST::True.new true 
 end
 
 def _reduce_6(val, _values)
- AST::False.new val.first 
+ AST::False.new false 
 end
 
 def _reduce_7(val, _values)
@@ -222,7 +222,7 @@ end
 # reduce 17 omitted
 
 def _reduce_18(val, _values)
- AST::Integer.new val.first 
+ AST::Integer.new val.first.to_i 
 end
 
 def _reduce_19(val, _values)
