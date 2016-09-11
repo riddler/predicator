@@ -3,8 +3,13 @@ module Predicator
     class Instructions < Visitor
       attr_reader :instructions
 
-      def initialize instructions
+      def initialize instructions=[]
         @instructions = instructions
+      end
+
+      def accept ast
+        super
+        instructions
       end
 
       private

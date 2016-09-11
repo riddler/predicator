@@ -3,6 +3,8 @@ require "helper"
 module Predicator
   module Visitors
     class TestInstructions < Minitest::Test
+      make_my_diffs_pretty!
+
       def setup
         @parser = Parser.new
       end
@@ -38,16 +40,6 @@ module Predicator
 
       def test_true_or_false
         assert_instructions "true or false", [
-          {op: "lit", lit: true},
-          {op: "jump_if_true", label: "will_be_substituted"},
-          {op: "lit", lit: false},
-          {op: "label", label: "will_be_substituted"},
-        ]
-      end
-
-      def test_false_or_true_and_true
-        skip
-        assert_instructions "false or true and true", [
           {op: "lit", lit: true},
           {op: "jump_if_true", label: "will_be_substituted"},
           {op: "lit", lit: false},
