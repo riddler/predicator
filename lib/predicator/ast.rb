@@ -18,9 +18,7 @@ module Predicator
       end
 
       def to_instructions
-        instructions = []
-        Visitors::Instructions.new(instructions).accept self
-        instructions
+        Visitors::Instructions.new.accept self
       end
 
       def to_predicate
