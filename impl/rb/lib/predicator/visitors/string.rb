@@ -7,12 +7,16 @@ module Predicator
         node.left.to_s
       end
 
-      def visit_NOT node
-        "!#{visit node.left}"
-      end
-
       def visit_STRING node
         "'#{node.left}'"
+      end
+
+      def visit_NAMED node
+        "@#{node.left}"
+      end
+
+      def visit_NOT node
+        "!#{visit node.left}"
       end
 
       def visit_GROUP node

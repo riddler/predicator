@@ -9,46 +9,51 @@ module Predicator
 
       def accept ast
         super
-        instructions
+        @instructions
       end
 
       private
 
+      def visit_NAMED node
+        pred = Predicator.find node.symbol
+        @instructions += pred.instructions
+      end
+
       def visit_AND node
         visit node.left
-        instructions.push jump_instruction("false", node)
+        @instructions.push jump_instruction("false", node)
         visit node.right
-        instructions.push label_instruction(node)
+        @instructions.push label_instruction(node)
       end
 
       def visit_OR node
         visit node.left
-        instructions.push jump_instruction("true", node)
+        @instructions.push jump_instruction("true", node)
         visit node.right
-        instructions.push label_instruction(node)
+        @instructions.push label_instruction(node)
       end
 
       def visit_NOT node
         super
-        instructions.push op: "not"
+        @instructions.push op: "not"
       end
 
       def visit_EQ node
         super
-        instructions.push op: "compare", comparison: "EQ"
+        @instructions.push op: "compare", comparison: "EQ"
       end
 
       def visit_GT node
         super
-        instructions.push op: "compare", comparison: "GT"
+        @instructions.push op: "compare", comparison: "GT"
       end
 
       def visit_VARIABLE node
-        instructions.push op: "read_var", var: node.symbol
+        @instructions.push op: "read_var", var: node.symbol
       end
 
       def terminal node
-        instructions.push op: "lit", lit: node.symbol
+        @instructions.push op: "lit", lit: node.symbol
       end
 
       def jump_instruction condition, node

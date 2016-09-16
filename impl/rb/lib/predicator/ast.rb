@@ -34,24 +34,30 @@ module Predicator
       end
 
       def variable?; false; end
+      def literal?; false; end
     end
 
     class Terminal < Node
       alias :symbol :left
     end
 
-    #class Literal < Terminal
-    #  def type; :LITERAL; end
-    #end
+    class Literal < Terminal
+      def type; :LITERAL; end
+      def literal?; true; end
+    end
 
     class Variable < Terminal
       def type; :VARIABLE; end
       def variable?; true; end
     end
 
+    class Named < Terminal
+      def type; :NAMED; end
+    end
+
     %w[ True False Integer String ].each do |t|
       class_eval <<-eoruby, __FILE__, __LINE__ + 1
-        class #{t} < Terminal;
+        class #{t} < Literal;
           def type; :#{t.upcase}; end
         end
       eoruby
