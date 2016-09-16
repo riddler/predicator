@@ -28,13 +28,27 @@ module Predicator
         instructions.push label_instruction(node)
       end
 
-      def visit_EQUAL node
+      def visit_NOT node
         super
-        instructions.push  op: "compare", comparison: "EQ"
+        instructions.push op: "not"
+      end
+
+      def visit_EQ node
+        super
+        instructions.push op: "compare", comparison: "EQ"
+      end
+
+      def visit_GT node
+        super
+        instructions.push op: "compare", comparison: "GT"
+      end
+
+      def visit_VARIABLE node
+        instructions.push op: "read_var", var: node.symbol
       end
 
       def terminal node
-        instructions.push  op: "lit", lit: node.symbol
+        instructions.push op: "lit", lit: node.symbol
       end
 
       def jump_instruction condition, node

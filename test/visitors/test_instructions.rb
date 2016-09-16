@@ -21,11 +21,34 @@ module Predicator
         assert_instructions "(true)", [{op: "lit", lit: true}]
       end
 
+      def test_not
+        assert_instructions "!true", [
+          {op: "lit", lit: true},
+          {op: "not"},
+        ]
+      end
+
       def test_integer_equal_integer
         assert_instructions "1=1", [
           {op: "lit", lit: 1},
           {op: "lit", lit: 1},
           {op: "compare", comparison: "EQ"},
+        ]
+      end
+
+      def test_variable_equal_integer
+        assert_instructions "age=21", [
+          {op: "read_var", var: "age"},
+          {op: "lit", lit: 21},
+          {op: "compare", comparison: "EQ"},
+        ]
+      end
+
+      def test_integer_greater_than_integer
+        assert_instructions "2>1", [
+          {op: "lit", lit: 2},
+          {op: "lit", lit: 1},
+          {op: "compare", comparison: "GT"},
         ]
       end
 
@@ -66,7 +89,7 @@ module Predicator
 
         expected_instructions.each_with_index do |expected, idx|
           generated = instructions[idx]
-          if expected.key? :label
+          if expected.key?(:label) && !generated.nil?
             expected[:label] = generated[:label]
           end
         end

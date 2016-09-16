@@ -14,11 +14,17 @@ module Predicator
         ["false",   [[:FALSE, "false"]]],
         ["123",     [[:INTEGER, "123"]]],
         ["'foo'",   [[:STRING, "foo"]]],
+        ['"foo"',   [[:STRING, "foo"]]],
         ["foo",     [[:IDENTIFIER, "foo"]]],
         ["a='b'",   [
                       [:IDENTIFIER, "a"],
                       [:EQ, "="],
                       [:STRING, "b"]
+                    ]],
+        ["a>1",     [
+                      [:IDENTIFIER, "a"],
+                      [:GT, ">"],
+                      [:INTEGER, "1"]
                     ]],
         ["!true",   [
                       [:BANG, "!"],

@@ -19,8 +19,12 @@ module Predicator
         "(#{visit node.left})"
       end
 
-      def visit_EQUAL node
+      def visit_EQ node
         [visit(node.left), " = ", visit(node.right)].join
+      end
+
+      def visit_GT node
+        [visit(node.left), " > ", visit(node.right)].join
       end
 
       def visit_AND node

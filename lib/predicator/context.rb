@@ -10,10 +10,12 @@ module Predicator
     def bind name, value
       @bindings[name.to_s] = value
     end
+    alias :[]= :bind
 
     def binding_for name
-      @bindings[name]
+      @bindings[name.to_s]
     end
+    alias :[] :binding_for
 
     def value_of input
       if input.kind_of? Variable

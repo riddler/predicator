@@ -33,7 +33,7 @@ digraph parse_tree {
         super
       end
 
-      def visit_EQUAL node
+      def visit_EQ node
         @nodes << "#{node.object_id} [label=\"=\"];"
         super
       end
