@@ -1,5 +1,0 @@
-require "predicator/predicates/true"
-require "predicator/predicates/false"
-require "predicator/predicates/not"
-require "predicator/predicates/comparison"
-require "predicator/predicates/equal"
