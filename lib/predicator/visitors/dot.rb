@@ -72,16 +72,11 @@ digraph parse_tree {
         begin
           named = Predicator.find value
         rescue PredicateNotFoundError
-          attrs[:fillcolor] = "red"
+          attrs[:fontcolor] = "red"
         end
 
         if named
-          ast = Predicator.parse named.source
-          vis = Dot.new
-          vis.accept ast
-          @nodes += vis.nodes
-          @edges += vis.edges
-          @edges << "#{node.object_id} -> #{ast.object_id};"
+          add_source named.source, node
         end
 
         attrs_string = attrs.map{|k,v| "#{k}=#{v}"}.join(" ")
@@ -96,6 +91,15 @@ digraph parse_tree {
       def terminal node
         value = node.left.to_s
         @nodes << "#{node.object_id} [label=\"#{value}\"];"
+      end
+
+      def add_source source, parent
+        ast = Predicator.parse source
+        vis = Dot.new
+        vis.accept ast
+        @nodes += vis.nodes
+        @edges += vis.edges
+        @edges << "#{parent.object_id} -> #{ast.object_id};"
       end
     end
   end
