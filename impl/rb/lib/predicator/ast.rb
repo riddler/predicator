@@ -81,7 +81,11 @@ module Predicator
     end
 
     class Equal < Binary
-      def type; :EQUAL; end
+      def type; :EQ; end
+    end
+
+    class GreaterThan < Binary
+      def type; :GT; end
     end
 
     class And < Binary

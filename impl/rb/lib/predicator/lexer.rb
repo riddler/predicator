@@ -12,6 +12,7 @@ module Predicator
     AND         = /and/
     OR          = /or/
     EQ          = /=/
+    GT          = />/
     INTEGER     = /[+-]?\d(_?\d)*\b/
     STRING      = /(["'])(?:\\?.)*?\1/
     IDENTIFIER  = /[a-z][A-Za-z0-9_]*/
@@ -50,6 +51,7 @@ module Predicator
         when text = @ss.scan(AND)         then add [:AND, text]
         when text = @ss.scan(OR)          then add [:OR, text]
         when text = @ss.scan(EQ)          then add [:EQ, text]
+        when text = @ss.scan(GT)          then add [:GT, text]
         when text = @ss.scan(INTEGER)     then add [:INTEGER, text]
         when text = @ss.scan(STRING)      then add [:STRING, text[1...-1]]
         when text = @ss.scan(IDENTIFIER)  then add [:IDENTIFIER, text]

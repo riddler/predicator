@@ -3,7 +3,7 @@ class Predicator::Parser
 options no_result_var
 
 token TRUE FALSE LPAREN RPAREN BANG AND OR
-      EQ
+      EQ GT
       INTEGER STRING IDENTIFIER
 
 rule
@@ -27,6 +27,7 @@ rule
     ;
   comparison_predicate
     : value EQ value            { AST::Equal.new val.first, val.last }
+    | value GT value            { AST::GreaterThan.new val.first, val.last }
     ;
   value
     : scalar
