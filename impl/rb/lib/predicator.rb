@@ -1,9 +1,5 @@
 require "predicator/parser"
-
-require "predicator/variable"
 require "predicator/context"
-require "predicator/predicates"
-
 require "predicator/evaluator"
 
 module Predicator
