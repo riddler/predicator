@@ -22,6 +22,10 @@ module Predicator
       assert_type :GROUP, "(true)"
     end
 
+    def test_named
+      assert_type :NAMED, "@foo"
+    end
+
     def test_integer_equals_integer
       ast = @parser.parse "1 = 1"
 

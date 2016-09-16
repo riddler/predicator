@@ -6,16 +6,17 @@ module Predicator
     SPACE       = /[ \t\r\n]/
     LPAREN      = /\(/
     RPAREN      = /\)/
-    TRUE        = /true/
-    FALSE       = /false/
+    TRUE        = /true\b/
+    FALSE       = /false\b/
     BANG        = /!/
-    AND         = /and/
-    OR          = /or/
+    AT          = /@/
+    AND         = /and\b/
+    OR          = /or\b/
     EQ          = /=/
     GT          = />/
     INTEGER     = /[+-]?\d(_?\d)*\b/
     STRING      = /(["'])(?:\\?.)*?\1/
-    IDENTIFIER  = /[a-z][A-Za-z0-9_]*/
+    IDENTIFIER  = /[a-z][A-Za-z0-9_]*\b/
 
     def initialize
       @ss = nil
@@ -48,6 +49,7 @@ module Predicator
         when text = @ss.scan(TRUE)        then add [:TRUE, text]
         when text = @ss.scan(FALSE)       then add [:FALSE, text]
         when text = @ss.scan(BANG)        then add [:BANG, text]
+        when text = @ss.scan(AT)          then add [:AT, text]
         when text = @ss.scan(AND)         then add [:AND, text]
         when text = @ss.scan(OR)          then add [:OR, text]
         when text = @ss.scan(EQ)          then add [:EQ, text]

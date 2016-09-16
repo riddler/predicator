@@ -1,6 +1,8 @@
 module Predicator
   module Visitors
     class Dot < Visitor
+      attr_reader :nodes, :edges
+
       def initialize
         @nodes = []
         @edges = []
@@ -38,6 +40,11 @@ digraph parse_tree {
         super
       end
 
+      def visit_GT node
+        @nodes << "#{node.object_id} [label=\">\"];"
+        super
+      end
+
       def visit_AND node
         @nodes << "#{node.object_id} [label=\"and\"];"
         super
@@ -56,6 +63,29 @@ digraph parse_tree {
       def visit_GROUP node
         @nodes << "#{node.object_id} [label=\"( )\"];"
         super
+      end
+
+      def visit_NAMED node
+        value = node.left
+        attrs = {label: "\"@#{value}\""}
+
+        begin
+          named = Predicator.find value
+        rescue PredicateNotFoundError
+          attrs[:fillcolor] = "red"
+        end
+
+        if named
+          ast = Predicator.parse named.source
+          vis = Dot.new
+          vis.accept ast
+          @nodes += vis.nodes
+          @edges += vis.edges
+          @edges << "#{node.object_id} -> #{ast.object_id};"
+        end
+
+        attrs_string = attrs.map{|k,v| "#{k}=#{v}"}.join(" ")
+        @nodes << "#{node.object_id} [#{attrs_string}];"
       end
 
       def visit_STRING node
