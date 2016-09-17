@@ -14,7 +14,7 @@ module Predicator
     end
 
     def test_create
-      Predicator.create name: "good_credit", source: "true"
+      Predicator.create name: "good_credit", source: "score > 700"
 
       found = Predicator.find "good_credit"
       assert_respond_to found, :instructions
