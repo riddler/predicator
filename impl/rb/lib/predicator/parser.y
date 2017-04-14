@@ -12,7 +12,6 @@ rule
     | logical_predicate
     | group_predicate
     | comparison_predicate
-    | named_predicate
     ;
   boolean_predicate
     : TRUE                      { AST::True.new true }
@@ -29,9 +28,6 @@ rule
   comparison_predicate
     : value EQ value            { AST::Equal.new val.first, val.last }
     | value GT value            { AST::GreaterThan.new val.first, val.last }
-    ;
-  named_predicate
-    : AT IDENTIFIER             { AST::Named.new val.last }
     ;
   value
     : scalar
