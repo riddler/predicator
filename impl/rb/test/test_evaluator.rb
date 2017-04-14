@@ -71,7 +71,7 @@ module Predicator
     def test_true_and_true
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_false", label: "end_and"},
+        {op: "jump_if_false", to: 3},
         {op: "lit", lit: true},
         {op: "label", label: "end_and"},
       ]
@@ -80,7 +80,7 @@ module Predicator
     def test_false_and_false
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_false", label: "end_and"},
+        {op: "jump_if_false", to: 3},
         {op: "lit", lit: false},
         {op: "label", label: "end_and"},
       ]
@@ -89,7 +89,7 @@ module Predicator
     def test_false_and_true
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_false", label: "end_and"},
+        {op: "jump_if_false", to: 3},
         {op: "lit", lit: true},
         {op: "label", label: "end_and"},
       ]
@@ -98,7 +98,7 @@ module Predicator
     def test_true_and_false
       assert_eval false, [
         {op: "lit", lit: true},
-        {op: "jump_if_false", label: "end_and"},
+        {op: "jump_if_false", to: 3},
         {op: "lit", lit: false},
         {op: "label", label: "end_and"},
       ]
@@ -108,7 +108,7 @@ module Predicator
     def test_true_or_true
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_true", label: "end_or"},
+        {op: "jump_if_true", to: 3},
         {op: "lit", lit: true},
         {op: "label", label: "end_or"},
       ]
@@ -117,7 +117,7 @@ module Predicator
     def test_false_or_false
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_true", label: "end_or"},
+        {op: "jump_if_true", to: 3},
         {op: "lit", lit: false},
         {op: "label", label: "end_or"},
       ]
@@ -126,7 +126,7 @@ module Predicator
     def test_false_or_true
       assert_eval true, [
         {op: "lit", lit: false},
-        {op: "jump_if_true", label: "end_or"},
+        {op: "jump_if_true", to: 3},
         {op: "lit", lit: true},
         {op: "label", label: "end_or"},
       ]
@@ -135,7 +135,7 @@ module Predicator
     def test_true_or_false
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_true", label: "end_or"},
+        {op: "jump_if_true", to: 3},
         {op: "lit", lit: false},
         {op: "label", label: "end_or"},
       ]

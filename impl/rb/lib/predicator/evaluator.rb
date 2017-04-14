@@ -7,7 +7,6 @@ module Predicator
       @context = Context.new context_data
       @stack = []
       @ip = 0
-      process_labels
     end
 
     def result
@@ -25,9 +24,9 @@ module Predicator
       when "not"
         stack.push !stack.pop
       when "jump_if_false"
-        jump_if_false instruction[:label]
+        jump_if_false instruction[:to]
       when "jump_if_true"
-        jump_if_true instruction[:label]
+        jump_if_true instruction[:to]
       when "lit"
         stack.push instruction[:lit]
       when "read_var"
@@ -37,17 +36,17 @@ module Predicator
       end
     end
 
-    def jump_if_false label
+    def jump_if_false new_pointer
       if stack[-1] == false
-        @ip = @labels[label]
+        @ip = new_pointer
       else
         stack.pop
       end
     end
 
-    def jump_if_true label
+    def jump_if_true new_pointer
       if stack[-1] == true
-        @ip = @labels[label]
+        @ip = new_pointer
       else
         stack.pop
       end
@@ -69,15 +68,6 @@ module Predicator
 
     def compare_GT left, right
       left > right
-    end
-
-    # Build up a map of label => instruction_pointer
-    def process_labels
-      @labels = {}
-      @instructions.each_with_index do |inst, idx|
-        next unless inst[:op] == "label"
-        @labels[inst[:label]] = idx
-      end
     end
   end
 end

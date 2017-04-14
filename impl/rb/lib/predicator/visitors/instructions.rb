@@ -5,10 +5,13 @@ module Predicator
 
       def initialize instructions=[]
         @instructions = instructions
+        @labels = {}
       end
 
       def accept ast
         super
+        process_labels
+        update_jumps
         @instructions
       end
 
@@ -63,6 +66,20 @@ module Predicator
           op: "label",
           label: node.object_id.to_s
         }
+      end
+
+      def process_labels
+        @instructions.each_with_index do |inst, idx|
+          next unless inst[:op] == "label"
+          @labels[inst[:label]] = idx
+        end
+      end
+
+      def update_jumps
+        @instructions.each_with_index do |inst, idx|
+          next unless inst[:op] =~ /^jump/
+          inst[:to] = @labels[inst.delete :label]
+        end
       end
     end
   end
