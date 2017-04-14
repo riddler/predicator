@@ -65,24 +65,6 @@ digraph parse_tree {
         super
       end
 
-      def visit_NAMED node
-        value = node.left
-        attrs = {label: "\"@#{value}\""}
-
-        begin
-          named = Predicator.find value
-        rescue PredicateNotFoundError
-          attrs[:fontcolor] = "red"
-        end
-
-        if named
-          add_source named.source, node
-        end
-
-        attrs_string = attrs.map{|k,v| "#{k}=#{v}"}.join(" ")
-        @nodes << "#{node.object_id} [#{attrs_string}];"
-      end
-
       def visit_STRING node
         value = node.left
         @nodes << "#{node.object_id} [label=\"'#{value}'\"];"

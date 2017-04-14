@@ -36,7 +36,6 @@ module Predicator
       def visit_INTEGER node;   terminal node; end
       def visit_STRING node;    terminal node; end
       def visit_VARIABLE node;  terminal node; end
-      def visit_NAMED node;     terminal node; end
     end
   end
 end

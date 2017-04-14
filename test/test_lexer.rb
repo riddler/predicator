@@ -35,10 +35,6 @@ module Predicator
                       [:TRUE, "true"],
                       [:RPAREN, ")"],
                     ]],
-        ["@foo",    [
-                      [:AT, "@"],
-                      [:IDENTIFIER, "foo"]
-                    ]],
       ].each do |str, expected|
         @lexer.scan_setup str
         assert_tokens expected, @lexer

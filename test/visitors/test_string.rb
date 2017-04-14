@@ -22,10 +22,6 @@ module Predicator
         assert_equal "!true", ast.to_s
       end
 
-      def test_named
-        assert_round_trip "@foo"
-      end
-
       def test_group
         ast = AST::Group.new(AST::True.new "true")
         assert_equal "(true)", ast.to_s

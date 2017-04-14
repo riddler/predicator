@@ -28,36 +28,6 @@ module Predicator
         ]
       end
 
-      def test_unknown_named
-        ast = @parser.parse "@not_found"
-
-        assert_raises PredicateNotFoundError do
-          ast.to_instructions
-        end
-      end
-
-      def test_named
-        Predicator.create name: "true_predicate", source: "true"
-
-        assert_instructions "@true_predicate", [
-          {op: "lit", lit: true},
-        ]
-      end
-
-      def test_named_or_true
-        Predicator.create name: "good_credit", source: "score > 700"
-
-        assert_instructions "@good_credit or true", [
-          {op: "read_var", var: "score"},
-          {op: "lit", lit: 700},
-          {op: "compare", comparison: "GT"},
-
-          {op: "jump_if_true", label: "will_be_substituted"},
-          {op: "lit", lit: true},
-          {op: "label", label: "will_be_substituted"},
-        ]
-      end
-
       def test_integer_equal_integer
         assert_instructions "1=1", [
           {op: "lit", lit: 1},

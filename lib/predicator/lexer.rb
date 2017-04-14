@@ -9,7 +9,6 @@ module Predicator
     TRUE        = /true\b/
     FALSE       = /false\b/
     BANG        = /!/
-    AT          = /@/
     AND         = /and\b/
     OR          = /or\b/
     EQ          = /=/
@@ -49,7 +48,6 @@ module Predicator
         when text = @ss.scan(TRUE)        then add [:TRUE, text]
         when text = @ss.scan(FALSE)       then add [:FALSE, text]
         when text = @ss.scan(BANG)        then add [:BANG, text]
-        when text = @ss.scan(AT)          then add [:AT, text]
         when text = @ss.scan(AND)         then add [:AND, text]
         when text = @ss.scan(OR)          then add [:OR, text]
         when text = @ss.scan(EQ)          then add [:EQ, text]

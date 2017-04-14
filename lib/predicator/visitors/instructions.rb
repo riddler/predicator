@@ -14,11 +14,6 @@ module Predicator
 
       private
 
-      def visit_NAMED node
-        pred = Predicator.find node.symbol
-        @instructions += pred.instructions
-      end
-
       def visit_AND node
         visit node.left
         @instructions.push jump_instruction("false", node)

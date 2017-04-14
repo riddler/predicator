@@ -51,10 +51,6 @@ module Predicator
       def variable?; true; end
     end
 
-    class Named < Terminal
-      def type; :NAMED; end
-    end
-
     %w[ True False Integer String ].each do |t|
       class_eval <<-eoruby, __FILE__, __LINE__ + 1
         class #{t} < Literal;
