@@ -55,7 +55,7 @@ module Predicator
       def test_true_and_true
         assert_instructions "true and true", [
           {op: "lit", lit: true},
-          {op: "jump_if_false", label: "will_be_substituted"},
+          {op: "jump_if_false", to: 3},
           {op: "lit", lit: true},
           {op: "label", label: "will_be_substituted"},
         ]
@@ -64,7 +64,7 @@ module Predicator
       def test_true_or_false
         assert_instructions "true or false", [
           {op: "lit", lit: true},
-          {op: "jump_if_true", label: "will_be_substituted"},
+          {op: "jump_if_true", to: 3},
           {op: "lit", lit: false},
           {op: "label", label: "will_be_substituted"},
         ]
@@ -73,7 +73,7 @@ module Predicator
       def test_false_or_integer_equal_integer
         assert_instructions "false or 1=1", [
           {op: "lit", lit: false},
-          {op: "jump_if_true", label: "will_be_substituted"},
+          {op: "jump_if_true", to: 5},
           {op: "lit", lit: 1},
           {op: "lit", lit: 1},
           {op: "compare", comparison: "EQ"},
