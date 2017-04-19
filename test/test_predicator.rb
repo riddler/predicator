@@ -12,5 +12,10 @@ module Predicator
       instructions = Predicator.compile "true"
       assert_equal [{op: "lit", lit: true}], instructions
     end
+
+    def test_evaluate
+      result = Predicator.evaluate "true"
+      assert result
+    end
   end
 end
