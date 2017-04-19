@@ -8,7 +8,13 @@ module Predicator
   end
 
   def self.compile source
-    ast = Predicator.parse source
+    ast = parse source
     ast.to_instructions
+  end
+
+  def self.evaluate source
+    instructions = compile source
+    evaluator = Evaluator.new instructions
+    evaluator.result
   end
 end
