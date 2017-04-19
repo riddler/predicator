@@ -1,16 +1,20 @@
-require "date"
-
 require "predicator/context"
-require "predicator/errors"
-require "predicator/lexer"
-require "predicator/nodes"
+require "predicator/evaluator"
 require "predicator/parser"
-require "predicator/predicates"
-require "predicator/variable"
-require "predicator/version"
 
 module Predicator
-  def self.parse string
-    Predicator::Parser.new.parse string
+  def self.parse source
+    Predicator::Parser.new.parse source
+  end
+
+  def self.compile source
+    ast = parse source
+    ast.to_instructions
+  end
+
+  def self.evaluate source
+    instructions = compile source
+    evaluator = Evaluator.new instructions
+    evaluator.result
   end
 end

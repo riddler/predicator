@@ -5,7 +5,7 @@
 
 # Predicator
 
-Predicator is a predicate engine
+Predicator is a predicate engine.
 
 ## Usage
 
@@ -14,12 +14,7 @@ Example usage:
 ```ruby
 require "predicator"
 
-pred = Predicator.parse "a.b = 5"
-
-context = Predicator::Context.new
-context[:a] = {b:5}
-
-pred.satisfied? context
+Predicator.evaluate "1 = 2"
 ```
 
 ## Installation

@@ -1,15 +1,21 @@
-require "bundler/gem_tasks"
+require "rubygems"
+#require "bundler/gem_tasks"
 require "rake/testtask"
 
 Rake::TestTask.new :test do |t|
   t.libs << "test"
   t.libs << "lib"
-  t.test_files = FileList["test/**/*_test.rb"]
+  t.test_files = FileList["test/**/test_*.rb"]
+  t.warning = false
 end
 
-task :default => :test
+rule ".rb" => ".y" do |t|
+  sh "racc -l -o #{t.name} #{t.source}"
+end
 
 desc "Compile and generate the parser"
-task :compile do
-  sh "racc lib/predicator/parser.y -o lib/predicator/generated_parser.rb"
-end
+task :compile => "lib/predicator/parser.rb"
+
+task :test => :compile
+
+task :default => :test
