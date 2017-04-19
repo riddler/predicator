@@ -1,40 +1,33 @@
-class Predicator::GeneratedParser
+class Predicator::Parser
+
 options no_result_var
-prechigh
-  right tBANG
-  left  tAND tOR
-preclow
-token tTRUE tFALSE tSTRING tFLOAT tINTEGER tDATE tIDENTIFIER tAND tOR tBETWEEN
-      tDOT tLPAREN tRPAREN tBANG tEQ tNEQ tLEQ tGEQ tLT tGT tBLANK tPRESENT
+
+token TRUE FALSE LPAREN RPAREN BANG AT AND OR
+      EQ GT
+      INTEGER STRING IDENTIFIER
+
 rule
   predicate
     : boolean_predicate
     | logical_predicate
-    | relation_predicate
-    | method_predicate
-    | tLPAREN predicate tRPAREN { val[1] }
-    | value tBETWEEN value tAND value { Predicator::Predicates::Between.new val[0], val[2], val[4] }
+    | group_predicate
+    | comparison_predicate
     ;
   boolean_predicate
-    : tTRUE                     { Predicator::Predicates::True.new }
-    | tFALSE                    { Predicator::Predicates::False.new }
+    : TRUE                      { AST::True.new true }
+    | FALSE                     { AST::False.new false }
     ;
   logical_predicate
-    : predicate tAND predicate  { Predicator::Predicates::And.new [val[0], val[2]] }
-    | predicate tOR predicate   { Predicator::Predicates::Or.new [val[0], val[2]] }
-    | tBANG predicate           { Predicator::Predicates::Not.new val[0] }
+    : BANG predicate            { AST::Not.new val.last }
+    | predicate AND predicate   { AST::And.new val.first, val.last }
+    | predicate OR predicate    { AST::Or.new val.first, val.last }
     ;
-  relation_predicate
-    : value tEQ value           { Predicator::Predicates::Equal.new val[0], val[2] }
-    | value tGT value           { Predicator::Predicates::GreaterThan.new val[0], val[2] }
-    | value tLT value           { Predicator::Predicates::LessThan.new val[0], val[2] }
-    | value tGEQ value          { Predicator::Predicates::GreaterThanOrEqual.new val[0], val[2] }
-    | value tLEQ value          { Predicator::Predicates::LessThanOrEqual.new val[0], val[2] }
-    | value tNEQ value          { Predicator::Predicates::NotEqual.new val[0], val[2] }
+  group_predicate
+    : LPAREN predicate RPAREN   { AST::Group.new val[1] }
     ;
-  method_predicate
-    : value tDOT tBLANK         { Predicator::Predicates::Method.new val[0], val[2] }
-    | value tDOT tPRESENT       { Predicator::Predicates::Method.new val[0], val[2] }
+  comparison_predicate
+    : value EQ value            { AST::Equal.new val.first, val.last }
+    | value GT value            { AST::GreaterThan.new val.first, val.last }
     ;
   value
     : scalar
@@ -45,13 +38,38 @@ rule
     | literal
     ;
   string
-    : tSTRING   { val[0] }
+    : STRING                    { AST::String.new val.first }
     ;
   literal
-    : tFLOAT    { val[0].to_f }
-    | tINTEGER  { val[0].to_i }
-    | tDATE     { Date.new *val[0] }
+    | INTEGER                   { AST::Integer.new val.first.to_i }
     ;
   variable
-    : tIDENTIFIER tDOT tIDENTIFIER { Predicator::Variable.new val[0], val[2] }
+    : IDENTIFIER                { AST::Variable.new val.first }
     ;
+end
+
+---- inner
+    def initialize
+      @lexer = Lexer.new
+    end
+
+    def parse string
+      @lexer.scan_setup string
+      do_parse
+    end
+
+    def next_token
+      @lexer.next_token
+    end
+
+    def on_error type, val, values
+      super
+    rescue Racc::ParseError
+      trace = values.each_with_index.map{|l, i| "#{' ' * i}#{l}"}
+      raise ParseError, "\nparse error on value #{val.inspect}\n#{trace.join("\n")}"
+    end
+
+---- header
+require "predicator/lexer"
+require "predicator/visitors"
+require "predicator/ast"

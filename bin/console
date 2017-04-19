@@ -2,14 +2,16 @@
 
 require "bundler/setup"
 require "predicator"
+
+include Predicator
+
 P = Predicator
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+def P.png source
+  ast = parse source
+  File.write "/tmp/pred.dot", ast.to_dot
+  `cd /tmp && dot -Tpng pred.dot > pred.png`
+end
 
-# (If you use this, don't forget to add pry to your Gemfile!)
 require "pry"
 Pry.start
-
-#require "irb"
-#IRB.start
