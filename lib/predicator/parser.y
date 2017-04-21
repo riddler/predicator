@@ -54,7 +54,8 @@ end
     end
 
     def parse string
-      @lexer.scan_setup string
+      @lexer.parse string
+      #@lexer.scan_setup string
       do_parse
     end
 
@@ -70,6 +71,6 @@ end
     end
 
 ---- header
-require "predicator/lexer"
+require "predicator/lexer.rex"
 require "predicator/visitors"
 require "predicator/ast"
