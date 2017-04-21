@@ -19,14 +19,12 @@ module Predicator
 
     def process instruction
       case instruction[:op]
-      when "label"
-        # no-op
       when "not"
         stack.push !stack.pop
       when "jump_if_false"
-        jump_if_false instruction[:to]
+        jump_if_false instruction[:offset]
       when "jump_if_true"
-        jump_if_true instruction[:to]
+        jump_if_true instruction[:offset]
       when "lit"
         stack.push instruction[:lit]
       when "read_var"
@@ -36,17 +34,17 @@ module Predicator
       end
     end
 
-    def jump_if_false new_pointer
+    def jump_if_false offset
       if stack[-1] == false
-        @ip = new_pointer
+        @ip += offset
       else
         stack.pop
       end
     end
 
-    def jump_if_true new_pointer
+    def jump_if_true offset
       if stack[-1] == true
-        @ip = new_pointer
+        @ip += offset
       else
         stack.pop
       end

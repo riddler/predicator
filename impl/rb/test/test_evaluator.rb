@@ -71,36 +71,32 @@ module Predicator
     def test_true_and_true
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_false", to: 3},
+        {op: "jump_if_false", offset: 2},
         {op: "lit", lit: true},
-        {op: "label", label: "end_and"},
       ]
     end
 
     def test_false_and_false
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_false", to: 3},
+        {op: "jump_if_false", offset: 2},
         {op: "lit", lit: false},
-        {op: "label", label: "end_and"},
       ]
     end
 
     def test_false_and_true
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_false", to: 3},
+        {op: "jump_if_false", offset: 2},
         {op: "lit", lit: true},
-        {op: "label", label: "end_and"},
       ]
     end
 
     def test_true_and_false
       assert_eval false, [
         {op: "lit", lit: true},
-        {op: "jump_if_false", to: 3},
+        {op: "jump_if_false", offset: 2},
         {op: "lit", lit: false},
-        {op: "label", label: "end_and"},
       ]
     end
 
@@ -108,36 +104,32 @@ module Predicator
     def test_true_or_true
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_true", to: 3},
+        {op: "jump_if_true", offset: 2},
         {op: "lit", lit: true},
-        {op: "label", label: "end_or"},
       ]
     end
 
     def test_false_or_false
       assert_eval false, [
         {op: "lit", lit: false},
-        {op: "jump_if_true", to: 3},
+        {op: "jump_if_true", offset: 2},
         {op: "lit", lit: false},
-        {op: "label", label: "end_or"},
       ]
     end
 
     def test_false_or_true
       assert_eval true, [
         {op: "lit", lit: false},
-        {op: "jump_if_true", to: 3},
+        {op: "jump_if_true", offset: 2},
         {op: "lit", lit: true},
-        {op: "label", label: "end_or"},
       ]
     end
 
     def test_true_or_false
       assert_eval true, [
         {op: "lit", lit: true},
-        {op: "jump_if_true", to: 3},
+        {op: "jump_if_true", offset: 2},
         {op: "lit", lit: false},
-        {op: "label", label: "end_or"},
       ]
     end
 
