@@ -6,7 +6,7 @@
 
 require 'racc/parser.rb'
 
-require "predicator/lexer"
+require "predicator/lexer.rex"
 require "predicator/visitors"
 require "predicator/ast"
 module Predicator
@@ -17,7 +17,8 @@ module Predicator
     end
 
     def parse string
-      @lexer.scan_setup string
+      @lexer.parse string
+      #@lexer.scan_setup string
       do_parse
     end
 
@@ -46,14 +47,14 @@ racc_action_check = [
      0,     0,     0,    18,     0,     8,     8,     8,   nil,     8,
      0,     0,     0,    10,    10,     8,     8,     8,     9,     9,
      9,   nil,     9,    19,    19,    19,   nil,    19,     9,     9,
-     9,    21,    21,    19,    19,    19,    20,    20,    20,    22,
-    20,     1,    22,    22,    26,    26,    20,    20,    20,     1,
-     1,    23,    23,    23,    24,    24,    24,    27,    27 ]
+     9,    26,    26,    19,    19,    19,    20,    20,    20,    22,
+    20,     1,    22,    22,    27,    27,    20,    20,    20,     1,
+     1,    23,    23,    23,    24,    24,    24,    21,    21 ]
 
 racc_action_pointer = [
     -2,    41,   nil,   nil,   nil,   nil,   nil,   nil,     3,    16,
      3,   nil,   nil,   nil,   nil,   nil,   nil,   nil,     3,    21,
-    34,    23,    34,    39,    42,   nil,    36,    49,   nil,   nil,
+    34,    49,    34,    39,    42,   nil,    23,    36,   nil,   nil,
    nil ]
 
 racc_action_default = [

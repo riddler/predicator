@@ -36,7 +36,8 @@ module Predicator
                       [:RPAREN, ")"],
                     ]],
       ].each do |str, expected|
-        @lexer.scan_setup str
+        #@lexer.scan_setup str
+        @lexer.parse str
         assert_tokens expected, @lexer
       end
     end
