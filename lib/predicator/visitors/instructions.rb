@@ -5,13 +5,15 @@ module Predicator
 
       def initialize instructions=[]
         @instructions = instructions
-        @labels = {}
+        @label_locations = {}
       end
 
       def accept ast
         super
-        process_labels
+        # Keep track of instruction location, add it to the label instruction
+        # Remove labels - no need for evaluator to see them
         update_jumps
+        remove_labels
         @instructions
       end
 
@@ -57,29 +59,30 @@ module Predicator
       def jump_instruction condition, node
         {
           op: "jump_if_#{condition}",
-          label: node.object_id.to_s
+          label: node.object_id.to_s,
         }
       end
 
       def label_instruction node
+        label = node.object_id.to_s
+        @label_locations[label] = @instructions.size
         {
           op: "label",
-          label: node.object_id.to_s
+          label: label
         }
-      end
-
-      def process_labels
-        @instructions.each_with_index do |inst, idx|
-          next unless inst[:op] == "label"
-          @labels[inst[:label]] = idx
-        end
       end
 
       def update_jumps
         @instructions.each_with_index do |inst, idx|
           next unless inst[:op] =~ /^jump/
-          inst[:to] = @labels[inst.delete :label]
+          label = inst.delete :label
+          offset = @label_locations[label] - idx
+          inst[:offset] = offset
         end
+      end
+
+      def remove_labels
+        @instructions.delete_if{ |inst| inst[:op] == "label" }
       end
     end
   end
