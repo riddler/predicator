@@ -55,7 +55,6 @@ end
 
     def parse string
       @lexer.parse string
-      #@lexer.scan_setup string
       do_parse
     end
 
