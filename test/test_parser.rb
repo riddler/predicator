@@ -51,6 +51,16 @@ module Predicator
 
       assert_equal :EQ, ast.type
       assert_equal :VARIABLE, ast.left.type
+      assert_equal "foo", ast.left.left
+      assert_equal :STRING, ast.right.type
+    end
+
+    def test_variable_with_dot_equals_string
+      ast = @parser.parse "foo.bar = 'foo'"
+
+      assert_equal :EQ, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal "foo.bar", ast.left.left
       assert_equal :STRING, ast.right.type
     end
 
