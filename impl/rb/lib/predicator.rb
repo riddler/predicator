@@ -14,6 +14,10 @@ module Predicator
 
   def self.evaluate source, context={}
     instructions = compile source
+    evaluate_instructions instructions, context
+  end
+
+  def self.evaluate_instructions instructions, context={}
     evaluator = Evaluator.new instructions, context
     evaluator.result
   end

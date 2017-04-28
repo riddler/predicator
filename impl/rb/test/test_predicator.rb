@@ -17,5 +17,11 @@ module Predicator
       result = Predicator.evaluate "true"
       assert result
     end
+
+    def test_evaluate_instructions
+      instructions = [{op: "lit", lit: true}]
+      result = Predicator.evaluate_instructions instructions
+      assert result
+    end
   end
 end
