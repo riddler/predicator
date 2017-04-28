@@ -9,6 +9,7 @@ macro
   TRUE        /true\b/
   FALSE       /false\b/
   BANG        /!/
+  DOT         /\./
   AND         /and\b/
   OR          /or\b/
   EQ          /=/
@@ -23,6 +24,7 @@ rule
   /#{TRUE}/        { [:TRUE, text] }
   /#{FALSE}/       { [:FALSE, text] }
   /#{BANG}/        { [:BANG, text] }
+  /#{DOT}/         { [:DOT, text] }
   /#{AND}/         { [:AND, text] }
   /#{OR}/          { [:OR, text] }
   /#{EQ}/          { [:EQ, text] }
