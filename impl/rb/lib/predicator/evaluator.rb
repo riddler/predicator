@@ -4,9 +4,14 @@ module Predicator
 
     def initialize instructions, context_data={}
       @instructions = instructions
-      @context = Context.new context_data
+      @context = context_for context_data
       @stack = []
       @ip = 0
+    end
+
+    def context_for context_data
+      return context_data unless context_data.kind_of? Hash
+      Context.new context_data
     end
 
     def result
