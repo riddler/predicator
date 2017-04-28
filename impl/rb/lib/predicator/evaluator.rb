@@ -3,7 +3,7 @@ module Predicator
     attr_reader :instructions, :stack, :context
 
     def initialize instructions, context_data={}
-      @instructions = instructions
+      @instructions = setup_instructions instructions
       @context = context_for context_data
       @stack = []
       @ip = 0
@@ -12,6 +12,15 @@ module Predicator
     def context_for context_data
       return context_data unless context_data.kind_of? Hash
       Context.new context_data
+    end
+
+    def setup_instructions instructions
+      instructions.map do |instruction|
+        instruction.inject({}) do |memo,(k,v)|
+          memo[k.to_sym] = v
+          memo
+        end
+      end
     end
 
     def result
