@@ -1,21 +1,24 @@
 require "rubygems"
 #require "bundler/gem_tasks"
 require "rake/testtask"
+require "oedipus_lex"
+
+Rake.application.rake_require "oedipus_lex"
 
 Rake::TestTask.new :test do |t|
   t.libs << "test"
-  t.libs << "lib"
   t.test_files = FileList["test/**/test_*.rb"]
   t.warning = false
 end
 
-rule ".rb" => ".y" do |t|
-  sh "racc -l -o #{t.name} #{t.source}"
-end
+desc "Generate the lexer"
+task lexer: "lib/predicator/lexer.rex.rb"
 
 desc "Compile and generate the parser"
-task :compile => "lib/predicator/parser.rb"
+task parser: :lexer do
+  sh "racc -l -o lib/predicator/parser.rb lib/predicator/parser.y"
+end
 
-task :test => :compile
+task test: :parser
 
-task :default => :test
+task default: :test
