@@ -2,7 +2,7 @@ class Predicator::Parser
 
 options no_result_var
 
-token TRUE FALSE LPAREN RPAREN BANG AT AND OR
+token TRUE FALSE LPAREN RPAREN BANG DOT AT AND OR
       EQ GT
       INTEGER STRING IDENTIFIER
 
@@ -45,6 +45,7 @@ rule
     ;
   variable
     : IDENTIFIER                { AST::Variable.new val.first }
+    | variable DOT IDENTIFIER   { AST::Variable.new [val.first, val.last].flatten.join(".") }
     ;
 end
 
@@ -54,7 +55,7 @@ end
     end
 
     def parse string
-      @lexer.scan_setup string
+      @lexer.parse string
       do_parse
     end
 
@@ -70,6 +71,6 @@ end
     end
 
 ---- header
-require "predicator/lexer"
+require "predicator/lexer.rex"
 require "predicator/visitors"
 require "predicator/ast"

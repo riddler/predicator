@@ -9,6 +9,7 @@ module Predicator
     def test_tokens
       [
         ["    ",    []],
+        [".",       [[:DOT, "."]]],
         [" true ",  [[:TRUE, "true"]]],
         ["true",    [[:TRUE, "true"]]],
         ["false",   [[:FALSE, "false"]]],
@@ -36,7 +37,8 @@ module Predicator
                       [:RPAREN, ")"],
                     ]],
       ].each do |str, expected|
-        @lexer.scan_setup str
+        #@lexer.scan_setup str
+        @lexer.parse str
         assert_tokens expected, @lexer
       end
     end

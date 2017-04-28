@@ -12,9 +12,9 @@ module Predicator
     ast.to_instructions
   end
 
-  def self.evaluate source
+  def self.evaluate source, context={}
     instructions = compile source
-    evaluator = Evaluator.new instructions
+    evaluator = Evaluator.new instructions, context
     evaluator.result
   end
 end
