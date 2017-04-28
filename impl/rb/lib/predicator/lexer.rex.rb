@@ -14,6 +14,7 @@ class Predicator::Lexer
   TRUE       = /true\b/
   FALSE      = /false\b/
   BANG       = /!/
+  DOT        = /\./
   AND        = /and\b/
   OR         = /or\b/
   EQ         = /=/
@@ -99,6 +100,8 @@ class Predicator::Lexer
             action { [:FALSE, text] }
           when text = ss.scan(/#{BANG}/) then
             action { [:BANG, text] }
+          when text = ss.scan(/#{DOT}/) then
+            action { [:DOT, text] }
           when text = ss.scan(/#{AND}/) then
             action { [:AND, text] }
           when text = ss.scan(/#{OR}/) then

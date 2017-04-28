@@ -9,6 +9,7 @@ module Predicator
     def test_tokens
       [
         ["    ",    []],
+        [".",       [[:DOT, "."]]],
         [" true ",  [[:TRUE, "true"]]],
         ["true",    [[:TRUE, "true"]]],
         ["false",   [[:FALSE, "false"]]],
