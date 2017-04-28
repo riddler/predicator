@@ -2,6 +2,10 @@ require "helper"
 
 module Predicator
   class TestEvaluator < Minitest::Test
+    def test_true_with_string_keys
+      assert_eval true, [{"op" => "lit", "lit" => true}]
+    end
+
     def test_true
       assert_eval true, [{op: "lit", lit: true}]
     end
