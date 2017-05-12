@@ -3,7 +3,7 @@ module Predicator
     attr_reader :instructions, :stack, :context
 
     def initialize instructions, context_data={}
-      @instructions = setup_instructions instructions
+      @instructions = instructions
       @context = context_for context_data
       @stack = []
       @ip = 0
@@ -12,15 +12,6 @@ module Predicator
     def context_for context_data
       return context_data unless context_data.kind_of? Hash
       Context.new context_data
-    end
-
-    def setup_instructions instructions
-      instructions.map do |instruction|
-        instruction.inject({}) do |memo,(k,v)|
-          memo[k.to_sym] = v
-          memo
-        end
-      end
     end
 
     def result
@@ -32,19 +23,21 @@ module Predicator
     end
 
     def process instruction
-      case instruction[:op]
+      op = instruction.shift
+      arg = instruction.last
+      case op
       when "not"
         stack.push !stack.pop
-      when "jump_if_false"
-        jump_if_false instruction[:offset]
-      when "jump_if_true"
-        jump_if_true instruction[:offset]
+      when "jfalse"
+        jump_if_false arg
+      when "jtrue"
+        jump_if_true arg
       when "lit"
-        stack.push instruction[:lit]
-      when "read_var"
-        stack.push context[instruction[:var]]
+        stack.push arg
+      when "load"
+        stack.push context[arg]
       when "compare"
-        compare instruction[:comparison]
+        compare arg
       end
     end
 
