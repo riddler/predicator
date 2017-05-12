@@ -10,7 +10,7 @@ module Predicator
 
     def test_compile
       instructions = Predicator.compile "true"
-      assert_equal [{op: "lit", lit: true}], instructions
+      assert_equal [["lit", true]], instructions
     end
 
     def test_evaluate
@@ -19,7 +19,7 @@ module Predicator
     end
 
     def test_evaluate_instructions
-      instructions = [{op: "lit", lit: true}]
+      instructions = [["lit", true]]
       result = Predicator.evaluate_instructions instructions
       assert result
     end
