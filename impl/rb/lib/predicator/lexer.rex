@@ -8,6 +8,7 @@ macro
   RPAREN      /\)/
   TRUE        /true\b/
   FALSE       /false\b/
+  BETWEEN     /between\b/
   BANG        /!/
   DOT         /\./
   AND         /and\b/
@@ -24,6 +25,7 @@ rule
   /#{RPAREN}/      { [:RPAREN, text] }
   /#{TRUE}/        { [:TRUE, text] }
   /#{FALSE}/       { [:FALSE, text] }
+  /#{BETWEEN}/     { [:BETWEEN, text] }
   /#{BANG}/        { [:BANG, text] }
   /#{DOT}/         { [:DOT, text] }
   /#{AND}/         { [:AND, text] }

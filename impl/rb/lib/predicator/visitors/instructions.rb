@@ -51,6 +51,11 @@ module Predicator
         @instructions.push ["compare", "LT"]
       end
 
+      def visit_BETWEEN node
+        super
+        @instructions.push ["compare", "BETWEEN"]
+      end
+
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]
       end

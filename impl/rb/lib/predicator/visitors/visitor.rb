@@ -31,6 +31,13 @@ module Predicator
       def visit_AND node;   binary node; end
       def visit_OR node;    binary node; end
 
+      def ternary node
+        visit node.left
+        visit node.middle
+        visit node.right
+      end
+      def visit_BETWEEN node; ternary node; end
+
       def terminal node; end
       def visit_TRUE node;      terminal node; end
       def visit_FALSE node;     terminal node; end
