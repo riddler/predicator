@@ -27,6 +27,7 @@ module Predicator
       end
       def visit_EQ node;    binary node; end
       def visit_GT node;    binary node; end
+      def visit_LT node;    binary node; end
       def visit_AND node;   binary node; end
       def visit_OR node;    binary node; end
 

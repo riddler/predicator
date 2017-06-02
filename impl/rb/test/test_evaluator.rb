@@ -67,6 +67,20 @@ module Predicator
       ], age: 22
     end
 
+    def test_variable_less_than_integer
+      assert_eval true, [
+        ["load", "age"],
+        ["lit", 21],
+        ["compare", "LT"],
+      ], age: 10
+
+      assert_eval false, [
+        ["load", "age"],
+        ["lit", 21],
+        ["compare", "LT"],
+      ], age: 22
+    end
+
     #--- AND
     def test_true_and_true
       assert_eval true, [

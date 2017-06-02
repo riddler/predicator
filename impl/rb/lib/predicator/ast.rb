@@ -90,6 +90,10 @@ module Predicator
       def type; :GT; end
     end
 
+    class LessThan < Binary
+      def type; :LT; end
+    end
+
     class And < Binary
       def type; :AND; end
     end

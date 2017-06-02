@@ -45,6 +45,11 @@ digraph parse_tree {
         super
       end
 
+      def visit_LT node
+        @nodes << "#{node.object_id} [label=\"<\"];"
+        super
+      end
+
       def visit_AND node
         @nodes << "#{node.object_id} [label=\"and\"];"
         super
