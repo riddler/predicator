@@ -81,6 +81,30 @@ module Predicator
       ], age: 22
     end
 
+    # 2 between 1 and 5
+    def test_integer_between_integers
+      assert_eval true, [
+        ["lit", 2],
+        ["lit", 1],
+        ["lit", 5],
+        ["compare", "BETWEEN"],
+      ]
+
+      assert_eval true, [
+        ["lit", 1],
+        ["lit", 1],
+        ["lit", 5],
+        ["compare", "BETWEEN"],
+      ]
+
+      assert_eval true, [
+        ["lit", 5],
+        ["lit", 1],
+        ["lit", 5],
+        ["compare", "BETWEEN"],
+      ]
+    end
+
     #--- AND
     def test_true_and_true
       assert_eval true, [

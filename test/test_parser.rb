@@ -14,6 +14,15 @@ module Predicator
       assert_type :FALSE, "false"
     end
 
+    def test_between
+      ast = @parser.parse "1 between 0 and 5"
+
+      assert_equal :BETWEEN, ast.type
+      assert_equal :INTEGER, ast.left.type
+      assert_equal :INTEGER, ast.middle.type
+      assert_equal :INTEGER, ast.right.type
+    end
+
     def test_not
       assert_type :NOT, "!true"
     end

@@ -13,6 +13,7 @@ class Predicator::Lexer
   RPAREN     = /\)/
   TRUE       = /true\b/
   FALSE      = /false\b/
+  BETWEEN    = /between\b/
   BANG       = /!/
   DOT        = /\./
   AND        = /and\b/
@@ -99,6 +100,8 @@ class Predicator::Lexer
             action { [:TRUE, text] }
           when text = ss.scan(/#{FALSE}/) then
             action { [:FALSE, text] }
+          when text = ss.scan(/#{BETWEEN}/) then
+            action { [:BETWEEN, text] }
           when text = ss.scan(/#{BANG}/) then
             action { [:BANG, text] }
           when text = ss.scan(/#{DOT}/) then

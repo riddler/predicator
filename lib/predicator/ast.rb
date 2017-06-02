@@ -102,5 +102,21 @@ module Predicator
       def type; :OR; end
     end
 
+    class Ternary < Node
+      attr_accessor :middle, :right
+
+      def initialize left, middle, right
+        super left
+        @middle = middle
+        @right = right
+      end
+
+      def children; [left, middle, right] end
+    end
+
+    class Between < Ternary
+      def type; :BETWEEN; end
+    end
+
   end
 end
