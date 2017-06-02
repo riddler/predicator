@@ -35,7 +35,11 @@ module Predicator
       when "load"
         stack.push context[instruction.last]
       when "compare"
-        compare instruction.last
+        if instruction.last == "BETWEEN"
+          compare_BETWEEN
+        else
+          compare instruction.last
+        end
       end
     end
 
@@ -77,6 +81,18 @@ module Predicator
 
     def compare_LT left, right
       left < right
+    end
+
+    def compare_BETWEEN
+      max = stack.pop
+      min = stack.pop
+      val = stack.pop
+      if max.nil? || min.nil? || val.nil?
+        stack.push false
+      else
+        result = val.between? min, max
+        stack.push result
+      end
     end
   end
 end

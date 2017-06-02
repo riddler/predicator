@@ -30,6 +30,8 @@ digraph parse_tree {
         super
       end
 
+      alias_method :ternary, :binary
+
       def unary node
         @edges << "#{node.object_id} -> #{node.left.object_id};"
         super
@@ -47,6 +49,11 @@ digraph parse_tree {
 
       def visit_LT node
         @nodes << "#{node.object_id} [label=\"<\"];"
+        super
+      end
+
+      def visit_BETWEEN node
+        @nodes << "#{node.object_id} [label=\"between\"];"
         super
       end
 
