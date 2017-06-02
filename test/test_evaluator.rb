@@ -2,27 +2,23 @@ require "helper"
 
 module Predicator
   class TestEvaluator < Minitest::Test
-    def test_true_with_string_keys
-      assert_eval true, [{"op" => "lit", "lit" => true}]
-    end
-
     def test_true
-      assert_eval true, [{op: "lit", lit: true}]
+      assert_eval true, [["lit", true]]
     end
 
     def test_false
-      assert_eval false, [{op: "lit", lit: false}]
+      assert_eval false, [["lit", false]]
     end
 
     def test_not
       assert_eval false, [
-        {op: "lit", lit: true},
-        {op: "not"},
+        ["lit", true],
+        ["not"]
       ]
     end
 
-    def test_read_var
-      instructions = [{op: "read_var", var: "age"}]
+    def test_load
+      instructions = [["load", "age"]]
       context = {age: 21}
 
       e = Evaluator.new instructions, context
@@ -32,108 +28,124 @@ module Predicator
 
     def test_integer_equal_integer
       assert_eval true, [
-        {op: "lit", lit: 1},
-        {op: "lit", lit: 1},
-        {op: "compare", comparison: "EQ"},
+        ["lit", 1],
+        ["lit", 1],
+        ["compare", "EQ"],
       ]
     end
 
     # age > 21
     def test_undefined_variable_greater_than_integer
       assert_eval false, [
-        {op: "read_var", var: "age"},
-        {op: "lit", lit: 21},
-        {op: "compare", comparison: "GT"},
+        ["load", "age"],
+        ["lit", 21],
+        ["compare", "GT"],
       ]
     end
 
     # 21 > age
     def test_integer_greater_than_undefined_variable
       assert_eval false, [
-        {op: "lit", lit: 21},
-        {op: "read_var", var: "age"},
-        {op: "compare", comparison: "GT"},
+        ["lit", 21],
+        ["load", "age"],
+        ["compare", "GT"],
       ]
     end
 
     # age > 21
     def test_variable_greater_than_integer
       assert_eval false, [
-        {op: "read_var", var: "age"},
-        {op: "lit", lit: 21},
-        {op: "compare", comparison: "GT"},
+        ["load", "age"],
+        ["lit", 21],
+        ["compare", "GT"],
       ], age: 10
 
       assert_eval true, [
-        {op: "read_var", var: "age"},
-        {op: "lit", lit: 21},
-        {op: "compare", comparison: "GT"},
+        ["load", "age"],
+        ["lit", 21],
+        ["compare", "GT"],
       ], age: 22
     end
 
     #--- AND
     def test_true_and_true
       assert_eval true, [
-        {op: "lit", lit: true},
-        {op: "jump_if_false", offset: 2},
-        {op: "lit", lit: true},
+        ["lit", true],
+        ["jfalse", 2],
+        ["lit", true],
       ]
     end
 
     def test_false_and_false
       assert_eval false, [
-        {op: "lit", lit: false},
-        {op: "jump_if_false", offset: 2},
-        {op: "lit", lit: false},
+        ["lit", false],
+        ["jfalse", 2],
+        ["lit", false],
       ]
     end
 
     def test_false_and_true
       assert_eval false, [
-        {op: "lit", lit: false},
-        {op: "jump_if_false", offset: 2},
-        {op: "lit", lit: true},
+        ["lit", false],
+        ["jfalse", 2],
+        ["lit", true],
       ]
     end
 
     def test_true_and_false
       assert_eval false, [
-        {op: "lit", lit: true},
-        {op: "jump_if_false", offset: 2},
-        {op: "lit", lit: false},
+        ["lit", true],
+        ["jfalse", 2],
+        ["lit", false],
       ]
     end
 
     #--- OR
     def test_true_or_true
       assert_eval true, [
-        {op: "lit", lit: true},
-        {op: "jump_if_true", offset: 2},
-        {op: "lit", lit: true},
+        ["lit", true],
+        ["jtrue", 2],
+        ["lit", true],
       ]
     end
 
     def test_false_or_false
       assert_eval false, [
-        {op: "lit", lit: false},
-        {op: "jump_if_true", offset: 2},
-        {op: "lit", lit: false},
+        ["lit", false],
+        ["jtrue", 2],
+        ["lit", false],
       ]
     end
 
     def test_false_or_true
       assert_eval true, [
-        {op: "lit", lit: false},
-        {op: "jump_if_true", offset: 2},
-        {op: "lit", lit: true},
+        ["lit", false],
+        ["jtrue", 2],
+        ["lit", true],
       ]
     end
 
     def test_true_or_false
       assert_eval true, [
-        {op: "lit", lit: true},
-        {op: "jump_if_true", offset: 2},
-        {op: "lit", lit: false},
+        ["lit", true],
+        ["jtrue", 2],
+        ["lit", false],
+      ]
+    end
+
+    # "(true or (false and false)) and 1 > 2"
+    def test_jump_offset
+      assert_eval false, [
+        ["lit", true], ["jtrue", 4], ["lit", false], ["jfalse", 2], ["lit", false],
+        ["jfalse", 4], ["lit", 1], ["lit", 2], ["compare", "GT"],
+      ]
+    end
+
+    # "(true or true or true) or true"
+    def test_should_result_in_empty_stack
+      assert_eval true, [
+        ["lit", true], ["jtrue", 4], ["lit", true], ["jtrue", 2], ["lit", true],
+        ["jtrue", 2], ["lit", true],
       ]
     end
 

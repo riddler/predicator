@@ -10,8 +10,6 @@ module Predicator
 
       def accept ast
         super
-        # Keep track of instruction location, add it to the label instruction
-        # Remove labels - no need for evaluator to see them
         update_jumps
         remove_labels
         @instructions
@@ -35,54 +33,54 @@ module Predicator
 
       def visit_NOT node
         super
-        @instructions.push op: "not"
+        @instructions.push ["not"]
       end
 
       def visit_EQ node
         super
-        @instructions.push op: "compare", comparison: "EQ"
+        @instructions.push ["compare", "EQ"]
       end
 
       def visit_GT node
         super
-        @instructions.push op: "compare", comparison: "GT"
+        @instructions.push ["compare", "GT"]
       end
 
       def visit_VARIABLE node
-        @instructions.push op: "read_var", var: node.symbol
+        @instructions.push ["load", node.symbol]
       end
 
       def terminal node
-        @instructions.push op: "lit", lit: node.symbol
+        @instructions.push ["lit", node.symbol]
       end
 
       def jump_instruction condition, node
-        {
-          op: "jump_if_#{condition}",
-          label: node.object_id.to_s,
-        }
+        ["j#{condition}", node.object_id.to_s]
       end
 
       def label_instruction node
         label = node.object_id.to_s
         @label_locations[label] = @instructions.size
-        {
-          op: "label",
-          label: label
-        }
+        ["label", label]
       end
 
       def update_jumps
         @instructions.each_with_index do |inst, idx|
-          next unless inst[:op] =~ /^jump/
-          label = inst.delete :label
-          offset = @label_locations[label] - idx
-          inst[:offset] = offset
+          next unless inst.first =~ /^j/
+          label = inst.pop
+          offset = calculate_offset idx, @label_locations[label]
+          inst.push offset
         end
       end
 
+      def calculate_offset from_idx, to_idx
+        offset = to_idx - from_idx
+        num_labels = @instructions[from_idx...to_idx].count{ |i| i.first == "label" }
+        offset - num_labels
+      end
+
       def remove_labels
-        @instructions.delete_if{ |inst| inst[:op] == "label" }
+        @instructions.delete_if{ |inst| inst.first == "label" }
       end
     end
   end
