@@ -38,6 +38,14 @@ module Predicator
       assert_equal :INTEGER, ast.right.type
     end
 
+    def test_integer_less_than_integer
+      ast = @parser.parse "1 < 1"
+
+      assert_equal :LT, ast.type
+      assert_equal :INTEGER, ast.left.type
+      assert_equal :INTEGER, ast.right.type
+    end
+
     def test_string_equals_string
       ast = @parser.parse "'foo' = 'foo'"
 

@@ -46,6 +46,11 @@ module Predicator
         @instructions.push ["compare", "GT"]
       end
 
+      def visit_LT node
+        super
+        @instructions.push ["compare", "LT"]
+      end
+
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]
       end

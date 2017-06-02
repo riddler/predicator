@@ -74,5 +74,9 @@ module Predicator
     def compare_GT left, right
       left > right
     end
+
+    def compare_LT left, right
+      left < right
+    end
   end
 end

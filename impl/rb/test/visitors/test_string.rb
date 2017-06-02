@@ -37,6 +37,10 @@ module Predicator
         assert_round_trip "1 > 1"
       end
 
+      def test_integer_less_than_integer
+        assert_round_trip "1 < 1"
+      end
+
       def test_string_equals_string
         assert_round_trip "'foo' = 'foo'"
       end
