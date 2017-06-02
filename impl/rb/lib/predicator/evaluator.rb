@@ -3,7 +3,7 @@ module Predicator
     attr_reader :instructions, :stack, :context
 
     def initialize instructions, context_data={}
-      @instructions = setup_instructions instructions
+      @instructions = instructions
       @context = context_for context_data
       @stack = []
       @ip = 0
@@ -12,15 +12,6 @@ module Predicator
     def context_for context_data
       return context_data unless context_data.kind_of? Hash
       Context.new context_data
-    end
-
-    def setup_instructions instructions
-      instructions.map do |instruction|
-        instruction.inject({}) do |memo,(k,v)|
-          memo[k.to_sym] = v
-          memo
-        end
-      end
     end
 
     def result
@@ -32,25 +23,26 @@ module Predicator
     end
 
     def process instruction
-      case instruction[:op]
+      case instruction.first
       when "not"
         stack.push !stack.pop
-      when "jump_if_false"
-        jump_if_false instruction[:offset]
-      when "jump_if_true"
-        jump_if_true instruction[:offset]
+      when "jfalse"
+        jump_if_false instruction.last
+      when "jtrue"
+        jump_if_true instruction.last
       when "lit"
-        stack.push instruction[:lit]
-      when "read_var"
-        stack.push context[instruction[:var]]
+        stack.push instruction.last
+      when "load"
+        stack.push context[instruction.last]
       when "compare"
-        compare instruction[:comparison]
+        compare instruction.last
       end
     end
 
     def jump_if_false offset
       if stack[-1] == false
-        @ip += offset
+        adjusted_offset = offset - 1
+        @ip += adjusted_offset
       else
         stack.pop
       end
@@ -58,7 +50,8 @@ module Predicator
 
     def jump_if_true offset
       if stack[-1] == true
-        @ip += offset
+        adjusted_offset = offset - 1
+        @ip += adjusted_offset
       else
         stack.pop
       end
