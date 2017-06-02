@@ -52,6 +52,14 @@ module Predicator
         ]
       end
 
+      def test_integer_greater_than_integer
+        assert_instructions "2<1", [
+          ["lit", 2],
+          ["lit", 1],
+          ["compare", "LT"],
+        ]
+      end
+
       def test_true_and_true
         assert_instructions "true and true", [
           ["lit", true],

@@ -19,6 +19,7 @@ class Predicator::Lexer
   OR         = /or\b/
   EQ         = /=/
   GT         = />/
+  LT         = /</
   INTEGER    = /[+-]?\d(_?\d)*\b/
   STRING     = /(["'])(?:\\?.)*?\1/
   IDENTIFIER = /[a-z][A-Za-z0-9_]*\b/
@@ -110,6 +111,8 @@ class Predicator::Lexer
             action { [:EQ, text] }
           when text = ss.scan(/#{GT}/) then
             action { [:GT, text] }
+          when text = ss.scan(/#{LT}/) then
+            action { [:LT, text] }
           when text = ss.scan(/#{INTEGER}/) then
             action { [:INTEGER, text] }
           when text = ss.scan(/#{STRING}/) then
