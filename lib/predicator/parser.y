@@ -3,7 +3,7 @@ class Predicator::Parser
 options no_result_var
 
 token TRUE FALSE LPAREN RPAREN BANG DOT AT AND OR
-      EQ GT LT
+      EQ GT LT BETWEEN
       INTEGER STRING IDENTIFIER
 
 rule
@@ -26,9 +26,10 @@ rule
     : LPAREN predicate RPAREN   { AST::Group.new val[1] }
     ;
   comparison_predicate
-    : value EQ value            { AST::Equal.new val.first, val.last }
-    | value GT value            { AST::GreaterThan.new val.first, val.last }
-    | value LT value            { AST::LessThan.new val.first, val.last }
+    : value EQ value                { AST::Equal.new val.first, val.last }
+    | value GT value                { AST::GreaterThan.new val.first, val.last }
+    | value LT value                { AST::LessThan.new val.first, val.last }
+    | value BETWEEN value AND value { AST::Between.new val.first, val[2], val.last }
     ;
   value
     : scalar

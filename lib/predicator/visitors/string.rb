@@ -38,6 +38,10 @@ module Predicator
       def visit_OR node
         [visit(node.left), " or ", visit(node.right)].join
       end
+
+      def visit_BETWEEN node
+        [visit(node.left), " between ", visit(node.middle), " and ", visit(node.right)].join
+      end
     end
   end
 end

@@ -13,6 +13,7 @@ module Predicator
         [" true ",  [[:TRUE, "true"]]],
         ["true",    [[:TRUE, "true"]]],
         ["false",   [[:FALSE, "false"]]],
+        ["between", [[:BETWEEN, "between"]]],
         ["123",     [[:INTEGER, "123"]]],
         ["'foo'",   [[:STRING, "foo"]]],
         ['"foo"',   [[:STRING, "foo"]]],
