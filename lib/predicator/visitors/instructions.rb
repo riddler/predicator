@@ -68,9 +68,15 @@ module Predicator
         @instructions.each_with_index do |inst, idx|
           next unless inst.first =~ /^j/
           label = inst.pop
-          offset = @label_locations[label] - idx
+          offset = calculate_offset idx, @label_locations[label]
           inst.push offset
         end
+      end
+
+      def calculate_offset from_idx, to_idx
+        offset = to_idx - from_idx
+        num_labels = @instructions[from_idx...to_idx].count{ |i| i.first == "label" }
+        offset - num_labels
       end
 
       def remove_labels

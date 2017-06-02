@@ -78,6 +78,14 @@ module Predicator
         ]
       end
 
+      # "(true or true or true) or true"
+      def test_group_true_or_true_or_true_or_true
+        assert_instructions "(true or true or true) or true", [
+          ["lit", true], ["jtrue", 4], ["lit", true], ["jtrue", 2], ["lit", true],
+          ["jtrue", 2], ["lit", true],
+        ]
+      end
+
       def assert_instructions source, expected_instructions
         ast = @parser.parse source
         instructions = ast.to_instructions
