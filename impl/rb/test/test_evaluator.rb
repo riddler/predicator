@@ -133,6 +133,22 @@ module Predicator
       ]
     end
 
+    # "(true or (false and false)) and 1 > 2"
+    def test_jump_offset
+      assert_eval false, [
+        ["lit", true], ["jtrue", 4], ["lit", false], ["jfalse", 2], ["lit", false],
+        ["jfalse", 4], ["lit", 1], ["lit", 2], ["compare", "GT"],
+      ]
+    end
+
+    # "(true or true or true) or true"
+    def test_should_result_in_empty_stack
+      assert_eval true, [
+        ["lit", true], ["jtrue", 4], ["lit", true], ["jtrue", 2], ["lit", true],
+        ["jtrue", 2], ["lit", true],
+      ]
+    end
+
     def assert_eval result, instructions, context={}
       e = Evaluator.new instructions, context
       assert_equal result, e.result

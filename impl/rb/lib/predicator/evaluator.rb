@@ -23,27 +23,26 @@ module Predicator
     end
 
     def process instruction
-      op = instruction.shift
-      arg = instruction.last
-      case op
+      case instruction.first
       when "not"
         stack.push !stack.pop
       when "jfalse"
-        jump_if_false arg
+        jump_if_false instruction.last
       when "jtrue"
-        jump_if_true arg
+        jump_if_true instruction.last
       when "lit"
-        stack.push arg
+        stack.push instruction.last
       when "load"
-        stack.push context[arg]
+        stack.push context[instruction.last]
       when "compare"
-        compare arg
+        compare instruction.last
       end
     end
 
     def jump_if_false offset
       if stack[-1] == false
-        @ip += offset
+        adjusted_offset = offset - 1
+        @ip += adjusted_offset
       else
         stack.pop
       end
@@ -51,7 +50,8 @@ module Predicator
 
     def jump_if_true offset
       if stack[-1] == true
-        @ip += offset
+        adjusted_offset = offset - 1
+        @ip += adjusted_offset
       else
         stack.pop
       end
