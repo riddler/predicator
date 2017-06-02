@@ -27,6 +27,10 @@ module Predicator
         [visit(node.left), " > ", visit(node.right)].join
       end
 
+      def visit_LT node
+        [visit(node.left), " < ", visit(node.right)].join
+      end
+
       def visit_AND node
         [visit(node.left), " and ", visit(node.right)].join
       end

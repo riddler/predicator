@@ -27,6 +27,11 @@ module Predicator
                       [:GT, ">"],
                       [:INTEGER, "1"]
                     ]],
+        ["a<1",     [
+                      [:IDENTIFIER, "a"],
+                      [:LT, "<"],
+                      [:INTEGER, "1"]
+                    ]],
         ["!true",   [
                       [:BANG, "!"],
                       [:TRUE, "true"]
