@@ -32,17 +32,11 @@ rule
     | value BETWEEN value AND value { AST::Between.new val.first, val[2], val.last }
     ;
   value
-    : scalar
+    : literal
     | variable
     ;
-  scalar
-    : string
-    | literal
-    ;
-  string
-    : STRING                    { AST::String.new val.first }
-    ;
   literal
+    : STRING                    { AST::String.new val.first }
     | INTEGER                   { AST::Integer.new val.first.to_i }
     ;
   variable
