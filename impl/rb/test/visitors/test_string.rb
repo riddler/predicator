@@ -33,6 +33,10 @@ module Predicator
         assert_round_trip "1 = 1"
       end
 
+      def test_integer_in_array
+        assert_round_trip "1 in [1, 2]"
+      end
+
       def test_integer_greater_than_integer
         assert_round_trip "1 > 1"
       end

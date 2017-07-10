@@ -30,6 +30,7 @@ module Predicator
       def visit_LT node;    binary node; end
       def visit_AND node;   binary node; end
       def visit_OR node;    binary node; end
+      def visit_IN node;    binary node; end
 
       def ternary node
         visit node.left

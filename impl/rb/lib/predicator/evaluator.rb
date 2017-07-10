@@ -30,7 +30,7 @@ module Predicator
         jump_if_false instruction.last
       when "jtrue"
         jump_if_true instruction.last
-      when "lit"
+      when "lit", "array"
         stack.push instruction.last
       when "load"
         stack.push context[instruction.last]
@@ -81,6 +81,10 @@ module Predicator
 
     def compare_LT left, right
       left < right
+    end
+
+    def compare_IN left, right
+      right.include? left
     end
 
     def compare_BETWEEN
