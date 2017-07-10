@@ -41,6 +41,31 @@ module Predicator
         ["compare", "IN"],
       ]
     end
+
+    def test_integer_not_in_array
+      assert_eval true, [
+        ["lit", 3],
+        ["array", [1, 2]],
+        ["compare", "NOTIN"],
+      ]
+    end
+
+    def test_string_in_array
+      assert_eval true, [
+        ["lit", "UT"],
+        ["array", ["UT", "NM"]],
+        ["compare", "IN"],
+      ]
+    end
+
+    def test_string_not_in_array
+      assert_eval true, [
+        ["lit", "NY"],
+        ["array", ["UT", "NM"]],
+        ["compare", "NOTIN"],
+      ]
+    end
+
     # age > 21
     def test_undefined_variable_greater_than_integer
       assert_eval false, [

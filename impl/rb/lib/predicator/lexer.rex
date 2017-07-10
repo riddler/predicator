@@ -13,6 +13,7 @@ macro
   BETWEEN     /between\b/
   IN          /in\b/
   BANG        /!/
+  NOT         /not\b/
   DOT         /\./
   COMMA       /,/
   AND         /and\b/
@@ -34,6 +35,7 @@ rule
   /#{BETWEEN}/     { [:BETWEEN, text] }
   /#{IN}/          { [:IN, text] }
   /#{BANG}/        { [:BANG, text] }
+  /#{NOT}/         { [:NOT, text] }
   /#{DOT}/         { [:DOT, text] }
   /#{COMMA}/       { [:COMMA, text] }
   /#{AND}/         { [:AND, text] }

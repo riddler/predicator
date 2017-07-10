@@ -15,6 +15,7 @@ module Predicator
         ["false",   [[:FALSE, "false"]]],
         ["between", [[:BETWEEN, "between"]]],
         ["in",      [[:IN, "in"]]],
+        ["not",     [[:NOT, "not"]]],
         ["123",     [[:INTEGER, "123"]]],
         ["'foo'",   [[:STRING, "foo"]]],
         ['"foo"',   [[:STRING, "foo"]]],
