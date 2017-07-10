@@ -87,6 +87,10 @@ module Predicator
       right.include? left
     end
 
+    def compare_NOTIN left, right
+      !right.include? left
+    end
+
     def compare_BETWEEN
       max = stack.pop
       min = stack.pop

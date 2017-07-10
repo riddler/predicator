@@ -3,7 +3,7 @@ class Predicator::Parser
 options no_result_var
 
 token TRUE FALSE LPAREN RPAREN LBRACKET RBRACKET
-      BANG DOT COMMA AT AND OR
+      BANG NOT DOT COMMA AT AND OR
       EQ GT LT BETWEEN IN
       INTEGER STRING IDENTIFIER
 
@@ -32,6 +32,7 @@ rule
     | value LT value                { AST::LessThan.new val.first, val.last }
     | value BETWEEN value AND value { AST::Between.new val.first, val[2], val.last }
     | value IN array                { AST::In.new val.first, val.last}
+    | value NOT IN array            { AST::NotIn.new val.first, val.last}
     ;
   array
     : LBRACKET array_contents RBRACKET {AST::Array.new val[1]}

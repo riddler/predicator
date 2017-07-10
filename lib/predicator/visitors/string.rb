@@ -51,6 +51,10 @@ module Predicator
       def visit_IN node
         [visit(node.left), " in ", visit(node.right)].join
       end
+
+      def visit_NOTIN node
+        [visit(node.left), " not in ", visit(node.right)].join
+      end
     end
   end
 end

@@ -61,6 +61,11 @@ module Predicator
         @instructions.push ["compare", "IN"]
       end
 
+      def visit_NOTIN node
+        super
+        @instructions.push ["compare", "NOTIN"]
+      end
+
       def visit_ARRAY node
         contents = node.left.map{ |item| item.left }
         @instructions.push ["array", contents]

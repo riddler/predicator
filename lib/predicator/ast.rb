@@ -102,6 +102,10 @@ module Predicator
       def type; :IN; end
     end
 
+    class NotIn < Binary
+      def type; :NOTIN; end
+    end
+
     class And < Binary
       def type; :AND; end
     end

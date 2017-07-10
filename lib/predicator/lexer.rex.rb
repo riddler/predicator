@@ -18,6 +18,7 @@ class Predicator::Lexer
   BETWEEN    = /between\b/
   IN         = /in\b/
   BANG       = /!/
+  NOT        = /not\b/
   DOT        = /\./
   COMMA      = /,/
   AND        = /and\b/
@@ -114,6 +115,8 @@ class Predicator::Lexer
             action { [:IN, text] }
           when text = ss.scan(/#{BANG}/) then
             action { [:BANG, text] }
+          when text = ss.scan(/#{NOT}/) then
+            action { [:NOT, text] }
           when text = ss.scan(/#{DOT}/) then
             action { [:DOT, text] }
           when text = ss.scan(/#{COMMA}/) then
