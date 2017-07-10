@@ -56,6 +56,16 @@ module Predicator
         @instructions.push ["compare", "BETWEEN"]
       end
 
+      def visit_IN node
+        super
+        @instructions.push ["compare", "IN"]
+      end
+
+      def visit_ARRAY node
+        contents = node.left.map{ |item| item.left }
+        @instructions.push ["array", contents]
+      end
+
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]
       end

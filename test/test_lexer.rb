@@ -14,6 +14,7 @@ module Predicator
         ["true",    [[:TRUE, "true"]]],
         ["false",   [[:FALSE, "false"]]],
         ["between", [[:BETWEEN, "between"]]],
+        ["in",      [[:IN, "in"]]],
         ["123",     [[:INTEGER, "123"]]],
         ["'foo'",   [[:STRING, "foo"]]],
         ['"foo"',   [[:STRING, "foo"]]],
@@ -42,6 +43,18 @@ module Predicator
                       [:TRUE, "true"],
                       [:RPAREN, ")"],
                     ]],
+        ["[1]", [
+                  [:LBRACKET, "["],
+                  [:INTEGER, "1"],
+                  [:RBRACKET, "]"]
+                ]],
+        ["[1, 2]", [
+                  [:LBRACKET, "["],
+                  [:INTEGER, "1"],
+                  [:COMMA, ","],
+                  [:INTEGER, "2"],
+                  [:RBRACKET, "]"]
+                ]],
       ].each do |str, expected|
         #@lexer.scan_setup str
         @lexer.parse str
