@@ -11,11 +11,16 @@ class Predicator::Lexer
   SPACE      = /[ \t\r\n]/
   LPAREN     = /\(/
   RPAREN     = /\)/
+  LBRACKET   = /\[/
+  RBRACKET   = /\]/
   TRUE       = /true\b/
   FALSE      = /false\b/
   BETWEEN    = /between\b/
+  IN         = /in\b/
   BANG       = /!/
+  NOT        = /not\b/
   DOT        = /\./
+  COMMA      = /,/
   AND        = /and\b/
   OR         = /or\b/
   EQ         = /=/
@@ -96,16 +101,26 @@ class Predicator::Lexer
             action { [:LPAREN, text] }
           when text = ss.scan(/#{RPAREN}/) then
             action { [:RPAREN, text] }
+          when text = ss.scan(/#{LBRACKET}/) then
+            action { [:LBRACKET, text] }
+          when text = ss.scan(/#{RBRACKET}/) then
+            action { [:RBRACKET, text] }
           when text = ss.scan(/#{TRUE}/) then
             action { [:TRUE, text] }
           when text = ss.scan(/#{FALSE}/) then
             action { [:FALSE, text] }
           when text = ss.scan(/#{BETWEEN}/) then
             action { [:BETWEEN, text] }
+          when text = ss.scan(/#{IN}/) then
+            action { [:IN, text] }
           when text = ss.scan(/#{BANG}/) then
             action { [:BANG, text] }
+          when text = ss.scan(/#{NOT}/) then
+            action { [:NOT, text] }
           when text = ss.scan(/#{DOT}/) then
             action { [:DOT, text] }
+          when text = ss.scan(/#{COMMA}/) then
+            action { [:COMMA, text] }
           when text = ss.scan(/#{AND}/) then
             action { [:AND, text] }
           when text = ss.scan(/#{OR}/) then

@@ -6,11 +6,16 @@ macro
   SPACE       /[ \t\r\n]/
   LPAREN      /\(/
   RPAREN      /\)/
+  LBRACKET    /\[/
+  RBRACKET    /\]/
   TRUE        /true\b/
   FALSE       /false\b/
   BETWEEN     /between\b/
+  IN          /in\b/
   BANG        /!/
+  NOT         /not\b/
   DOT         /\./
+  COMMA       /,/
   AND         /and\b/
   OR          /or\b/
   EQ          /=/
@@ -23,11 +28,16 @@ rule
   /#{SPACE}/       # ignore space
   /#{LPAREN}/      { [:LPAREN, text] }
   /#{RPAREN}/      { [:RPAREN, text] }
+  /#{LBRACKET}/    { [:LBRACKET, text] }
+  /#{RBRACKET}/    { [:RBRACKET, text] }
   /#{TRUE}/        { [:TRUE, text] }
   /#{FALSE}/       { [:FALSE, text] }
   /#{BETWEEN}/     { [:BETWEEN, text] }
+  /#{IN}/          { [:IN, text] }
   /#{BANG}/        { [:BANG, text] }
+  /#{NOT}/         { [:NOT, text] }
   /#{DOT}/         { [:DOT, text] }
+  /#{COMMA}/       { [:COMMA, text] }
   /#{AND}/         { [:AND, text] }
   /#{OR}/          { [:OR, text] }
   /#{EQ}/          { [:EQ, text] }

@@ -63,6 +63,10 @@ module Predicator
       def children; [left] end
     end
 
+    class Array < Unary
+      def type; :ARRAY; end
+    end
+
     class Not < Unary
       def type; :NOT; end
     end
@@ -92,6 +96,14 @@ module Predicator
 
     class LessThan < Binary
       def type; :LT; end
+    end
+
+    class In < Binary
+      def type; :IN; end
+    end
+
+    class NotIn < Binary
+      def type; :NOTIN; end
     end
 
     class And < Binary
