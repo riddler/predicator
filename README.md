@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/predicator.svg)](http://badge.fury.io/rb/predicator)
-[![Build Status](https://travis-ci.org/johnnyt/predicator.svg?branch=master)](https://travis-ci.org/johnnyt/predicator)
-[![Dependency Status](https://img.shields.io/gemnasium/johnnyt/predicator.svg)](https://gemnasium.com/johnnyt/predicator)
-[![Coverage Status](https://coveralls.io/repos/github/johnnyt/predicator/badge.svg?branch=master)](https://coveralls.io/github/johnnyt/predicator?branch=master)
+[![Build Status](https://travis-ci.org/predicator/predicator.svg?branch=master)](https://travis-ci.org/predicator/predicator)
+[![Dependency Status](https://img.shields.io/gemnasium/predicator/predicator.svg)](https://gemnasium.com/predicator/predicator)
+[![Coverage Status](https://coveralls.io/repos/github/predicator/predicator/badge.svg?branch=master)](https://coveralls.io/github/predicator/predicator?branch=master)
 
 # Predicator
 
@@ -43,7 +43,7 @@ To release a new version, update the version number in `version.rb`, and then ru
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/johnnyt/predicator.
+Bug reports and pull requests are welcome on GitHub at https://github.com/predicator/predicator.
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
