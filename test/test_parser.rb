@@ -81,6 +81,20 @@ module Predicator
       assert_equal :STRING, ast.right.type
     end
 
+    def test_integer_in_array
+      ast = @parser.parse "1 in [1,2]"
+
+      assert_equal :IN, ast.type
+      assert_equal :ARRAY, ast.right.type
+    end
+
+    def test_integer_not_in_array
+      ast = @parser.parse "3 not in [1,2]"
+
+      assert_equal :NOTIN, ast.type
+      assert_equal :ARRAY, ast.right.type
+    end
+
     def assert_type type, source
       assert_equal type, @parser.parse(source).type
     end

@@ -36,6 +36,22 @@ module Predicator
         ]
       end
 
+      def test_integer_in_array
+        assert_instructions "1 in [1, 2]", [
+          ["lit", 1],
+          ["array", [1, 2]],
+          ["compare", "IN"],
+        ]
+      end
+
+      def test_integer_not_in_array
+        assert_instructions "3 not in [1, 2]", [
+          ["lit", 3],
+          ["array", [1, 2]],
+          ["compare", "NOTIN"],
+        ]
+      end
+
       def test_variable_equal_integer
         assert_instructions "age=21", [
           ["load", "age"],
