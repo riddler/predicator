@@ -75,6 +75,11 @@ module Predicator
         @instructions.push ["load", node.symbol]
       end
 
+      def visit_BOOL node
+        super
+        @instructions.push ["to_bool"]
+      end
+
       def terminal node
         @instructions.push ["lit", node.symbol]
       end

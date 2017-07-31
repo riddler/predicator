@@ -17,6 +17,13 @@ module Predicator
         assert_instructions "false", [["lit", false]]
       end
 
+      def test_boolean
+        assert_instructions "bool_var", [
+          ["load", "bool_var"],
+          ["to_bool"],
+        ]
+      end
+
       def test_group
         assert_instructions "(true)", [["lit", true]]
       end
