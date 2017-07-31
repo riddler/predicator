@@ -10,6 +10,27 @@ module Predicator
       assert_eval false, [["lit", false]]
     end
 
+    def test_bool_undefined
+      assert_eval false, [
+        ["load", "bool_var"],
+        ["to_bool"],
+      ]
+    end
+
+    def test_bool_false
+      assert_eval false, [
+        ["load", "bool_var"],
+        ["to_bool"],
+      ], bool_var: false
+    end
+
+    def test_bool
+      assert_eval true, [
+        ["load", "bool_var"],
+        ["to_bool"],
+      ], bool_var: true
+    end
+
     def test_not
       assert_eval false, [
         ["lit", true],
