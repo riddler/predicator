@@ -21,6 +21,7 @@ module Predicator
 
       def visit_NOT node;   visit_children node; end
       def visit_GROUP node; visit_children node; end
+      def visit_BOOL node;  visit_children node; end
 
       def visit_EQ node;    visit_children node; end
       def visit_GT node;    visit_children node; end

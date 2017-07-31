@@ -130,5 +130,9 @@ module Predicator
       def type; :BETWEEN; end
     end
 
+    class BooleanVariable < Unary
+      def type; :BOOL; end
+    end
+
   end
 end

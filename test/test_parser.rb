@@ -14,6 +14,10 @@ module Predicator
       assert_type :FALSE, "false"
     end
 
+    def test_boolean_variable
+      assert_type :BOOL, "foo"
+    end
+
     def test_between
       ast = @parser.parse "1 between 0 and 5"
 

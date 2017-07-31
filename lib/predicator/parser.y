@@ -17,6 +17,7 @@ rule
   boolean_predicate
     : TRUE                      { AST::True.new true }
     | FALSE                     { AST::False.new false }
+    | variable                  { AST::BooleanVariable.new val.first }
     ;
   logical_predicate
     : BANG predicate            { AST::Not.new val.last }
@@ -31,15 +32,15 @@ rule
     | value GT value                { AST::GreaterThan.new val.first, val.last }
     | value LT value                { AST::LessThan.new val.first, val.last }
     | value BETWEEN value AND value { AST::Between.new val.first, val[2], val.last }
-    | value IN array                { AST::In.new val.first, val.last}
-    | value NOT IN array            { AST::NotIn.new val.first, val.last}
+    | value IN array                { AST::In.new val.first, val.last }
+    | value NOT IN array            { AST::NotIn.new val.first, val.last }
     ;
   array
-    : LBRACKET array_contents RBRACKET {AST::Array.new val[1]}
+    : LBRACKET array_contents RBRACKET { AST::Array.new val[1] }
     ;
   array_contents
-    : literal {[val.first]}
-    | array_contents COMMA literal {[val.first, val.last].flatten}
+    : literal
+    | array_contents COMMA literal  { [val.first, val.last].flatten }
     ;
   value
     : literal
