@@ -34,6 +34,8 @@ module Predicator
         stack.push instruction.last
       when "load"
         stack.push context[instruction.last]
+      when "to_bool"
+        stack.push !!stack.pop
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
