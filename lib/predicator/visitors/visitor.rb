@@ -19,16 +19,9 @@ module Predicator
         node.children.each {|child| visit child}
       end
 
-      def unary node
-        visit node.left
-      end
       def visit_NOT node;   visit_children node; end
       def visit_GROUP node; visit_children node; end
 
-      def binary node
-        visit node.left
-        visit node.right
-      end
       def visit_EQ node;    visit_children node; end
       def visit_GT node;    visit_children node; end
       def visit_LT node;    visit_children node; end
@@ -37,11 +30,6 @@ module Predicator
       def visit_IN node;    visit_children node; end
       def visit_NOTIN node; visit_children node; end
 
-      def ternary node
-        visit node.left
-        visit node.middle
-        visit node.right
-      end
       def visit_BETWEEN node; visit_children node; end
 
       def terminal node; end
