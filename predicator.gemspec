@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ubergeek3141@gmail.com"]
 
   spec.summary       = %q{Predicate Engine}
-  spec.homepage      = "https://github.com/johnnyt/predicator"
+  spec.homepage      = "https://github.com/predicator/predicator"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(bin|test|spec|features)/}) }
