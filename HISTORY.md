@@ -1,3 +1,12 @@
+### 1.0.0 / 2017-09-22
+
+* Adds new lexer
+* Introduces the stack machine and instructions
+* Adds LessThan predicate
+* Adds Between predicate
+* Adds In and Not In predicates (with arrays)
+* Adds BooleanVariable predicate
+
 ### 0.4.0 / 2016-06-09
 
 * Adds double dispatch for relation predicates
