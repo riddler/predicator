@@ -14,7 +14,11 @@ Example usage:
 ```ruby
 require "predicator"
 
-Predicator.evaluate "1 = 2"
+Predicator.evaluate "age > 21" # false
+
+Predicator.evaluate "age > 21", age: 10 # false
+
+Predicator.evaluate "age > 21", age: 50 # true
 ```
 
 ## Installation
