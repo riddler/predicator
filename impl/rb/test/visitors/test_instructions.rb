@@ -119,7 +119,7 @@ module Predicator
       end
 
       # "(true or true or true) or true"
-      def test_group_true_or_true_or_true_or_true
+      def test_correct_jump_offsets
         assert_instructions "(true or true or true) or true", [
           ["lit", true], ["jtrue", 4], ["lit", true], ["jtrue", 2], ["lit", true],
           ["jtrue", 2], ["lit", true],

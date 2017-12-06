@@ -240,6 +240,23 @@ module Predicator
       ]
     end
 
+    def test_invalid_compare_rescues_error
+      assert_eval false, [
+        ["lit", "foo"],
+        ["lit", 5],
+        ["compare", "GT"],
+      ]
+    end
+
+    def test_invalid_between_rescues_error
+      assert_eval false, [
+        ["lit", "foo"],
+        ["lit", 1],
+        ["lit", 5],
+        ["compare", "BETWEEN"],
+      ]
+    end
+
     def assert_eval result, instructions, context={}
       e = Evaluator.new instructions, context
       assert_equal result, e.result
