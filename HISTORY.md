@@ -1,3 +1,7 @@
+### 1.1.0 / 2017-12-06
+
+* Rescues errors when comparing invalid types
+
 ### 1.0.0 / 2017-09-22
 
 * Adds new lexer
