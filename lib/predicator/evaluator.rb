@@ -71,6 +71,8 @@ module Predicator
       else
         stack.push send("compare_#{comparison}", left, right)
       end
+    rescue
+      stack.push false
     end
 
     def compare_EQ left, right
@@ -103,6 +105,8 @@ module Predicator
         result = val.between? min, max
         stack.push result
       end
+    rescue
+      stack.push false
     end
   end
 end
