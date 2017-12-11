@@ -29,38 +29,49 @@ module Predicator
         assert_to_s "(true)", "( true )"
       end
 
-      # def test_integer_equals_integer
-      #   assert_round_trip "1 = 1"
-      # end
+      def test_variable_equals_integer
+        assert_round_trip "foo = 1"
+      end
 
-      # def test_integer_in_array
-      #   assert_round_trip "1 in [1, 2]"
-      # end
+      def test_variable_equals_string
+        assert_round_trip "foo = 'foo'"
+      end
 
-      # def test_integer_not_in_array
-      #   assert_round_trip "3 not in [1, 2]"
-      # end
+      def test_variable_greater_than_integer
+        assert_round_trip "foo > 1"
+      end
 
-      # def test_integer_greater_than_integer
-      #   assert_round_trip "1 > 1"
-      # end
+      def test_variable_greater_than_string
+        assert_round_trip "foo > 'foo'"
+      end
 
-      # def test_integer_less_than_integer
-      #   assert_round_trip "1 < 1"
-      # end
+      def test_variable_less_than_integer
+        assert_round_trip "foo < 1"
+      end
 
-      # def test_integer_between_integers
-      #   assert_round_trip "1 between 0 and 5"
-      # end
+      def test_variable_less_than_string
+        assert_round_trip "foo < 'foo'"
+      end
 
-      # def test_string_equals_string
-      #   assert_round_trip "'foo' = 'foo'"
-      # end
+      def test_integer_between_integers
+        assert_round_trip "foo between 0 and 5"
+      end
 
-      # def test_variable_equals_string
-      #   assert_round_trip "foo = 'foo'"
-      # end
+      def test_variable_in_integer_array
+        assert_round_trip "foo in [1, 2]"
+      end
 
+      def test_variable_in_string_array
+        assert_round_trip "foo in ['foo', 'bar']"
+      end
+
+      def test_variable_not_in_integer_array
+        assert_round_trip "foo not in [1, 2]"
+      end
+
+      def test_variable_not_in_string_array
+        assert_round_trip "foo not in ['foo', 'bar']"
+      end
 
       def assert_to_s str, source
         assert_equal str, @parser.parse(source).to_s
