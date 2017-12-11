@@ -105,6 +105,16 @@ module Predicator
       ]
     end
 
+    # age = 21
+    def test_variable_equal_to_integer
+      assert_eval true, [
+        ["load", "age"],
+        ["to_int"],
+        ["lit", 21],
+        ["compare", "EQ"],
+      ], age: "21"
+    end
+
     # age > 21
     def test_variable_greater_than_integer
       assert_eval false, [

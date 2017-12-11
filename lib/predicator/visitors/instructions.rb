@@ -37,58 +37,60 @@ module Predicator
       end
 
       def visit_INTEQ node
-        super
-        @instructions.push ["compare", "INTEQ"]
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
+        @instructions.push ["compare", "EQ"]
       end
 
       def visit_STREQ node
         super
-        @instructions.push ["compare", "STREQ"]
+        @instructions.push ["compare", "EQ"]
       end
 
       def visit_INTGT node
         super
-        @instructions.push ["compare", "INTGT"]
+        @instructions.push ["compare", "GT"]
       end
 
       def visit_STRGT node
         super
-        @instructions.push ["compare", "STRGT"]
+        @instructions.push ["compare", "GT"]
       end
 
       def visit_INTLT node
         super
-        @instructions.push ["compare", "INTLT"]
+        @instructions.push ["compare", "LT"]
       end
 
       def visit_STRLT node
         super
-        @instructions.push ["compare", "STRLT"]
+        @instructions.push ["compare", "LT"]
       end
 
       def visit_INTBETWEEN node
         super
-        @instructions.push ["compare", "INTBETWEEN"]
+        @instructions.push ["compare", "BETWEEN"]
       end
 
       def visit_INTIN node
         super
-        @instructions.push ["compare", "INTIN"]
+        @instructions.push ["compare", "IN"]
       end
 
       def visit_STRIN node
         super
-        @instructions.push ["compare", "STRIN"]
+        @instructions.push ["compare", "IN"]
       end
 
       def visit_INTNOTIN node
         super
-        @instructions.push ["compare", "INTNOTIN"]
+        @instructions.push ["compare", "NOTIN"]
       end
 
       def visit_STRNOTIN node
         super
-        @instructions.push ["compare", "STRNOTIN"]
+        @instructions.push ["compare", "NOTIN"]
       end
 
       def visit_INTARRAY node
