@@ -28,27 +28,31 @@ rule
     : LPAREN predicate RPAREN   { AST::Group.new val[1] }
     ;
   comparison_predicate
-    : value EQ value                { AST::Equal.new val.first, val.last }
-    | value GT value                { AST::GreaterThan.new val.first, val.last }
-    | value LT value                { AST::LessThan.new val.first, val.last }
-    | value BETWEEN value AND value { AST::Between.new val.first, val[2], val.last }
-    | value IN array                { AST::In.new val.first, val.last }
-    | value NOT IN array            { AST::NotIn.new val.first, val.last }
+    : integer_comparison_predicate
+    | string_comparison_predicate
     ;
-  array
-    : LBRACKET array_contents RBRACKET { AST::Array.new val[1] }
+  integer_comparison_predicate
+    : variable EQ integer                  { AST::IntegerEqual.new val.first, val.last }
+    | variable GT integer                  { AST::IntegerGreaterThan.new val.first, val.last }
+    | variable LT integer                  { AST::IntegerLessThan.new val.first, val.last }
+    | variable BETWEEN integer AND integer { AST::IntegerBetween.new val.first, val[2], val.last }
+    | variable IN integer_array            { AST::IntegerIn.new val.first, val.last }
+    | variable NOT IN integer_array        { AST::IntegerNotIn.new val.first, val.last }
     ;
-  array_contents
-    : literal
-    | array_contents COMMA literal  { [val.first, val.last].flatten }
+  string_comparison_predicate
+    : variable EQ string                   { AST::StringEqual.new val.first, val.last }
+  integer_array
+    : LBRACKET integer_array_contents RBRACKET { AST::IntegerArray.new val[1] }
     ;
-  value
-    : literal
-    | variable
+  integer_array_contents
+    : integer
+    | integer_array_contents COMMA integer  { [val.first, val.last].flatten }
     ;
-  literal
+  integer
+    : INTEGER                   { AST::Integer.new val.first.to_i }
+    ;
+  string
     : STRING                    { AST::String.new val.first }
-    | INTEGER                   { AST::Integer.new val.first.to_i }
     ;
   variable
     : IDENTIFIER                { AST::Variable.new val.first }
