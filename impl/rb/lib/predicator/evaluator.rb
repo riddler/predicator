@@ -36,6 +36,8 @@ module Predicator
         stack.push context[instruction.last]
       when "to_bool"
         stack.push !!stack.pop
+      when "to_int"
+        stack.push stack.pop.to_i
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN

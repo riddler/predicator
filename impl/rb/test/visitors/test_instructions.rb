@@ -38,8 +38,9 @@ module Predicator
       def test_variable_equal_integer
         assert_instructions "foo=1", [
           ["load", "foo"],
+          ["to_int"],
           ["lit", 1],
-          ["compare", "INTEQ"],
+          ["compare", "EQ"],
         ]
       end
 
@@ -47,7 +48,7 @@ module Predicator
         assert_instructions "foo='bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "STREQ"],
+          ["compare", "EQ"],
         ]
       end
 
@@ -55,7 +56,7 @@ module Predicator
         assert_instructions "foo>1", [
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "INTGT"],
+          ["compare", "GT"],
         ]
       end
 
@@ -63,7 +64,7 @@ module Predicator
         assert_instructions "foo>'bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "STRGT"],
+          ["compare", "GT"],
         ]
       end
 
@@ -71,7 +72,7 @@ module Predicator
         assert_instructions "foo<1", [
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "INTLT"],
+          ["compare", "LT"],
         ]
       end
 
@@ -79,7 +80,7 @@ module Predicator
         assert_instructions "foo<'bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "STRLT"],
+          ["compare", "LT"],
         ]
       end
 
@@ -87,7 +88,7 @@ module Predicator
         assert_instructions "foo in [1, 2]", [
           ["load", "foo"],
           ["integer_array", [1, 2]],
-          ["compare", "INTIN"],
+          ["compare", "IN"],
         ]
       end
 
@@ -95,7 +96,7 @@ module Predicator
         assert_instructions "foo in ['foo', 'bar']", [
           ["load", "foo"],
           ["string_array", ["foo", "bar"]],
-          ["compare", "STRIN"],
+          ["compare", "IN"],
         ]
       end
 
@@ -103,7 +104,7 @@ module Predicator
         assert_instructions "foo not in [1, 2]", [
           ["load", "foo"],
           ["integer_array", [1, 2]],
-          ["compare", "INTNOTIN"],
+          ["compare", "NOTIN"],
         ]
       end
 
@@ -111,7 +112,7 @@ module Predicator
         assert_instructions "foo not in ['foo', 'bar']", [
           ["load", "foo"],
           ["string_array", ["foo", "bar"]],
-          ["compare", "STRNOTIN"],
+          ["compare", "NOTIN"],
         ]
       end
 
@@ -120,7 +121,7 @@ module Predicator
           ["load", "foo"],
           ["lit", 1],
           ["lit", 2],
-          ["compare", "INTBETWEEN"],
+          ["compare", "BETWEEN"],
         ]
       end
 
@@ -143,10 +144,11 @@ module Predicator
       def test_false_or_variable_equal_integer
         assert_instructions "false or foo=1", [
           ["lit", false],
-          ["jtrue", 4],
+          ["jtrue", 5],
           ["load", "foo"],
+          ["to_int"],
           ["lit", 1],
-          ["compare", "INTEQ"],
+          ["compare", "EQ"],
         ]
       end
 
@@ -156,7 +158,7 @@ module Predicator
           ["jtrue", 4],
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "STREQ"],
+          ["compare", "EQ"],
         ]
       end
 
