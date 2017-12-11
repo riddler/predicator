@@ -41,12 +41,24 @@ rule
     ;
   string_comparison_predicate
     : variable EQ string                   { AST::StringEqual.new val.first, val.last }
+    | variable GT string                   { AST::StringGreaterThan.new val.first, val.last }
+    | variable LT string                   { AST::StringLessThan.new val.first, val.last }
+    | variable IN string_array             { AST::StringIn.new val.first, val.last }
+    | variable NOT IN string_array         { AST::StringNotIn.new val.first, val.last }
+    ;
   integer_array
     : LBRACKET integer_array_contents RBRACKET { AST::IntegerArray.new val[1] }
     ;
   integer_array_contents
     : integer
     | integer_array_contents COMMA integer  { [val.first, val.last].flatten }
+    ;
+  string_array
+    : LBRACKET string_array_contents RBRACKET { AST::StringArray.new val[1] }
+    ;
+  string_array_contents
+    : string
+    | string_array_contents COMMA string  { [val.first, val.last].flatten }
     ;
   integer
     : INTEGER                   { AST::Integer.new val.first.to_i }
