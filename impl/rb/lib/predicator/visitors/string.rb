@@ -11,7 +11,12 @@ module Predicator
         "'#{node.left}'"
       end
 
-      def visit_ARRAY node
+      def visit_INTARRAY node
+        contents = node.left.map{ |item| visit item }.join(", ")
+        "[#{contents}]"
+      end
+
+      def visit_STRARRAY node
         contents = node.left.map{ |item| visit item }.join(", ")
         "[#{contents}]"
       end
@@ -24,15 +29,27 @@ module Predicator
         "(#{visit node.left})"
       end
 
-      def visit_EQ node
+      def visit_INTEQ node
         [visit(node.left), " = ", visit(node.right)].join
       end
 
-      def visit_GT node
+      def visit_STREQ node
+        [visit(node.left), " = ", visit(node.right)].join
+      end
+
+      def visit_INTGT node
         [visit(node.left), " > ", visit(node.right)].join
       end
 
-      def visit_LT node
+      def visit_STRGT node
+        [visit(node.left), " > ", visit(node.right)].join
+      end
+
+      def visit_INTLT node
+        [visit(node.left), " < ", visit(node.right)].join
+      end
+
+      def visit_STRLT node
         [visit(node.left), " < ", visit(node.right)].join
       end
 
@@ -44,15 +61,23 @@ module Predicator
         [visit(node.left), " or ", visit(node.right)].join
       end
 
-      def visit_BETWEEN node
+      def visit_INTBETWEEN node
         [visit(node.left), " between ", visit(node.middle), " and ", visit(node.right)].join
       end
 
-      def visit_IN node
+      def visit_INTIN node
         [visit(node.left), " in ", visit(node.right)].join
       end
 
-      def visit_NOTIN node
+      def visit_STRIN node
+        [visit(node.left), " in ", visit(node.right)].join
+      end
+
+      def visit_INTNOTIN node
+        [visit(node.left), " not in ", visit(node.right)].join
+      end
+
+      def visit_STRNOTIN node
         [visit(node.left), " not in ", visit(node.right)].join
       end
     end
