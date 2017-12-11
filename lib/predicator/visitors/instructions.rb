@@ -36,17 +36,32 @@ module Predicator
         @instructions.push ["not"]
       end
 
-      def visit_EQ node
+      def visit_INTEQ node
         super
         @instructions.push ["compare", "EQ"]
       end
 
-      def visit_GT node
+      def visit_STREQ node
+        super
+        @instructions.push ["compare", "EQ"]
+      end
+
+      def visit_INTGT node
         super
         @instructions.push ["compare", "GT"]
       end
 
-      def visit_LT node
+      def visit_STRGT node
+        super
+        @instructions.push ["compare", "GT"]
+      end
+
+      def visit_INTLT node
+        super
+        @instructions.push ["compare", "LT"]
+      end
+
+      def visit_STRLT node
         super
         @instructions.push ["compare", "LT"]
       end
@@ -56,19 +71,34 @@ module Predicator
         @instructions.push ["compare", "BETWEEN"]
       end
 
-      def visit_IN node
+      def visit_INTIN node
         super
-        @instructions.push ["compare", "IN"]
+        @instructions.push ["compare", "INTIN"]
       end
 
-      def visit_NOTIN node
+      def visit_STRIN node
         super
-        @instructions.push ["compare", "NOTIN"]
+        @instructions.push ["compare", "STRIN"]
       end
 
-      def visit_ARRAY node
+      def visit_INTNOTIN node
+        super
+        @instructions.push ["compare", "INTNOTIN"]
+      end
+
+      def visit_STRNOTIN node
+        super
+        @instructions.push ["compare", "STRNOTIN"]
+      end
+
+      def visit_INTARRAY node
         contents = node.left.map{ |item| item.left }
-        @instructions.push ["array", contents]
+        @instructions.push ["integer_array", contents]
+      end
+
+      def visit_STRARRAY node
+        contents = node.left.map{ |item| item.left }
+        @instructions.push ["string_array", contents]
       end
 
       def visit_VARIABLE node

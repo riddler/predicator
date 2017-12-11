@@ -35,62 +35,85 @@ module Predicator
         ]
       end
 
-      # def test_integer_equal_integer
-      #   assert_instructions "1=1", [
-      #     ["lit", 1],
-      #     ["lit", 1],
-      #     ["compare", "EQ"],
-      #   ]
-      # end
+      def test_variable_equal_integer
+        assert_instructions "foo=1", [
+          ["load", "foo"],
+          ["lit", 1],
+          ["compare", "EQ"],
+        ]
+      end
 
-      # def test_integer_in_array
-      #   assert_instructions "1 in [1, 2]", [
-      #     ["lit", 1],
-      #     ["array", [1, 2]],
-      #     ["compare", "IN"],
-      #   ]
-      # end
+      def test_variable_equal_string
+        assert_instructions "foo='bar'", [
+          ["load", "foo"],
+          ["lit", "bar"],
+          ["compare", "EQ"],
+        ]
+      end
 
-      # def test_integer_not_in_array
-      #   assert_instructions "3 not in [1, 2]", [
-      #     ["lit", 3],
-      #     ["array", [1, 2]],
-      #     ["compare", "NOTIN"],
-      #   ]
-      # end
+      def test_variable_greater_than_integer
+        assert_instructions "foo>1", [
+          ["load", "foo"],
+          ["lit", 1],
+          ["compare", "GT"],
+        ]
+      end
 
-      # def test_variable_equal_integer
-      #   assert_instructions "age=21", [
-      #     ["load", "age"],
-      #     ["lit", 21],
-      #     ["compare", "EQ"],
-      #   ]
-      # end
+      def test_variable_greater_than_string
+        assert_instructions "foo>'bar'", [
+          ["load", "foo"],
+          ["lit", "bar"],
+          ["compare", "GT"],
+        ]
+      end
 
-      # def test_integer_greater_than_integer
-      #   assert_instructions "2>1", [
-      #     ["lit", 2],
-      #     ["lit", 1],
-      #     ["compare", "GT"],
-      #   ]
-      # end
+      def test_variable_less_than_integer
+        assert_instructions "foo<1", [
+          ["load", "foo"],
+          ["lit", 1],
+          ["compare", "LT"],
+        ]
+      end
 
-      # def test_integer_greater_than_integer
-      #   assert_instructions "2<1", [
-      #     ["lit", 2],
-      #     ["lit", 1],
-      #     ["compare", "LT"],
-      #   ]
-      # end
+      def test_variable_less_than_string
+        assert_instructions "foo<'bar'", [
+          ["load", "foo"],
+          ["lit", "bar"],
+          ["compare", "LT"],
+        ]
+      end
 
-      # def test_integer_greater_than_integer
-      #   assert_instructions "2 between 1 and 5", [
-      #     ["lit", 2],
-      #     ["lit", 1],
-      #     ["lit", 5],
-      #     ["compare", "BETWEEN"],
-      #   ]
-      # end
+      def test_variable_in_integer_array
+        assert_instructions "foo in [1, 2]", [
+          ["load", "foo"],
+          ["integer_array", [1, 2]],
+          ["compare", "INTIN"],
+        ]
+      end
+
+      def test_variable_in_string_array
+        assert_instructions "foo in ['foo', 'bar']", [
+          ["load", "foo"],
+          ["string_array", ["foo", "bar"]],
+          ["compare", "STRIN"],
+        ]
+      end
+
+      def test_variable_not_in_integer_array
+        assert_instructions "foo not in [1, 2]", [
+          ["load", "foo"],
+          ["integer_array", [1, 2]],
+          ["compare", "INTNOTIN"],
+        ]
+      end
+
+      def test_variable_not_in_string_array
+        assert_instructions "foo not in ['foo', 'bar']", [
+          ["load", "foo"],
+          ["string_array", ["foo", "bar"]],
+          ["compare", "STRNOTIN"],
+        ]
+      end
 
       def test_true_and_true
         assert_instructions "true and true", [
@@ -108,15 +131,25 @@ module Predicator
         ]
       end
 
-      # def test_false_or_integer_equal_integer
-      #   assert_instructions "false or 1=1", [
-      #     ["lit", false],
-      #     ["jtrue", 4],
-      #     ["lit", 1],
-      #     ["lit", 1],
-      #     ["compare", "EQ"],
-      #   ]
-      # end
+      def test_false_or_variable_equal_integer
+        assert_instructions "false or foo=1", [
+          ["lit", false],
+          ["jtrue", 4],
+          ["load", "foo"],
+          ["lit", 1],
+          ["compare", "EQ"],
+        ]
+      end
+
+      def test_false_or_variable_equal_str
+        assert_instructions "false or foo='bar'", [
+          ["lit", false],
+          ["jtrue", 4],
+          ["load", "foo"],
+          ["lit", "bar"],
+          ["compare", "EQ"],
+        ]
+      end
 
       # "(true or true or true) or true"
       def test_correct_jump_offsets
