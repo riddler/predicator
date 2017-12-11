@@ -39,7 +39,7 @@ module Predicator
         assert_instructions "foo=1", [
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "EQ"],
+          ["compare", "INTEQ"],
         ]
       end
 
@@ -47,7 +47,7 @@ module Predicator
         assert_instructions "foo='bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "EQ"],
+          ["compare", "STREQ"],
         ]
       end
 
@@ -55,7 +55,7 @@ module Predicator
         assert_instructions "foo>1", [
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "GT"],
+          ["compare", "INTGT"],
         ]
       end
 
@@ -63,7 +63,7 @@ module Predicator
         assert_instructions "foo>'bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "GT"],
+          ["compare", "STRGT"],
         ]
       end
 
@@ -71,7 +71,7 @@ module Predicator
         assert_instructions "foo<1", [
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "LT"],
+          ["compare", "INTLT"],
         ]
       end
 
@@ -79,7 +79,7 @@ module Predicator
         assert_instructions "foo<'bar'", [
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "LT"],
+          ["compare", "STRLT"],
         ]
       end
 
@@ -115,6 +115,15 @@ module Predicator
         ]
       end
 
+      def test_variable_between_integers
+        assert_instructions "foo between 1 and 2", [
+          ["load", "foo"],
+          ["lit", 1],
+          ["lit", 2],
+          ["compare", "INTBETWEEN"],
+        ]
+      end
+
       def test_true_and_true
         assert_instructions "true and true", [
           ["lit", true],
@@ -137,7 +146,7 @@ module Predicator
           ["jtrue", 4],
           ["load", "foo"],
           ["lit", 1],
-          ["compare", "EQ"],
+          ["compare", "INTEQ"],
         ]
       end
 
@@ -147,7 +156,7 @@ module Predicator
           ["jtrue", 4],
           ["load", "foo"],
           ["lit", "bar"],
-          ["compare", "EQ"],
+          ["compare", "STREQ"],
         ]
       end
 

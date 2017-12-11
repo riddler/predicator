@@ -38,37 +38,37 @@ module Predicator
 
       def visit_INTEQ node
         super
-        @instructions.push ["compare", "EQ"]
+        @instructions.push ["compare", "INTEQ"]
       end
 
       def visit_STREQ node
         super
-        @instructions.push ["compare", "EQ"]
+        @instructions.push ["compare", "STREQ"]
       end
 
       def visit_INTGT node
         super
-        @instructions.push ["compare", "GT"]
+        @instructions.push ["compare", "INTGT"]
       end
 
       def visit_STRGT node
         super
-        @instructions.push ["compare", "GT"]
+        @instructions.push ["compare", "STRGT"]
       end
 
       def visit_INTLT node
         super
-        @instructions.push ["compare", "LT"]
+        @instructions.push ["compare", "INTLT"]
       end
 
       def visit_STRLT node
         super
-        @instructions.push ["compare", "LT"]
+        @instructions.push ["compare", "STRLT"]
       end
 
-      def visit_BETWEEN node
+      def visit_INTBETWEEN node
         super
-        @instructions.push ["compare", "BETWEEN"]
+        @instructions.push ["compare", "INTBETWEEN"]
       end
 
       def visit_INTIN node

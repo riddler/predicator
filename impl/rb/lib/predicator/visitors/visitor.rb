@@ -23,11 +23,12 @@ module Predicator
       def visit_GROUP node; visit_children node; end
       def visit_BOOL node;  visit_children node; end
 
-      def visit_INTEQ node;    visit_children node; end
-      def visit_INTGT node;    visit_children node; end
-      def visit_INTLT node;    visit_children node; end
-      def visit_INTIN node;    visit_children node; end
-      def visit_INTNOTIN node; visit_children node; end
+      def visit_INTEQ node;      visit_children node; end
+      def visit_INTGT node;      visit_children node; end
+      def visit_INTLT node;      visit_children node; end
+      def visit_INTIN node;      visit_children node; end
+      def visit_INTNOTIN node;   visit_children node; end
+      def visit_INTBETWEEN node; visit_children node; end
 
       def visit_STREQ node;    visit_children node; end
       def visit_STRGT node;    visit_children node; end
@@ -37,7 +38,6 @@ module Predicator
 
       def visit_AND node;   visit_children node; end
       def visit_OR node;    visit_children node; end
-      def visit_BETWEEN node; visit_children node; end
 
       def terminal node; end
       def visit_TRUE node;      terminal node; end
