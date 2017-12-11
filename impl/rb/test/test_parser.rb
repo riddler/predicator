@@ -69,7 +69,7 @@ module Predicator
       assert_equal :INTARRAY, ast.right.type
     end
 
-    def test_variable_not_in_array
+    def test_variable_not_in_integer_array
       ast = @parser.parse "foo not in [1,2]"
 
       assert_equal :INTNOTIN, ast.type
@@ -84,26 +84,50 @@ module Predicator
 
       assert_equal :STREQ, ast.type
       assert_equal :VARIABLE, ast.left.type
+      assert_equal "foo", ast.left.left
       assert_equal :STRING, ast.right.type
     end
 
-    # def test_variable_equals_string
-    #   ast = @parser.parse "foo = 'foo'"
+    def test_variable_with_dot_equals_string
+      ast = @parser.parse "foo.bar = 'foo'"
 
-    #   assert_equal :EQ, ast.type
-    #   assert_equal :VARIABLE, ast.left.type
-    #   assert_equal "foo", ast.left.left
-    #   assert_equal :STRING, ast.right.type
-    # end
+      assert_equal :STREQ, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal "foo.bar", ast.left.left
+      assert_equal :STRING, ast.right.type
+    end
 
-    # def test_variable_with_dot_equals_string
-    #   ast = @parser.parse "foo.bar = 'foo'"
+    def test_variable_greater_than_string
+      ast = @parser.parse "foo > 'bar'"
 
-    #   assert_equal :EQ, ast.type
-    #   assert_equal :VARIABLE, ast.left.type
-    #   assert_equal "foo.bar", ast.left.left
-    #   assert_equal :STRING, ast.right.type
-    # end
+      assert_equal :STRGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRING, ast.right.type
+    end
+
+    def test_variable_less_than_string
+      ast = @parser.parse "foo < 'bar'"
+
+      assert_equal :STRLT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRING, ast.right.type
+    end
+
+    def test_variable_in_string_array
+      ast = @parser.parse "foo in ['foo','bar']"
+
+      assert_equal :STRIN, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRARRAY, ast.right.type
+    end
+
+    def test_variable_not_in_string_array
+      ast = @parser.parse "foo not in ['foo','bar']"
+
+      assert_equal :STRNOTIN, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRARRAY, ast.right.type
+    end
 
     def assert_type type, source
       assert_equal type, @parser.parse(source).type

@@ -67,6 +67,10 @@ module Predicator
       def type; :INTARRAY; end
     end
 
+    class StringArray < Unary
+      def type; :STRARRAY; end
+    end
+
     class Not < Unary
       def type; :NOT; end
     end
@@ -98,16 +102,32 @@ module Predicator
       def type; :INTGT; end
     end
 
+    class StringGreaterThan < Binary
+      def type; :STRGT; end
+    end
+
     class IntegerLessThan < Binary
       def type; :INTLT; end
+    end
+
+    class StringLessThan < Binary
+      def type; :STRLT; end
     end
 
     class IntegerIn < Binary
       def type; :INTIN; end
     end
 
+    class StringIn < Binary
+      def type; :STRIN; end
+    end
+
     class IntegerNotIn < Binary
       def type; :INTNOTIN; end
+    end
+
+    class StringNotIn < Binary
+      def type; :STRNOTIN; end
     end
 
     class And < Binary
