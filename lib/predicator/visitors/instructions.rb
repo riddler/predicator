@@ -44,52 +44,73 @@ module Predicator
       end
 
       def visit_STREQ node
-        super
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
         @instructions.push ["compare", "EQ"]
       end
 
       def visit_INTGT node
-        super
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "GT"]
       end
 
       def visit_STRGT node
-        super
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
         @instructions.push ["compare", "GT"]
       end
 
       def visit_INTLT node
-        super
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "LT"]
       end
 
       def visit_STRLT node
-        super
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
         @instructions.push ["compare", "LT"]
       end
 
       def visit_INTBETWEEN node
-        super
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.middle
+        visit node.right
         @instructions.push ["compare", "BETWEEN"]
       end
 
       def visit_INTIN node
-        super
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "IN"]
       end
 
       def visit_STRIN node
-        super
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
         @instructions.push ["compare", "IN"]
       end
 
       def visit_INTNOTIN node
-        super
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
 
       def visit_STRNOTIN node
-        super
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
 
