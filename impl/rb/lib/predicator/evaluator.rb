@@ -37,7 +37,21 @@ module Predicator
       when "to_bool"
         stack.push !!stack.pop
       when "to_int"
-        stack.push stack.pop.to_i
+        val = stack.pop
+        new_val = if val.nil? || val.is_a?(String) && val.empty?
+                    nil
+                  else
+                    val.to_i
+                  end
+        stack.push new_val
+      when "to_str"
+        val = stack.pop
+        new_val = if val.nil?
+                    nil
+                  else
+                    val.to_s
+                  end
+        stack.push new_val
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
