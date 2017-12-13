@@ -23,36 +23,32 @@ digraph parse_tree {
 
       private
 
-      def binary node
+      def visit_children node
         node.children.each do |c|
           @edges << "#{node.object_id} -> #{c.object_id};"
         end
         super
       end
 
-      alias_method :ternary, :binary
-
-      def unary node
-        @edges << "#{node.object_id} -> #{node.left.object_id};"
-        super
-      end
-
-      def visit_EQ node
+      def visit_INTEQ node
         @nodes << "#{node.object_id} [label=\"=\"];"
         super
       end
+      alias_method :visit_STREQ, :visit_INTEQ
 
-      def visit_GT node
+      def visit_INTGT node
         @nodes << "#{node.object_id} [label=\">\"];"
         super
       end
+      alias_method :visit_STRGT, :visit_INTGT
 
-      def visit_LT node
+      def visit_INTLT node
         @nodes << "#{node.object_id} [label=\"<\"];"
         super
       end
+      alias_method :visit_STRLT, :visit_INTLT
 
-      def visit_BETWEEN node
+      def visit_INTBETWEEN node
         @nodes << "#{node.object_id} [label=\"between\"];"
         super
       end

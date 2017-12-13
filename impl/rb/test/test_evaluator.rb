@@ -87,6 +87,34 @@ module Predicator
       ]
     end
 
+    # age = 21
+    def test_variable_equal_to_integer
+      assert_eval true, [
+        ["load", "age"],
+        ["to_int"],
+        ["lit", 21],
+        ["compare", "EQ"],
+      ], age: "21"
+    end
+
+    def test_nil_variable_equal_to_integer
+      assert_eval false, [
+        ["load", "age"],
+        ["to_int"],
+        ["lit", 0],
+        ["compare", "EQ"],
+      ]
+    end
+
+    def test_empty_string_variable_equal_to_integer
+      assert_eval false, [
+        ["load", "age"],
+        ["to_int"],
+        ["lit", 0],
+        ["compare", "EQ"],
+      ], age: ""
+    end
+
     # age > 21
     def test_undefined_variable_greater_than_integer
       assert_eval false, [
@@ -96,16 +124,6 @@ module Predicator
       ]
     end
 
-    # 21 > age
-    def test_integer_greater_than_undefined_variable
-      assert_eval false, [
-        ["lit", 21],
-        ["load", "age"],
-        ["compare", "GT"],
-      ]
-    end
-
-    # age > 21
     def test_variable_greater_than_integer
       assert_eval false, [
         ["load", "age"],
@@ -120,6 +138,7 @@ module Predicator
       ], age: 22
     end
 
+    # age < 21
     def test_variable_less_than_integer
       assert_eval true, [
         ["load", "age"],
@@ -156,6 +175,34 @@ module Predicator
         ["lit", 5],
         ["compare", "BETWEEN"],
       ]
+    end
+
+    # age = 21
+    def test_variable_equal_to_string
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "bar"],
+        ["compare", "EQ"],
+      ], foo: "bar"
+    end
+
+    def test_nil_variable_equal_to_string
+      assert_eval false, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "foo"],
+        ["compare", "EQ"],
+      ]
+    end
+
+    def test_int_variable_equal_to_string
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "20"],
+        ["compare", "EQ"],
+      ], foo: 20
     end
 
     #--- AND
