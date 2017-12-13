@@ -93,16 +93,16 @@ module Predicator
         assert_instructions "foo in [1, 2]", [
           ["load", "foo"],
           ["to_int"],
-          ["integer_array", [1, 2]],
+          ["array", [1, 2]],
           ["compare", "IN"],
         ]
       end
 
-      def test_variable_in_string_array
+      def test_variable_in_array
         assert_instructions "foo in ['foo', 'bar']", [
           ["load", "foo"],
           ["to_str"],
-          ["string_array", ["foo", "bar"]],
+          ["array", ["foo", "bar"]],
           ["compare", "IN"],
         ]
       end
@@ -111,16 +111,16 @@ module Predicator
         assert_instructions "foo not in [1, 2]", [
           ["load", "foo"],
           ["to_int"],
-          ["integer_array", [1, 2]],
+          ["array", [1, 2]],
           ["compare", "NOTIN"],
         ]
       end
 
-      def test_variable_not_in_string_array
+      def test_variable_not_in_array
         assert_instructions "foo not in ['foo', 'bar']", [
           ["load", "foo"],
           ["to_str"],
-          ["string_array", ["foo", "bar"]],
+          ["array", ["foo", "bar"]],
           ["compare", "NOTIN"],
         ]
       end
