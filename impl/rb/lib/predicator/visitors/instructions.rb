@@ -116,13 +116,9 @@ module Predicator
 
       def visit_INTARRAY node
         contents = node.left.map{ |item| item.left }
-        @instructions.push ["integer_array", contents]
+        @instructions.push ["array", contents]
       end
-
-      def visit_STRARRAY node
-        contents = node.left.map{ |item| item.left }
-        @instructions.push ["string_array", contents]
-      end
+      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]

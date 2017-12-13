@@ -53,7 +53,6 @@ module Predicator
         node.left.each{ |item| visit item }
       end
       alias_method :visit_STRARRAY, :visit_INTARRAY
-
     end
   end
 end
