@@ -36,6 +36,10 @@ module Predicator
         stack.push context[instruction.last]
       when "to_bool"
         stack.push !!stack.pop
+      when "to_int"
+        stack.push to_int(stack.pop)
+      when "to_str"
+        stack.push to_str(stack.pop)
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
@@ -43,6 +47,18 @@ module Predicator
           compare instruction.last
         end
       end
+    end
+
+    def to_int val
+      if val.nil? || (val.is_a?(String) && val.empty?)
+        nil
+      else
+        val.to_i
+      end
+    end
+
+    def to_str val
+      val.nil? ? nil : val.to_s
     end
 
     def jump_if_false offset

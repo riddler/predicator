@@ -11,10 +11,11 @@ module Predicator
         "'#{node.left}'"
       end
 
-      def visit_ARRAY node
+      def visit_INTARRAY node
         contents = node.left.map{ |item| visit item }.join(", ")
         "[#{contents}]"
       end
+      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_NOT node
         "!#{visit node.left}"
@@ -24,17 +25,20 @@ module Predicator
         "(#{visit node.left})"
       end
 
-      def visit_EQ node
+      def visit_INTEQ node
         [visit(node.left), " = ", visit(node.right)].join
       end
+      alias_method :visit_STREQ, :visit_INTEQ
 
-      def visit_GT node
+      def visit_INTGT node
         [visit(node.left), " > ", visit(node.right)].join
       end
+      alias_method :visit_STRGT, :visit_INTGT
 
-      def visit_LT node
+      def visit_INTLT node
         [visit(node.left), " < ", visit(node.right)].join
       end
+      alias_method :visit_STRLT, :visit_INTLT
 
       def visit_AND node
         [visit(node.left), " and ", visit(node.right)].join
@@ -44,17 +48,19 @@ module Predicator
         [visit(node.left), " or ", visit(node.right)].join
       end
 
-      def visit_BETWEEN node
+      def visit_INTBETWEEN node
         [visit(node.left), " between ", visit(node.middle), " and ", visit(node.right)].join
       end
 
-      def visit_IN node
+      def visit_INTIN node
         [visit(node.left), " in ", visit(node.right)].join
       end
+      alias_method :visit_STRIN, :visit_INTIN
 
-      def visit_NOTIN node
+      def visit_INTNOTIN node
         [visit(node.left), " not in ", visit(node.right)].join
       end
+      alias_method :visit_STRNOTIN, :visit_INTNOTIN
     end
   end
 end

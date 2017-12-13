@@ -63,8 +63,12 @@ module Predicator
       def children; [left] end
     end
 
-    class Array < Unary
-      def type; :ARRAY; end
+    class IntegerArray < Unary
+      def type; :INTARRAY; end
+    end
+
+    class StringArray < Unary
+      def type; :STRARRAY; end
     end
 
     class Not < Unary
@@ -86,24 +90,44 @@ module Predicator
       def children; [left, right] end
     end
 
-    class Equal < Binary
-      def type; :EQ; end
+    class IntegerEqual < Binary
+      def type; :INTEQ; end
     end
 
-    class GreaterThan < Binary
-      def type; :GT; end
+    class StringEqual < Binary
+      def type; :STREQ; end
     end
 
-    class LessThan < Binary
-      def type; :LT; end
+    class IntegerGreaterThan < Binary
+      def type; :INTGT; end
     end
 
-    class In < Binary
-      def type; :IN; end
+    class StringGreaterThan < Binary
+      def type; :STRGT; end
     end
 
-    class NotIn < Binary
-      def type; :NOTIN; end
+    class IntegerLessThan < Binary
+      def type; :INTLT; end
+    end
+
+    class StringLessThan < Binary
+      def type; :STRLT; end
+    end
+
+    class IntegerIn < Binary
+      def type; :INTIN; end
+    end
+
+    class StringIn < Binary
+      def type; :STRIN; end
+    end
+
+    class IntegerNotIn < Binary
+      def type; :INTNOTIN; end
+    end
+
+    class StringNotIn < Binary
+      def type; :STRNOTIN; end
     end
 
     class And < Binary
@@ -126,8 +150,8 @@ module Predicator
       def children; [left, middle, right] end
     end
 
-    class Between < Ternary
-      def type; :BETWEEN; end
+    class IntegerBetween < Ternary
+      def type; :INTBETWEEN; end
     end
 
     class BooleanVariable < Unary

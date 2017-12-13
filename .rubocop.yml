@@ -1,0 +1,41 @@
+AllCops:
+  TargetRubyVersion: 2.4
+  DisabledByDefault: true
+
+Bundler/DuplicatedGem:
+  Enabled: true
+Lint:
+  Enabled: true
+Performance:
+  Enabled: true
+Security:
+  Enabled: true
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation. Use single quotes only if their semantics
+# are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Seattle style
+Style/MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses
+
+# Allow regex argument in Seattle style
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+
+# Allow block argument in Seattle style
+Lint/AmbiguousOperator:
+  Enabled: false
+
+# No long classes
+Style/ClassLength:
+  Enabled: true
+  Exclude:
+    - test/**/*.rb
+
+Lint/HandleExceptions:
+  Exclude:
+    - lib/tasks/**/*.rake

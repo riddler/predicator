@@ -36,40 +36,89 @@ module Predicator
         @instructions.push ["not"]
       end
 
-      def visit_EQ node
-        super
+      def visit_INTEQ node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "EQ"]
       end
 
-      def visit_GT node
-        super
+      def visit_STREQ node
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "EQ"]
+      end
+
+      def visit_INTGT node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "GT"]
       end
 
-      def visit_LT node
-        super
+      def visit_STRGT node
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "GT"]
+      end
+
+      def visit_INTLT node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "LT"]
       end
 
-      def visit_BETWEEN node
-        super
+      def visit_STRLT node
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "LT"]
+      end
+
+      def visit_INTBETWEEN node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.middle
+        visit node.right
         @instructions.push ["compare", "BETWEEN"]
       end
 
-      def visit_IN node
-        super
+      def visit_INTIN node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "IN"]
       end
 
-      def visit_NOTIN node
-        super
+      def visit_STRIN node
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "IN"]
+      end
+
+      def visit_INTNOTIN node
+        visit node.left
+        @instructions.push ["to_int"]
+        visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
 
-      def visit_ARRAY node
+      def visit_STRNOTIN node
+        visit node.left
+        @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "NOTIN"]
+      end
+
+      def visit_INTARRAY node
         contents = node.left.map{ |item| item.left }
         @instructions.push ["array", contents]
       end
+      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]

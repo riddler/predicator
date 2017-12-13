@@ -23,15 +23,24 @@ module Predicator
       def visit_GROUP node; visit_children node; end
       def visit_BOOL node;  visit_children node; end
 
-      def visit_EQ node;    visit_children node; end
-      def visit_GT node;    visit_children node; end
-      def visit_LT node;    visit_children node; end
+      def visit_INTEQ node;      visit_children node; end
+      alias_method :visit_STREQ, :visit_INTEQ
+
+      def visit_INTGT node;      visit_children node; end
+      alias_method :visit_STRGT, :visit_INTGT
+
+      def visit_INTLT node;      visit_children node; end
+      alias_method :visit_STRLT, :visit_INTLT
+
+      def visit_INTIN node;      visit_children node; end
+      alias_method :visit_STRIN, :visit_INTIN
+
+      def visit_INTNOTIN node;   visit_children node; end
+      alias_method :visit_STRNOTIN, :visit_INTNOTIN
+
+      def visit_INTBETWEEN node; visit_children node; end
       def visit_AND node;   visit_children node; end
       def visit_OR node;    visit_children node; end
-      def visit_IN node;    visit_children node; end
-      def visit_NOTIN node; visit_children node; end
-
-      def visit_BETWEEN node; visit_children node; end
 
       def terminal node; end
       def visit_TRUE node;      terminal node; end
@@ -40,9 +49,10 @@ module Predicator
       def visit_STRING node;    terminal node; end
       def visit_VARIABLE node;  terminal node; end
 
-      def visit_ARRAY node
+      def visit_INTARRAY node
         node.left.each{ |item| visit item }
       end
+      alias_method :visit_STRARRAY, :visit_INTARRAY
     end
   end
 end
