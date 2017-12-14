@@ -163,6 +163,21 @@ module Predicator
         @instructions.push ["to_date"]
       end
 
+      def visit_DATEAGO node
+        visit node.left
+        @instructions.push ["ago"]
+      end
+
+      def visit_DATEFROMNOW node
+        visit node.left
+        @instructions.push ["from_now"]
+      end
+
+      def visit_DURATION node
+        as_seconds = node.symbol.to_i * 24 * 60 * 60
+        @instructions.push ["lit", as_seconds]
+      end
+
       def terminal node
         @instructions.push ["lit", node.symbol]
       end

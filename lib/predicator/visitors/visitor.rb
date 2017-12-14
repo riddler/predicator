@@ -19,9 +19,11 @@ module Predicator
         node.children.each {|child| visit child}
       end
 
-      def visit_NOT node;   visit_children node; end
-      def visit_GROUP node; visit_children node; end
-      def visit_BOOL node;  visit_children node; end
+      def visit_NOT node;         visit_children node; end
+      def visit_GROUP node;       visit_children node; end
+      def visit_BOOL node;        visit_children node; end
+      def visit_DATEAGO node;      visit_children node; end
+      def visit_DATEFROMNOW node;  visit_children node; end
 
       def visit_INTEQ node;      visit_children node; end
       alias_method :visit_STREQ, :visit_INTEQ
@@ -50,7 +52,10 @@ module Predicator
       def terminal node; end
       def visit_TRUE node;      terminal node; end
       def visit_FALSE node;     terminal node; end
+
       def visit_DATE node;      terminal node; end
+      def visit_DURATION node;  terminal node; end
+
       def visit_INTEGER node;   terminal node; end
       def visit_STRING node;    terminal node; end
       def visit_VARIABLE node;  terminal node; end

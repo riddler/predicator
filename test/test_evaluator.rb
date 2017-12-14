@@ -314,6 +314,30 @@ module Predicator
       ]
     end
 
+    # age > 3d ago
+    def test_date_variable_greater_than_duration_ago
+      age = Time.now.strftime "%Y-%m-%d"
+      assert_eval true, [
+        ["load", "age"],
+        ["to_date"],
+        ["lit", 259200],
+        ["ago"],
+        ["compare", "GT"],
+      ], age: age
+    end
+
+    # age < 3d from now
+    def test_date_variable_less_than_duration_from_now
+      age = Time.now.strftime "%Y-%m-%d"
+      assert_eval true, [
+        ["load", "age"],
+        ["to_date"],
+        ["lit", 259200],
+        ["from_now"],
+        ["compare", "LT"],
+      ], age: age
+    end
+
     def assert_eval result, instructions, context={}
       e = Evaluator.new instructions, context
       assert_equal result, e.result
