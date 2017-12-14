@@ -5,7 +5,8 @@ options no_result_var
 token TRUE FALSE LPAREN RPAREN LBRACKET RBRACKET
       BANG NOT DOT COMMA AT AND OR
       EQ GT LT BETWEEN IN
-      INTEGER STRING IDENTIFIER DATE
+      INTEGER STRING IDENTIFIER
+      DATE DURATION AGO FROMNOW
 
 rule
   predicate
@@ -75,6 +76,11 @@ rule
     ;
   date
     : DATE                      { AST::Date.new val.first }
+    | duration AGO              { AST::DateAgo.new val.first }
+    | duration FROMNOW          { AST::DateFromNow.new val.first }
+    ;
+  duration
+    : DURATION                  { AST::Duration.new val.first }
     ;
   variable
     : IDENTIFIER                { AST::Variable.new val.first }

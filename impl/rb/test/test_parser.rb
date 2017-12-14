@@ -162,6 +162,24 @@ module Predicator
       assert_equal :DATE, ast.right.type
     end
 
+    def test_variable_greater_than_ago
+      ast = @parser.parse "foo > 10d ago"
+
+      assert_equal :DATGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATEAGO, ast.right.type
+      assert_equal :DURATION, ast.right.left.type
+    end
+
+    def test_variable_greater_than_from_now
+      ast = @parser.parse "foo > 10d from now"
+
+      assert_equal :DATGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATEFROMNOW, ast.right.type
+      assert_equal :DURATION, ast.right.left.type
+    end
+
     def assert_type type, source
       assert_equal type, @parser.parse(source).type
     end

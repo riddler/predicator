@@ -44,6 +44,10 @@ module Predicator
         stack.push to_str(stack.pop)
       when "to_date"
         stack.push to_date(stack.pop)
+      when "ago"
+        stack.push to_ago(stack.pop)
+      when "from_now"
+        stack.push to_from_now(stack.pop)
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
@@ -66,11 +70,17 @@ module Predicator
     end
 
     def to_date val
-      if val.nil?
-         nil
-      else
-        Date.parse(val)
-      end
+      val.nil? ? nil : Date.parse(val)
+    end
+
+    def to_ago seconds
+      past_time = Time.now - seconds
+      to_date past_time.strftime "%Y-%m-%d"
+    end
+
+    def to_from_now seconds
+      future_time = Time.now + seconds
+      to_date future_time.strftime "%Y-%m-%d"
     end
 
     def jump_if_false offset

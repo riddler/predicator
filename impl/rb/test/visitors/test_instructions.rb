@@ -91,6 +91,26 @@ module Predicator
         ]
       end
 
+      def test_variable_greater_than_duration_ago
+        assert_instructions "foo>3d ago", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", 259200],
+          ["ago"],
+          ["compare", "GT"],
+        ]
+      end
+
+      def test_variable_greater_than_duration_from_now
+        assert_instructions "foo>3d from now", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", 259200],
+          ["from_now"],
+          ["compare", "GT"],
+        ]
+      end
+
       def test_variable_less_than_integer
         assert_instructions "foo<1", [
           ["load", "foo"],
