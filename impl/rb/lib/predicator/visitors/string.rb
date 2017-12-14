@@ -65,6 +65,14 @@ module Predicator
         [visit(node.left), " not in ", visit(node.right)].join
       end
       alias_method :visit_STRNOTIN, :visit_INTNOTIN
+
+      def visit_DATEAGO node
+        visit(node.left) + " ago"
+      end
+
+      def visit_DATEFROMNOW node
+        visit(node.left) + " from now"
+      end
     end
   end
 end

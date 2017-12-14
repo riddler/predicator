@@ -77,6 +77,16 @@ digraph parse_tree {
         super
       end
 
+      def visit_DATEAGO node
+        @nodes << "#{node.object_id} [label=\"ago\"];"
+        super
+      end
+
+      def visit_DATEFROMNOW node
+        @nodes << "#{node.object_id} [label=\"from now\"];"
+        super
+      end
+
       def visit_STRING node
         value = node.left
         @nodes << "#{node.object_id} [label=\"'#{value}'\"];"
