@@ -178,6 +178,16 @@ module Predicator
         @instructions.push ["lit", as_seconds]
       end
 
+      def visit_BLANK node
+        visit node.left
+        @instructions.push ["blank"]
+      end
+
+      def visit_PRESENT node
+        visit node.left
+        @instructions.push ["present"]
+      end
+
       def terminal node
         @instructions.push ["lit", node.symbol]
       end
@@ -194,7 +204,7 @@ module Predicator
 
       def update_jumps
         @instructions.each_with_index do |inst, idx|
-          next unless inst.first =~ /^j/
+          next unless inst.first.match? /^j/
           label = inst.pop
           offset = calculate_offset idx, @label_locations[label]
           inst.push offset

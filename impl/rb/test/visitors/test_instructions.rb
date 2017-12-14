@@ -235,6 +235,20 @@ module Predicator
         ]
       end
 
+      def test_variable_is_blank
+        assert_instructions "foo is blank", [
+          ["load", "foo"],
+          ["blank"],
+        ]
+      end
+
+      def test_variable_is_present
+        assert_instructions "foo is present", [
+          ["load", "foo"],
+          ["present"],
+        ]
+      end
+
       # "(true or true or true) or true"
       def test_correct_jump_offsets
         assert_instructions "(true or true or true) or true", [

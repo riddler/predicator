@@ -21,6 +21,8 @@ macro
   EQ          /=/
   GT          />/
   LT          /</
+  BLANK       /is blank/
+  PRESENT     /is present/
   AGO         /ago/
   FROMNOW     /from now/
   DATE        /\d{4}[-|\/]\d{2}[-|\/]\d{2}/i
@@ -49,6 +51,8 @@ rule
   /#{LT}/          { [:LT, text] }
   /#{AGO}/         { [:AGO, text] }
   /#{FROMNOW}/     { [:FROMNOW, text] }
+  /#{BLANK}/       { [:BLANK, text] }
+  /#{PRESENT}/     { [:PRESENT, text] }
   /#{DATE}/        { [:DATE, text] }
   /#{DURATION}/    { [:DURATION, text] }
   /#{INTEGER}/     { [:INTEGER, text] }

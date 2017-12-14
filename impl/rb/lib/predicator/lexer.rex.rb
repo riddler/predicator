@@ -28,8 +28,15 @@ class Predicator::Lexer
   LT         = /</
   AGO        = /ago/
   FROMNOW    = /from now/
+<<<<<<< HEAD
   DATE       = /\d{4}[-|\/]\d{2}[-|\/]\d{2}/i
   DURATION   = /\d+d/
+=======
+  BLANK      = /is blank/
+  PRESENT    = /is present/
+  DATE       = /(\d{4})[-|\/](\d{2})[-|\/](\d{2})/i
+  DURATION   = /(\d+)(d)/
+>>>>>>> super dirty implimentation of blank/present
   INTEGER    = /[+-]?\d(_?\d)*\b/
   STRING     = /(["'])(?:\\?.)*?\1/
   IDENTIFIER = /[a-z][A-Za-z0-9_]*\b/
@@ -139,6 +146,10 @@ class Predicator::Lexer
             action { [:AGO, text] }
           when text = ss.scan(/#{FROMNOW}/) then
             action { [:FROMNOW, text] }
+          when text = ss.scan(/#{BLANK}/) then
+            action { [:BLANK, text] }
+          when text = ss.scan(/#{PRESENT}/) then
+            action { [:PRESENT, text] }
           when text = ss.scan(/#{DATE}/) then
             action { [:DATE, text] }
           when text = ss.scan(/#{DURATION}/) then

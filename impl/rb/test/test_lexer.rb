@@ -67,7 +67,7 @@ module Predicator
 
     def assert_tokens tokens, lexer
       toks = []
-      while tok = lexer.next_token
+      while (tok = lexer.next_token)
         toks << tok
       end
       assert_equal tokens, toks
