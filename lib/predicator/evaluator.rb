@@ -1,7 +1,5 @@
 module Predicator
   class Evaluator
-    require "date"
-
     attr_reader :instructions, :stack, :context
 
     def initialize instructions, context_data={}

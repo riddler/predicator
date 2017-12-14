@@ -43,6 +43,14 @@ module Predicator
         assert_dot "foo or bar", "[label=\"or\"]"
       end
 
+      def test_variable_greater_than_duration_ago
+        assert_dot "foo > 3d ago", "[label=\"ago\"]"
+      end
+
+      def test_variable_greater_than_duration_from_now
+        assert_dot "foo > 3d from now", "[label=\"from now\"]"
+      end
+
       def assert_dot source, expected_instructions
         ast = @parser.parse source
         instructions = ast.to_dot
