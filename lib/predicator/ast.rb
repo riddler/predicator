@@ -47,7 +47,7 @@ module Predicator
       def variable?; true; end
     end
 
-    %w[ True False Integer String Date Duration ].each do |t|
+    %w[ True False Integer String Date Duration Blank Present ].each do |t|
       class_eval <<-eoruby, __FILE__, __LINE__ + 1
         class #{t} < Literal;
           def type; :#{t.upcase}; end
