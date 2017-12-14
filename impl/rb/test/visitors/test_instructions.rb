@@ -53,6 +53,16 @@ module Predicator
         ]
       end
 
+      def test_variable_equal_date
+        assert_instructions "foo=2018-07-10", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", "2018-07-10"],
+          ["to_date"],
+          ["compare", "EQ"],
+        ]
+      end
+
       def test_variable_greater_than_integer
         assert_instructions "foo>1", [
           ["load", "foo"],
@@ -71,6 +81,16 @@ module Predicator
         ]
       end
 
+      def test_variable_greater_than_date
+        assert_instructions "foo>2018-07-10", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", "2018-07-10"],
+          ["to_date"],
+          ["compare", "GT"],
+        ]
+      end
+
       def test_variable_less_than_integer
         assert_instructions "foo<1", [
           ["load", "foo"],
@@ -85,6 +105,16 @@ module Predicator
           ["load", "foo"],
           ["to_str"],
           ["lit", "bar"],
+          ["compare", "LT"],
+        ]
+      end
+
+      def test_variable_less_than_date
+        assert_instructions "foo<2018-07-10", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", "2018-07-10"],
+          ["to_date"],
           ["compare", "LT"],
         ]
       end
@@ -131,6 +161,18 @@ module Predicator
           ["to_int"],
           ["lit", 1],
           ["lit", 2],
+          ["compare", "BETWEEN"],
+        ]
+      end
+
+      def test_variable_between_dates
+        assert_instructions "foo between 2018-07-10 and 2018-07-20", [
+          ["load", "foo"],
+          ["to_date"],
+          ["lit", "2018-07-10"],
+          ["to_date"],
+          ["lit", "2018-07-20"],
+          ["to_date"],
           ["compare", "BETWEEN"],
         ]
       end

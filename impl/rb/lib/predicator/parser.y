@@ -5,7 +5,7 @@ options no_result_var
 token TRUE FALSE LPAREN RPAREN LBRACKET RBRACKET
       BANG NOT DOT COMMA AT AND OR
       EQ GT LT BETWEEN IN
-      INTEGER STRING IDENTIFIER
+      INTEGER STRING IDENTIFIER DATE
 
 rule
   predicate
@@ -30,6 +30,7 @@ rule
   comparison_predicate
     : integer_comparison_predicate
     | string_comparison_predicate
+    | date_comparison_predicate
     ;
   integer_comparison_predicate
     : variable EQ integer                  { AST::IntegerEqual.new val.first, val.last }
@@ -45,6 +46,12 @@ rule
     | variable LT string                   { AST::StringLessThan.new val.first, val.last }
     | variable IN string_array             { AST::StringIn.new val.first, val.last }
     | variable NOT IN string_array         { AST::StringNotIn.new val.first, val.last }
+    ;
+  date_comparison_predicate
+    : variable EQ date                     { AST::DateEqual.new val.first, val.last }
+    | variable GT date                     { AST::DateGreaterThan.new val.first, val.last }
+    | variable LT date                     { AST::DateLessThan.new val.first, val.last }
+    | variable BETWEEN date AND date       { AST::DateBetween.new val.first, val[2], val.last }
     ;
   integer_array
     : LBRACKET integer_array_contents RBRACKET { AST::IntegerArray.new val[1] }
@@ -65,6 +72,9 @@ rule
     ;
   string
     : STRING                    { AST::String.new val.first }
+    ;
+  date
+    : DATE                      { AST::Date.new val.first }
     ;
   variable
     : IDENTIFIER                { AST::Variable.new val.first }

@@ -21,6 +21,7 @@ macro
   EQ          /=/
   GT          />/
   LT          /</
+  DATE        /(\d{4})[-|\/](\d{2})[-|\/](\d{2})/i
   INTEGER     /[+-]?\d(_?\d)*\b/
   STRING      /(["'])(?:\\?.)*?\1/
   IDENTIFIER  /[a-z][A-Za-z0-9_]*\b/
@@ -43,6 +44,7 @@ rule
   /#{EQ}/          { [:EQ, text] }
   /#{GT}/          { [:GT, text] }
   /#{LT}/          { [:LT, text] }
+  /#{DATE}/        { [:DATE, text] }
   /#{INTEGER}/     { [:INTEGER, text] }
   /#{STRING}/      { [:STRING, text[1...-1]] }
   /#{IDENTIFIER}/  { [:IDENTIFIER, text] }
