@@ -21,10 +21,6 @@ module Predicator
         Visitors::Instructions.new.accept self
       end
 
-      def to_predicate
-        Visitors::Predicate.new.accept self
-      end
-
       def to_s
         Visitors::String.new.accept self
       end
@@ -51,7 +47,7 @@ module Predicator
       def variable?; true; end
     end
 
-    %w[ True False Integer String ].each do |t|
+    %w[ True False Integer String Date ].each do |t|
       class_eval <<-eoruby, __FILE__, __LINE__ + 1
         class #{t} < Literal;
           def type; :#{t.upcase}; end
@@ -98,6 +94,10 @@ module Predicator
       def type; :STREQ; end
     end
 
+    class DateEqual < Binary
+      def type; :DATEQ; end
+    end
+
     class IntegerGreaterThan < Binary
       def type; :INTGT; end
     end
@@ -106,12 +106,20 @@ module Predicator
       def type; :STRGT; end
     end
 
+    class DateGreaterThan < Binary
+      def type; :DATGT; end
+    end
+
     class IntegerLessThan < Binary
       def type; :INTLT; end
     end
 
     class StringLessThan < Binary
       def type; :STRLT; end
+    end
+
+    class DateLessThan < Binary
+      def type; :DATLT; end
     end
 
     class IntegerIn < Binary
@@ -152,6 +160,10 @@ module Predicator
 
     class IntegerBetween < Ternary
       def type; :INTBETWEEN; end
+    end
+
+    class DateBetween < Ternary
+      def type; :DATBETWEEN; end
     end
 
     class BooleanVariable < Unary

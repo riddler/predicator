@@ -205,6 +205,16 @@ module Predicator
       ], foo: 20
     end
 
+    def test_date_variable_equal_to_date
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_date"],
+        ["lit", "2017-09-10"],
+        ["to_date"],
+        ["compare", "EQ"],
+      ], foo: "2017-09-10"
+    end
+
     #--- AND
     def test_true_and_true
       assert_eval true, [

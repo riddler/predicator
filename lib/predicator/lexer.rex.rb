@@ -26,6 +26,7 @@ class Predicator::Lexer
   EQ         = /=/
   GT         = />/
   LT         = /</
+  DATE       = /(\d{4})[-|\/](\d{2})[-|\/](\d{2})/i
   INTEGER    = /[+-]?\d(_?\d)*\b/
   STRING     = /(["'])(?:\\?.)*?\1/
   IDENTIFIER = /[a-z][A-Za-z0-9_]*\b/
@@ -131,6 +132,8 @@ class Predicator::Lexer
             action { [:GT, text] }
           when text = ss.scan(/#{LT}/) then
             action { [:LT, text] }
+          when text = ss.scan(/#{DATE}/) then
+            action { [:DATE, text] }
           when text = ss.scan(/#{INTEGER}/) then
             action { [:INTEGER, text] }
           when text = ss.scan(/#{STRING}/) then

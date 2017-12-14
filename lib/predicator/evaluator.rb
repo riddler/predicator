@@ -1,5 +1,7 @@
 module Predicator
   class Evaluator
+    require "date"
+
     attr_reader :instructions, :stack, :context
 
     def initialize instructions, context_data={}
@@ -40,6 +42,8 @@ module Predicator
         stack.push to_int(stack.pop)
       when "to_str"
         stack.push to_str(stack.pop)
+      when "to_date"
+        stack.push to_date(stack.pop)
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
@@ -59,6 +63,14 @@ module Predicator
 
     def to_str val
       val.nil? ? nil : val.to_s
+    end
+
+    def to_date val
+      if val.nil?
+         nil
+      else
+        Date.parse(val)
+      end
     end
 
     def jump_if_false offset

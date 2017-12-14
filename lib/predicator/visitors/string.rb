@@ -29,16 +29,19 @@ module Predicator
         [visit(node.left), " = ", visit(node.right)].join
       end
       alias_method :visit_STREQ, :visit_INTEQ
+      alias_method :visit_DATEQ, :visit_INTEQ
 
       def visit_INTGT node
         [visit(node.left), " > ", visit(node.right)].join
       end
       alias_method :visit_STRGT, :visit_INTGT
+      alias_method :visit_DATGT, :visit_INTGT
 
       def visit_INTLT node
         [visit(node.left), " < ", visit(node.right)].join
       end
       alias_method :visit_STRLT, :visit_INTLT
+      alias_method :visit_DATLT, :visit_INTLT
 
       def visit_AND node
         [visit(node.left), " and ", visit(node.right)].join
@@ -51,6 +54,7 @@ module Predicator
       def visit_INTBETWEEN node
         [visit(node.left), " between ", visit(node.middle), " and ", visit(node.right)].join
       end
+      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
       def visit_INTIN node
         [visit(node.left), " in ", visit(node.right)].join
