@@ -24,6 +24,7 @@ module Predicator
 
     def process instruction
       case instruction.first
+<<<<<<< HEAD
       when "not"             then stack.push !stack.pop
       when "jfalse"          then jump_if_false instruction.last
       when "jtrue"           then jump_if_true instruction.last
@@ -37,6 +38,21 @@ module Predicator
       when "date_from_now"   then stack.push date_from_now(stack.pop)
       when "blank"           then stack.push blank?(stack.pop)
       when "present"         then stack.push !blank?(stack.pop)
+=======
+      when "not"          then stack.push !stack.pop
+      when "jfalse"       then jump_if_false instruction.last
+      when "jtrue"        then jump_if_true instruction.last
+      when "lit", "array" then stack.push instruction.last
+      when "load"         then stack.push context[instruction.last]
+      when "to_bool"      then stack.push !!stack.pop
+      when "to_int"       then stack.push to_int(stack.pop)
+      when "to_str"       then stack.push to_str(stack.pop)
+      when "to_date"      then stack.push to_date(stack.pop)
+      when "ago"          then stack.push to_ago(stack.pop)
+      when "from_now"     then stack.push to_from_now(stack.pop)
+      when "blank"        then stack.push blank?(stack.pop)
+      when "present"      then stack.push !blank?(stack.pop)
+>>>>>>> reduces duplication in instructions visitor
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN

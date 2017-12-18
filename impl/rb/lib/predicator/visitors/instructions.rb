@@ -38,110 +38,56 @@ module Predicator
 
       def visit_INTEQ node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "EQ"]
       end
+      alias_method :visit_STREQ, :visit_INTEQ
+      alias_method :visit_DATEQ, :visit_INTEQ
 
-      def visit_STREQ node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "EQ"]
-      end
-
-      def visit_DATEQ node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "EQ"]
-      end
 
       def visit_INTGT node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "GT"]
       end
-
-      def visit_STRGT node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "GT"]
-      end
-
-      def visit_DATGT node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "GT"]
-      end
+      alias_method :visit_STRGT, :visit_INTGT
+      alias_method :visit_DATGT, :visit_INTGT
 
       def visit_INTLT node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "LT"]
       end
-
-      def visit_STRLT node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "LT"]
-      end
-
-      def visit_DATLT node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "LT"]
-      end
+      alias_method :visit_STRLT, :visit_INTLT
+      alias_method :visit_DATLT, :visit_INTLT
 
       def visit_INTBETWEEN node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.middle
         visit node.right
         @instructions.push ["compare", "BETWEEN"]
       end
-
-      def visit_DATBETWEEN node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.middle
-        visit node.right
-        @instructions.push ["compare", "BETWEEN"]
-      end
+      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
       def visit_INTIN node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "IN"]
       end
-
-      def visit_STRIN node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "IN"]
-      end
+      alias_method :visit_STRIN, :visit_INTIN
 
       def visit_INTNOTIN node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
-
-      def visit_STRNOTIN node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "NOTIN"]
-      end
+      alias_method :visit_STRNOTIN, :visit_INTNOTIN
 
       def visit_INTARRAY node
         contents = node.left.map{ |item| item.left }
@@ -190,6 +136,15 @@ module Predicator
 
       def terminal node
         @instructions.push ["lit", node.symbol]
+      end
+
+      def add_typecast_to_instructions node
+        type = case node.right.type.to_s
+               when /INT/  then "to_int"
+               when /STR/  then "to_str"
+               when /DATE/ then "to_date"
+               end
+        @instructions.push [type]
       end
 
       def jump_instruction condition, node
