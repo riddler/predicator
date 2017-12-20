@@ -129,6 +129,57 @@ module Predicator
       assert_equal :STRARRAY, ast.right.type
     end
 
+    def test_variable_equal_date
+      ast = @parser.parse "foo = 2018-07-10"
+
+      assert_equal :DATEQ, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATE, ast.right.type
+    end
+
+    def test_variable_greater_than_date
+      ast = @parser.parse "foo > 2018-07-10"
+
+      assert_equal :DATGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATE, ast.right.type
+    end
+
+    def test_variable_less_than_date
+      ast = @parser.parse "foo < 2018-07-10"
+
+      assert_equal :DATLT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATE, ast.right.type
+    end
+
+    def test_variable_between_date_and_date
+      ast = @parser.parse "foo between 2018-07-10 and 2018-07-20"
+
+      assert_equal :DATBETWEEN, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATE, ast.middle.type
+      assert_equal :DATE, ast.right.type
+    end
+
+    def test_variable_greater_than_ago
+      ast = @parser.parse "foo > 10d ago"
+
+      assert_equal :DATGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATEAGO, ast.right.type
+      assert_equal :DURATION, ast.right.left.type
+    end
+
+    def test_variable_greater_than_from_now
+      ast = @parser.parse "foo > 10d from now"
+
+      assert_equal :DATGT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :DATEFROMNOW, ast.right.type
+      assert_equal :DURATION, ast.right.left.type
+    end
+
     def assert_type type, source
       assert_equal type, @parser.parse(source).type
     end

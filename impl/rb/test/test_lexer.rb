@@ -56,6 +56,8 @@ module Predicator
                   [:INTEGER, "2"],
                   [:RBRACKET, "]"]
                 ]],
+        ["2018-07-10",  [[:DATE, "2018-07-10"]]],
+        ["2018/07/10",  [[:DATE, "2018/07/10"]]],
       ].each do |str, expected|
         #@lexer.scan_setup str
         @lexer.parse str

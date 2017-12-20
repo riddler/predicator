@@ -205,6 +205,16 @@ module Predicator
       ], foo: 20
     end
 
+    def test_date_variable_equal_to_date
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_date"],
+        ["lit", "2017-09-10"],
+        ["to_date"],
+        ["compare", "EQ"],
+      ], foo: "2017-09-10"
+    end
+
     #--- AND
     def test_true_and_true
       assert_eval true, [
@@ -302,6 +312,30 @@ module Predicator
         ["lit", 5],
         ["compare", "BETWEEN"],
       ]
+    end
+
+    # age > 3d ago
+    def test_date_variable_greater_than_duration_ago
+      age = Time.now.strftime "%Y-%m-%d"
+      assert_eval true, [
+        ["load", "age"],
+        ["to_date"],
+        ["lit", 259200],
+        ["date_ago"],
+        ["compare", "GT"],
+      ], age: age
+    end
+
+    # age < 3d from now
+    def test_date_variable_less_than_duration_from_now
+      age = Time.now.strftime "%Y-%m-%d"
+      assert_eval true, [
+        ["load", "age"],
+        ["to_date"],
+        ["lit", 259200],
+        ["date_from_now"],
+        ["compare", "LT"],
+      ], age: age
     end
 
     def assert_eval result, instructions, context={}
