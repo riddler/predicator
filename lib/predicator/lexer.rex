@@ -23,8 +23,8 @@ macro
   LT          /</
   AGO         /ago/
   FROMNOW     /from now/
-  DATE        /(\d{4})[-|\/](\d{2})[-|\/](\d{2})/i
-  DURATION    /(\d+)(d)/
+  DATE        /\d{4}[-|\/]\d{2}[-|\/]\d{2}/i
+  DURATION    /\d+d/
   INTEGER     /[+-]?\d(_?\d)*\b/
   STRING      /(["'])(?:\\?.)*?\1/
   IDENTIFIER  /[a-z][A-Za-z0-9_]*\b/
