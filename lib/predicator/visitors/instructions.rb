@@ -50,6 +50,13 @@ module Predicator
         @instructions.push ["compare", "EQ"]
       end
 
+      def visit_DATEQ node
+        visit node.left
+        @instructions.push ["to_date"]
+        visit node.right
+        @instructions.push ["compare", "EQ"]
+      end
+
       def visit_INTGT node
         visit node.left
         @instructions.push ["to_int"]
@@ -60,6 +67,13 @@ module Predicator
       def visit_STRGT node
         visit node.left
         @instructions.push ["to_str"]
+        visit node.right
+        @instructions.push ["compare", "GT"]
+      end
+
+      def visit_DATGT node
+        visit node.left
+        @instructions.push ["to_date"]
         visit node.right
         @instructions.push ["compare", "GT"]
       end
@@ -78,9 +92,24 @@ module Predicator
         @instructions.push ["compare", "LT"]
       end
 
+      def visit_DATLT node
+        visit node.left
+        @instructions.push ["to_date"]
+        visit node.right
+        @instructions.push ["compare", "LT"]
+      end
+
       def visit_INTBETWEEN node
         visit node.left
         @instructions.push ["to_int"]
+        visit node.middle
+        visit node.right
+        @instructions.push ["compare", "BETWEEN"]
+      end
+
+      def visit_DATBETWEEN node
+        visit node.left
+        @instructions.push ["to_date"]
         visit node.middle
         visit node.right
         @instructions.push ["compare", "BETWEEN"]
@@ -127,6 +156,26 @@ module Predicator
       def visit_BOOL node
         super
         @instructions.push ["to_bool"]
+      end
+
+      def visit_DATE node
+        @instructions.push ["lit", node.symbol]
+        @instructions.push ["to_date"]
+      end
+
+      def visit_DATEAGO node
+        visit node.left
+        @instructions.push ["ago"]
+      end
+
+      def visit_DATEFROMNOW node
+        visit node.left
+        @instructions.push ["from_now"]
+      end
+
+      def visit_DURATION node
+        as_seconds = node.symbol.to_i * 24 * 60 * 60
+        @instructions.push ["lit", as_seconds]
       end
 
       def terminal node

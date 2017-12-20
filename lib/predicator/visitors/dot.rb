@@ -35,23 +35,27 @@ digraph parse_tree {
         super
       end
       alias_method :visit_STREQ, :visit_INTEQ
+      alias_method :visit_DATEQ, :visit_INTEQ
 
       def visit_INTGT node
         @nodes << "#{node.object_id} [label=\">\"];"
         super
       end
       alias_method :visit_STRGT, :visit_INTGT
+      alias_method :visit_DATGT, :visit_INTGT
 
       def visit_INTLT node
         @nodes << "#{node.object_id} [label=\"<\"];"
         super
       end
       alias_method :visit_STRLT, :visit_INTLT
+      alias_method :visit_DATLT, :visit_INTLT
 
       def visit_INTBETWEEN node
         @nodes << "#{node.object_id} [label=\"between\"];"
         super
       end
+      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
       def visit_AND node
         @nodes << "#{node.object_id} [label=\"and\"];"
@@ -70,6 +74,16 @@ digraph parse_tree {
 
       def visit_GROUP node
         @nodes << "#{node.object_id} [label=\"( )\"];"
+        super
+      end
+
+      def visit_DATEAGO node
+        @nodes << "#{node.object_id} [label=\"ago\"];"
+        super
+      end
+
+      def visit_DATEFROMNOW node
+        @nodes << "#{node.object_id} [label=\"from now\"];"
         super
       end
 
