@@ -19,54 +19,82 @@ module Predicator
         node.children.each {|child| visit child}
       end
 
-      def visit_NOT node;          visit_children node; end
-      def visit_GROUP node;        visit_children node; end
-      def visit_BOOL node;         visit_children node; end
-      def visit_DATEAGO node;      visit_children node; end
-      def visit_DATEFROMNOW node;  visit_children node; end
-
-      def visit_INTEQ node;        visit_children node; end
-      alias_method :visit_STREQ, :visit_INTEQ
-      alias_method :visit_DATEQ, :visit_INTEQ
-
-      def visit_INTGT node;        visit_children node; end
-      alias_method :visit_STRGT, :visit_INTGT
-      alias_method :visit_DATGT, :visit_INTGT
-
-      def visit_INTLT node;        visit_children node; end
-      alias_method :visit_STRLT, :visit_INTLT
-      alias_method :visit_DATLT, :visit_INTLT
-
-      def visit_INTIN node;        visit_children node; end
-      alias_method :visit_STRIN, :visit_INTIN
-
-      def visit_INTNOTIN node;     visit_children node; end
-      alias_method :visit_STRNOTIN, :visit_INTNOTIN
-
-      def visit_INTBETWEEN node;   visit_children node; end
-      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
-
-      def visit_AND node;          visit_children node; end
-      def visit_OR node;           visit_children node; end
-
       def terminal node; end
-      def visit_TRUE node;      terminal node; end
-      def visit_FALSE node;     terminal node; end
 
-      def visit_DATE node;      terminal node; end
-      def visit_DURATION node;  terminal node; end
-
-      def visit_INTEGER node;   terminal node; end
-      def visit_STRING node;    terminal node; end
-      def visit_VARIABLE node;  terminal node; end
-
-      def visit_BLANK node;     terminal node; end
-      def visit_PRESENT node;   terminal node; end
-
-      def visit_INTARRAY node
+      def visit_array node
         node.left.each{ |item| visit item }
       end
-      alias_method :visit_STRARRAY, :visit_INTARRAY
+
+
+      visit_children_methods = %w(
+        visit_EQ visit_GT visit_LT
+        visit_NOT visit_GROUP visit_BOOL
+        visit_IN visit_NOTIN visit_BETWEEN
+        visit_DATEAGO visit_DATEFROMNOW
+        visit_AND visit_OR
+      )
+      visit_children_methods.each do |method_name|
+        define_method method_name do |node|
+          visit_children node
+        end
+      end
+
+      %w( visit_INTEQ visit_STREQ visit_DATEQ ).each do |method_name|
+        define_method method_name do |node|
+          visit_EQ node
+        end
+      end
+
+      %w( visit_INTGT visit_STRGT visit_DATGT ).each do |method_name|
+        define_method method_name do |node|
+          visit_GT node
+        end
+      end
+
+      %w( visit_INTLT visit_STRLT visit_DATLT ).each do |method_name|
+        define_method method_name do |node|
+          visit_LT node
+        end
+      end
+
+      %w( visit_INTIN visit_STRIN ).each do |method_name|
+        define_method method_name do |node|
+          visit_IN node
+        end
+      end
+
+      %w( visit_INTNOTIN visit_STRNOTIN ).each do |method_name|
+        define_method method_name do |node|
+          visit_NOTIN node
+        end
+      end
+
+      %w( visit_INTBETWEEN visit_DATBETWEEN ).each do |method_name|
+        define_method method_name do |node|
+          visit_BETWEEN node
+        end
+      end
+
+      terminal_methods = %w(
+        visit_TRUE visit_FALSE
+        visit_DATE visit_DURATION
+        visit_INTEGER visit_STRING visit_VARIABLE
+        visit_BLANK visit_PRESENT
+      )
+      terminal_methods.each do |method_name|
+        define_method method_name do |node|
+          terminal node
+        end
+      end
+
+      array_methods = %w(
+        visit_INTARRAY visit_STRARRAY
+      )
+      array_methods.each do |method_name|
+        define_method method_name do |node|
+          visit_array node
+        end
+      end
     end
   end
 end

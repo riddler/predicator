@@ -25,23 +25,17 @@ module Predicator
         "(#{visit node.left})"
       end
 
-      def visit_INTEQ node
+      def visit_EQ node
         [visit(node.left), " = ", visit(node.right)].join
       end
-      alias_method :visit_STREQ, :visit_INTEQ
-      alias_method :visit_DATEQ, :visit_INTEQ
 
-      def visit_INTGT node
+      def visit_GT node
         [visit(node.left), " > ", visit(node.right)].join
       end
-      alias_method :visit_STRGT, :visit_INTGT
-      alias_method :visit_DATGT, :visit_INTGT
 
-      def visit_INTLT node
+      def visit_LT node
         [visit(node.left), " < ", visit(node.right)].join
       end
-      alias_method :visit_STRLT, :visit_INTLT
-      alias_method :visit_DATLT, :visit_INTLT
 
       def visit_AND node
         [visit(node.left), " and ", visit(node.right)].join
@@ -51,20 +45,17 @@ module Predicator
         [visit(node.left), " or ", visit(node.right)].join
       end
 
-      def visit_INTBETWEEN node
+      def visit_BETWEEN node
         [visit(node.left), " between ", visit(node.middle), " and ", visit(node.right)].join
       end
-      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
-      def visit_INTIN node
+      def visit_IN node
         [visit(node.left), " in ", visit(node.right)].join
       end
-      alias_method :visit_STRIN, :visit_INTIN
 
-      def visit_INTNOTIN node
+      def visit_NOTIN node
         [visit(node.left), " not in ", visit(node.right)].join
       end
-      alias_method :visit_STRNOTIN, :visit_INTNOTIN
 
       def visit_DATEAGO node
         visit(node.left) + " ago"
