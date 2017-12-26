@@ -100,12 +100,12 @@ module Predicator
 
       def visit_DATEAGO node
         visit node.left
-        @instructions.push ["ago"]
+        @instructions.push ["date_ago"]
       end
 
       def visit_DATEFROMNOW node
         visit node.left
-        @instructions.push ["from_now"]
+        @instructions.push ["date_from_now"]
       end
 
       def visit_DURATION node
