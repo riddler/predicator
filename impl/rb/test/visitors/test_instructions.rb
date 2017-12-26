@@ -96,7 +96,7 @@ module Predicator
           ["load", "foo"],
           ["to_date"],
           ["lit", 259200],
-          ["ago"],
+          ["date_ago"],
           ["compare", "GT"],
         ]
       end
@@ -106,7 +106,7 @@ module Predicator
           ["load", "foo"],
           ["to_date"],
           ["lit", 259200],
-          ["from_now"],
+          ["date_from_now"],
           ["compare", "GT"],
         ]
       end
