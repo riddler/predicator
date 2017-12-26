@@ -30,32 +30,25 @@ digraph parse_tree {
         super
       end
 
-      def visit_INTEQ node
+      def visit_EQ node
         @nodes << "#{node.object_id} [label=\"=\"];"
         super
       end
-      alias_method :visit_STREQ, :visit_INTEQ
-      alias_method :visit_DATEQ, :visit_INTEQ
 
-      def visit_INTGT node
+      def visit_GT node
         @nodes << "#{node.object_id} [label=\">\"];"
         super
       end
-      alias_method :visit_STRGT, :visit_INTGT
-      alias_method :visit_DATGT, :visit_INTGT
 
-      def visit_INTLT node
+      def visit_LT node
         @nodes << "#{node.object_id} [label=\"<\"];"
         super
       end
-      alias_method :visit_STRLT, :visit_INTLT
-      alias_method :visit_DATLT, :visit_INTLT
 
-      def visit_INTBETWEEN node
+      def visit_BETWEEN node
         @nodes << "#{node.object_id} [label=\"between\"];"
         super
       end
-      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
       def visit_AND node
         @nodes << "#{node.object_id} [label=\"and\"];"

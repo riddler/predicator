@@ -36,118 +36,53 @@ module Predicator
         @instructions.push ["not"]
       end
 
-      def visit_INTEQ node
+      def visit_EQ node
         visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "EQ"]
       end
 
-      def visit_STREQ node
+      def visit_GT node
         visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "EQ"]
-      end
-
-      def visit_DATEQ node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "EQ"]
-      end
-
-      def visit_INTGT node
-        visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "GT"]
       end
 
-      def visit_STRGT node
+      def visit_LT node
         visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "GT"]
-      end
-
-      def visit_DATGT node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "GT"]
-      end
-
-      def visit_INTLT node
-        visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "LT"]
       end
 
-      def visit_STRLT node
+      def visit_BETWEEN node
         visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "LT"]
-      end
-
-      def visit_DATLT node
-        visit node.left
-        @instructions.push ["to_date"]
-        visit node.right
-        @instructions.push ["compare", "LT"]
-      end
-
-      def visit_INTBETWEEN node
-        visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.middle
         visit node.right
         @instructions.push ["compare", "BETWEEN"]
       end
 
-      def visit_DATBETWEEN node
+      def visit_IN node
         visit node.left
-        @instructions.push ["to_date"]
-        visit node.middle
-        visit node.right
-        @instructions.push ["compare", "BETWEEN"]
-      end
-
-      def visit_INTIN node
-        visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "IN"]
       end
 
-      def visit_STRIN node
+      def visit_NOTIN node
         visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "IN"]
-      end
-
-      def visit_INTNOTIN node
-        visit node.left
-        @instructions.push ["to_int"]
+        add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
 
-      def visit_STRNOTIN node
-        visit node.left
-        @instructions.push ["to_str"]
-        visit node.right
-        @instructions.push ["compare", "NOTIN"]
-      end
-
-      def visit_INTARRAY node
+      def visit_ARRAY node
         contents = node.left.map{ |item| item.left }
         @instructions.push ["array", contents]
       end
-      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]
@@ -165,12 +100,12 @@ module Predicator
 
       def visit_DATEAGO node
         visit node.left
-        @instructions.push ["ago"]
+        @instructions.push ["date_ago"]
       end
 
       def visit_DATEFROMNOW node
         visit node.left
-        @instructions.push ["from_now"]
+        @instructions.push ["date_from_now"]
       end
 
       def visit_DURATION node
@@ -178,8 +113,27 @@ module Predicator
         @instructions.push ["lit", as_seconds]
       end
 
+      def visit_BLANK node
+        visit node.left
+        @instructions.push ["blank"]
+      end
+
+      def visit_PRESENT node
+        visit node.left
+        @instructions.push ["present"]
+      end
+
       def terminal node
         @instructions.push ["lit", node.symbol]
+      end
+
+      def add_typecast_to_instructions node
+        type = case node.right.type.to_s
+               when /INT/  then "to_int"
+               when /STR/  then "to_str"
+               when /DATE/ then "to_date"
+               end
+        @instructions.push [type]
       end
 
       def jump_instruction condition, node

@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "minitest", "= 5.4.2"
+  spec.add_development_dependency "minitest-focus"
   spec.add_development_dependency "oedipus_lex"
   spec.add_development_dependency "pry-nav"
   spec.add_development_dependency "racc"
