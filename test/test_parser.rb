@@ -180,6 +180,20 @@ module Predicator
       assert_equal :DURATION, ast.right.left.type
     end
 
+    def test_variable_is_blank
+      ast = @parser.parse "foo is blank"
+
+      assert_equal :BLANK, ast.type
+      assert_equal :VARIABLE, ast.left.type
+    end
+
+    def test_variable_is_present
+      ast = @parser.parse "foo is present"
+
+      assert_equal :PRESENT, ast.type
+      assert_equal :VARIABLE, ast.left.type
+    end
+
     def assert_type type, source
       assert_equal type, @parser.parse(source).type
     end

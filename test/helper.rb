@@ -8,4 +8,5 @@ Coveralls.wear! "test_frameworks"
 
 require "minitest/autorun"
 require "minitest/pride"
+require "minitest/focus"
 require "predicator"

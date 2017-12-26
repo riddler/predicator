@@ -338,6 +338,36 @@ module Predicator
       ], age: age
     end
 
+    # age is blank
+    def test_empty_string_is_blank
+      assert_eval true, [
+        ["load", "age"],
+        ["blank"],
+      ], age: ""
+    end
+
+    def test_nil_is_blank
+      assert_eval true, [
+        ["load", "age"],
+        ["blank"],
+      ]
+    end
+
+    # age is present
+    def test_empty_string_is_present
+      assert_eval false, [
+        ["load", "age"],
+        ["present"],
+      ], age: ""
+    end
+
+    def test_string_is_present
+      assert_eval true, [
+        ["load", "age"],
+        ["present"],
+      ], age: "21"
+    end
+
     def assert_eval result, instructions, context={}
       e = Evaluator.new instructions, context
       assert_equal result, e.result

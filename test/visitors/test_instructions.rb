@@ -96,7 +96,7 @@ module Predicator
           ["load", "foo"],
           ["to_date"],
           ["lit", 259200],
-          ["ago"],
+          ["date_ago"],
           ["compare", "GT"],
         ]
       end
@@ -106,7 +106,7 @@ module Predicator
           ["load", "foo"],
           ["to_date"],
           ["lit", 259200],
-          ["from_now"],
+          ["date_from_now"],
           ["compare", "GT"],
         ]
       end
@@ -232,6 +232,20 @@ module Predicator
           ["to_str"],
           ["lit", "bar"],
           ["compare", "EQ"],
+        ]
+      end
+
+      def test_variable_is_blank
+        assert_instructions "foo is blank", [
+          ["load", "foo"],
+          ["blank"],
+        ]
+      end
+
+      def test_variable_is_present
+        assert_instructions "foo is present", [
+          ["load", "foo"],
+          ["present"],
         ]
       end
 

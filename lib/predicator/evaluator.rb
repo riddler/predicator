@@ -1,3 +1,5 @@
+require "date"
+
 module Predicator
   class Evaluator
     attr_reader :instructions, :stack, :context
@@ -24,28 +26,19 @@ module Predicator
 
     def process instruction
       case instruction.first
-      when "not"
-        stack.push !stack.pop
-      when "jfalse"
-        jump_if_false instruction.last
-      when "jtrue"
-        jump_if_true instruction.last
-      when "lit", "array"
-        stack.push instruction.last
-      when "load"
-        stack.push context[instruction.last]
-      when "to_bool"
-        stack.push !!stack.pop
-      when "to_int"
-        stack.push to_int(stack.pop)
-      when "to_str"
-        stack.push to_str(stack.pop)
-      when "to_date"
-        stack.push to_date(stack.pop)
-      when "date_ago"
-        stack.push date_ago(stack.pop)
-      when "date_from_now"
-        stack.push date_from_now(stack.pop)
+      when "not"             then stack.push !stack.pop
+      when "jfalse"          then jump_if_false instruction.last
+      when "jtrue"           then jump_if_true instruction.last
+      when "lit", "array"    then stack.push instruction.last
+      when "load"            then stack.push context[instruction.last]
+      when "to_bool"         then stack.push !!stack.pop
+      when "to_int"          then stack.push to_int(stack.pop)
+      when "to_str"          then stack.push to_str(stack.pop)
+      when "to_date"         then stack.push to_date(stack.pop)
+      when "date_ago"        then stack.push date_ago(stack.pop)
+      when "date_from_now"   then stack.push date_from_now(stack.pop)
+      when "blank"           then stack.push blank?(stack.pop)
+      when "present"         then stack.push !blank?(stack.pop)
       when "compare"
         if instruction.last == "BETWEEN"
           compare_BETWEEN
@@ -81,6 +74,10 @@ module Predicator
       to_date future_time.strftime "%Y-%m-%d"
     end
 
+    def blank? val
+      val.respond_to?(:empty?) ? !!val.empty? : !val
+    end
+
     def jump_if_false offset
       if stack[-1] == false
         adjusted_offset = offset - 1
@@ -107,7 +104,7 @@ module Predicator
       else
         stack.push send("compare_#{comparison}", left, right)
       end
-    rescue
+    rescue StandardError
       stack.push false
     end
 
@@ -141,7 +138,7 @@ module Predicator
         result = val.between? min, max
         stack.push result
       end
-    rescue
+    rescue StandardError
       stack.push false
     end
   end

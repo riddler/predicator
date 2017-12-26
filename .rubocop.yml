@@ -1,6 +1,9 @@
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.3
   DisabledByDefault: true
+  Exclude:
+    - "lib/predicator/parser.rb" #generated file
+    - "lib/predicator/lexer.rex.rb" #generated file
 
 Bundler/DuplicatedGem:
   Enabled: true
@@ -34,7 +37,9 @@ Lint/AmbiguousOperator:
 Style/ClassLength:
   Enabled: true
   Exclude:
-    - test/**/*.rb
+    - "test/**/*.rb"
+    - "lib/predicator/visitors/instructions.rb"
+    - "lib/predicator/evaluator.rb"
 
 Lint/HandleExceptions:
   Exclude:

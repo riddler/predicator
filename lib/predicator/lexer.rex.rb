@@ -26,6 +26,8 @@ class Predicator::Lexer
   EQ         = /=/
   GT         = />/
   LT         = /</
+  BLANK      = /is blank/
+  PRESENT    = /is present/
   AGO        = /ago/
   FROMNOW    = /from now/
   DATE       = /\d{4}[-|\/]\d{2}[-|\/]\d{2}/i
@@ -139,6 +141,10 @@ class Predicator::Lexer
             action { [:AGO, text] }
           when text = ss.scan(/#{FROMNOW}/) then
             action { [:FROMNOW, text] }
+          when text = ss.scan(/#{BLANK}/) then
+            action { [:BLANK, text] }
+          when text = ss.scan(/#{PRESENT}/) then
+            action { [:PRESENT, text] }
           when text = ss.scan(/#{DATE}/) then
             action { [:DATE, text] }
           when text = ss.scan(/#{DURATION}/) then
