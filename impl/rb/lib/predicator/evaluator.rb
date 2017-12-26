@@ -1,3 +1,5 @@
+require "date"
+
 module Predicator
   class Evaluator
     attr_reader :instructions, :stack, :context
