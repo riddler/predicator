@@ -21,10 +21,9 @@ module Predicator
 
       def terminal node; end
 
-      def visit_array node
+      def visit_ARRAY node
         node.left.each{ |item| visit item }
       end
-
 
       visit_children_methods = %w(
         visit_EQ visit_GT visit_LT
@@ -92,7 +91,7 @@ module Predicator
       )
       array_methods.each do |method_name|
         define_method method_name do |node|
-          visit_array node
+          visit_ARRAY node
         end
       end
     end

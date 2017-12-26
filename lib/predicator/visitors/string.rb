@@ -11,11 +11,10 @@ module Predicator
         "'#{node.left}'"
       end
 
-      def visit_INTARRAY node
+      def visit_ARRAY node
         contents = node.left.map{ |item| visit item }.join(", ")
         "[#{contents}]"
       end
-      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_NOT node
         "!#{visit node.left}"

@@ -36,64 +36,53 @@ module Predicator
         @instructions.push ["not"]
       end
 
-      def visit_INTEQ node
+      def visit_EQ node
         visit node.left
         add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "EQ"]
       end
-      alias_method :visit_STREQ, :visit_INTEQ
-      alias_method :visit_DATEQ, :visit_INTEQ
 
-
-      def visit_INTGT node
+      def visit_GT node
         visit node.left
         add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "GT"]
       end
-      alias_method :visit_STRGT, :visit_INTGT
-      alias_method :visit_DATGT, :visit_INTGT
 
-      def visit_INTLT node
+      def visit_LT node
         visit node.left
         add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "LT"]
       end
-      alias_method :visit_STRLT, :visit_INTLT
-      alias_method :visit_DATLT, :visit_INTLT
 
-      def visit_INTBETWEEN node
+      def visit_BETWEEN node
         visit node.left
         add_typecast_to_instructions node
         visit node.middle
         visit node.right
         @instructions.push ["compare", "BETWEEN"]
       end
-      alias_method :visit_DATBETWEEN, :visit_INTBETWEEN
 
-      def visit_INTIN node
+      def visit_IN node
         visit node.left
         add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "IN"]
       end
-      alias_method :visit_STRIN, :visit_INTIN
 
-      def visit_INTNOTIN node
+      def visit_NOTIN node
         visit node.left
         add_typecast_to_instructions node
         visit node.right
         @instructions.push ["compare", "NOTIN"]
       end
-      alias_method :visit_STRNOTIN, :visit_INTNOTIN
 
-      def visit_INTARRAY node
+      def visit_ARRAY node
         contents = node.left.map{ |item| item.left }
         @instructions.push ["array", contents]
       end
-      alias_method :visit_STRARRAY, :visit_INTARRAY
 
       def visit_VARIABLE node
         @instructions.push ["load", node.symbol]
@@ -159,7 +148,7 @@ module Predicator
 
       def update_jumps
         @instructions.each_with_index do |inst, idx|
-          next unless inst.first.match? /^j/
+          next unless inst.first =~ /^j/
           label = inst.pop
           offset = calculate_offset idx, @label_locations[label]
           inst.push offset
