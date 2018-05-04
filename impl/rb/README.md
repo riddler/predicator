@@ -5,20 +5,44 @@
 
 # Predicator
 
-Predicator is a predicate engine.
+Predicator is a safe (does not eval code), admin or business user facing predicate engine. It turns a string predicate like `"score > 600 or (score > 580 and monthly_income > 9000)"` along with a supplied context into a `true` or `false`. This predicate can be stored as an attribute of a model (ex: an Offer model could store a predicate indicating if it is available to a customer).
 
 ## Usage
 
-Example usage:
+Simple usage:
 
 ```ruby
 require "predicator"
 
-Predicator.evaluate "age > 21" # false
+Predicator.evaluate "score > 600 or (score > 580 and income > 9000)", score: 590 # false
 
-Predicator.evaluate "age > 21", age: 10 # false
+Predicator.evaluate "score > 600 or (score > 580 and income > 9000)", score: 590, income: 9500 # true
+```
 
-Predicator.evaluate "age > 21", age: 50 # true
+Example usage with a model:
+
+```ruby
+class Customer
+  ...
+  def to_hash
+    {
+      ...
+      score: score,
+      income: income,
+      ...
+    }
+  end
+end
+
+class Offer
+  attr_accessor :available_predicate
+  
+  ...
+  
+  def available_to? customer
+    Predicator.evaluate available_predicate, customer.to_hash
+  end
+end
 ```
 
 ## Installation
