@@ -194,6 +194,15 @@ module Predicator
       assert_equal :VARIABLE, ast.left.type
     end
 
+    def test_string_ends_with
+      ast = @parser.parse "foo ends with 'bar'"
+
+      assert_equal :STRENDSWITH, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRING, ast.right.type
+    end
+
+
     def assert_type type, source
       assert_equal type, @parser.parse(source).type
     end

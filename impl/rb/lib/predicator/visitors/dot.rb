@@ -80,6 +80,11 @@ digraph parse_tree {
         super
       end
 
+      def visit_STRENDSWITH node
+        @nodes << "#{node.object_id} [label=\"ends with\"];"
+        super
+      end
+
       def visit_STRING node
         value = node.left
         @nodes << "#{node.object_id} [label=\"'#{value}'\"];"

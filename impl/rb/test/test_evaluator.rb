@@ -368,6 +368,24 @@ module Predicator
       ], age: "21"
     end
 
+    def test_string_ends_with
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "bar"],
+        ["compare", "ENDSWITH"],
+      ], foo: "bar"
+    end
+
+    def test_invalid_string_ends_with
+      assert_eval false, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "bar"],
+        ["compare", "ENDSWITH"],
+      ], foo: "foonope"
+    end
+
     def assert_eval result, instructions, context={}
       e = Evaluator.new instructions, context
       assert_equal result, e.result
