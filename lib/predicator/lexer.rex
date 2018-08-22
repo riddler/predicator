@@ -21,6 +21,7 @@ macro
   EQ          /=/
   GT          />/
   LT          /</
+  ENDSWITH    /ends with/
   BLANK       /is blank/
   PRESENT     /is present/
   AGO         /ago/
@@ -51,6 +52,7 @@ rule
   /#{LT}/          { [:LT, text] }
   /#{AGO}/         { [:AGO, text] }
   /#{FROMNOW}/     { [:FROMNOW, text] }
+  /#{ENDSWITH}/    { [:ENDSWITH, text] }
   /#{BLANK}/       { [:BLANK, text] }
   /#{PRESENT}/     { [:PRESENT, text] }
   /#{DATE}/        { [:DATE, text] }

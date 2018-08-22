@@ -26,6 +26,7 @@ class Predicator::Lexer
   EQ         = /=/
   GT         = />/
   LT         = /</
+  ENDSWITH   = /ends with/
   BLANK      = /is blank/
   PRESENT    = /is present/
   AGO        = /ago/
@@ -141,6 +142,8 @@ class Predicator::Lexer
             action { [:AGO, text] }
           when text = ss.scan(/#{FROMNOW}/) then
             action { [:FROMNOW, text] }
+          when text = ss.scan(/#{ENDSWITH}/) then
+            action { [:ENDSWITH, text] }
           when text = ss.scan(/#{BLANK}/) then
             action { [:BLANK, text] }
           when text = ss.scan(/#{PRESENT}/) then

@@ -51,6 +51,10 @@ module Predicator
         assert_dot "foo > 3d from now", "[label=\"from now\"]"
       end
 
+      def test_variable_ends_with_string
+        assert_dot "foo ends with 'bar'", "[label=\"ends with\"]"
+      end
+
       def assert_dot source, expected_instructions
         ast = @parser.parse source
         instructions = ast.to_dot
