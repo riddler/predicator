@@ -22,6 +22,8 @@ macro
   GT          />/
   LT          /</
   ENDSWITH    /ends with/
+  STARTSWITH  /starts with/
+  BEGINSWITH  /begins with/
   BLANK       /is blank/
   PRESENT     /is present/
   AGO         /ago/
@@ -53,6 +55,8 @@ rule
   /#{AGO}/         { [:AGO, text] }
   /#{FROMNOW}/     { [:FROMNOW, text] }
   /#{ENDSWITH}/    { [:ENDSWITH, text] }
+  /#{STARTSWITH}/  { [:STARTSWITH, text] }
+  /#{BEGINSWITH}/  { [:STARTSWITH, text] }
   /#{BLANK}/       { [:BLANK, text] }
   /#{PRESENT}/     { [:PRESENT, text] }
   /#{DATE}/        { [:DATE, text] }

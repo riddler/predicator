@@ -368,13 +368,31 @@ module Predicator
       ], age: "21"
     end
 
+    def test_string_starts_with
+      assert_eval true, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "bar"],
+        ["compare", "STARTSWITH"],
+      ], foo: "bar"
+    end
+
+    def test_invalid_string_starts_with
+      assert_eval false, [
+        ["load", "foo"],
+        ["to_str"],
+        ["lit", "bar"],
+        ["compare", "STARTSWITH"],
+      ], foo: "bazbar"
+    end
+
     def test_string_ends_with
       assert_eval true, [
         ["load", "foo"],
         ["to_str"],
         ["lit", "bar"],
         ["compare", "ENDSWITH"],
-      ], foo: "bar"
+      ], foo: "foobar"
     end
 
     def test_invalid_string_ends_with

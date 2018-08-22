@@ -146,6 +146,10 @@ module Predicator
       def type; :STRNOTIN; end
     end
 
+    class StringStartsWith < Binary
+      def type; :STRSTARTSWITH; end
+    end
+
     class StringEndsWith < Binary
       def type; :STRENDSWITH; end
     end

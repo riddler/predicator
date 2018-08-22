@@ -202,6 +202,14 @@ module Predicator
       assert_equal :STRING, ast.right.type
     end
 
+    def test_string_starts_with
+      ast = @parser.parse "foo starts with 'bar'"
+
+      assert_equal :STRSTARTSWITH, ast.type
+      assert_equal :VARIABLE, ast.left.type
+      assert_equal :STRING, ast.right.type
+    end
+
 
     def assert_type type, source
       assert_equal type, @parser.parse(source).type

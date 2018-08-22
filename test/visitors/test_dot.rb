@@ -55,6 +55,10 @@ module Predicator
         assert_dot "foo ends with 'bar'", "[label=\"ends with\"]"
       end
 
+      def test_variable_starts_with_string
+        assert_dot "foo starts with 'bar'", "[label=\"starts with\"]"
+      end
+
       def assert_dot source, expected_instructions
         ast = @parser.parse source
         instructions = ast.to_dot

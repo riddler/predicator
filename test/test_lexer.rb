@@ -62,7 +62,12 @@ module Predicator
                   [:IDENTIFIER, "a"],
                   [:ENDSWITH, "ends with"],
                   [:STRING, "foo"]
-                ]]
+                ]],
+        ["a starts with 'foo'", [
+                  [:IDENTIFIER, "a"],
+                  [:STARTSWITH, "starts with"],
+                  [:STRING, "foo"]
+                ]],
       ].each do |str, expected|
         #@lexer.scan_setup str
         @lexer.parse str
