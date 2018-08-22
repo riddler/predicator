@@ -56,6 +56,10 @@ module Predicator
         [visit(node.left), " not in ", visit(node.right)].join
       end
 
+      def visit_STRSTARTSWITH node
+        [visit(node.left), " starts with ", visit(node.right)].join
+      end
+
       def visit_STRENDSWITH node
         [visit(node.left), " ends with ", visit(node.right)].join
       end

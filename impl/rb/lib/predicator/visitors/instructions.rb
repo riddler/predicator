@@ -79,6 +79,13 @@ module Predicator
         @instructions.push ["compare", "NOTIN"]
       end
 
+      def visit_STRSTARTSWITH node
+        visit node.left
+        add_typecast_to_instructions node
+        visit node.right
+        @instructions.push ["compare", "STARTSWITH"]
+      end
+
       def visit_STRENDSWITH node
         visit node.left
         add_typecast_to_instructions node

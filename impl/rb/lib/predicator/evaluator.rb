@@ -128,6 +128,10 @@ module Predicator
       !right.include? left
     end
 
+    def compare_STARTSWITH left, right
+      left.start_with? right
+    end
+
     def compare_ENDSWITH left, right
       left.end_with? right
     end

@@ -65,6 +65,10 @@ module Predicator
         assert_round_trip "foo in ['foo', 'bar']"
       end
 
+      def test_variable_starts_with_string
+        assert_round_trip "foo starts with 'bar'"
+      end
+
       def test_variable_ends_with_string
         assert_round_trip "foo ends with 'bar'"
       end
