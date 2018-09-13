@@ -1,3 +1,11 @@
+### 1.2.0 / 2018-09-13
+
+* Adds type casting to comparisons
+* Adds date type and predicates
+* Adds "from now" and "ago" relative dates
+* Adds "present" and "blank" predicates
+* Adds "starts with" and "ends with" string comparisons
+
 ### 1.1.0 / 2017-12-06
 
 * Rescues errors when comparing invalid types
