@@ -129,6 +129,24 @@ module Predicator
         ]
       end
 
+      def test_variable_starts_with_string
+        assert_instructions "foo starts with 'bar'", [
+          ["load", "foo"],
+          ["to_str"],
+          ["lit", "bar"],
+          ["compare", "STARTSWITH"],
+        ]
+      end
+
+      def test_variable_ends_with_string
+        assert_instructions "foo ends with 'bar'", [
+          ["load", "foo"],
+          ["to_str"],
+          ["lit", "bar"],
+          ["compare", "ENDSWITH"],
+        ]
+      end
+
       def test_variable_less_than_date
         assert_instructions "foo<2018-07-10", [
           ["load", "foo"],

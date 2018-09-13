@@ -58,6 +58,16 @@ module Predicator
                 ]],
         ["2018-07-10",  [[:DATE, "2018-07-10"]]],
         ["2018/07/10",  [[:DATE, "2018/07/10"]]],
+        ["a ends with 'foo'", [
+                  [:IDENTIFIER, "a"],
+                  [:ENDSWITH, "ends with"],
+                  [:STRING, "foo"]
+                ]],
+        ["a starts with 'foo'", [
+                  [:IDENTIFIER, "a"],
+                  [:STARTSWITH, "starts with"],
+                  [:STRING, "foo"]
+                ]],
       ].each do |str, expected|
         #@lexer.scan_setup str
         @lexer.parse str

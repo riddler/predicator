@@ -31,6 +31,7 @@ module Predicator
         visit_IN visit_NOTIN visit_BETWEEN
         visit_DATEAGO visit_DATEFROMNOW
         visit_AND visit_OR
+        visit_STRSTARTSWITH visit_STRENDSWITH
       )
       visit_children_methods.each do |method_name|
         define_method method_name do |node|

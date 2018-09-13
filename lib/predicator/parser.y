@@ -7,6 +7,7 @@ token TRUE FALSE LPAREN RPAREN LBRACKET RBRACKET
       EQ GT LT BETWEEN IN PRESENT BLANK
       INTEGER STRING IDENTIFIER
       DATE DURATION AGO FROMNOW
+      STARTSWITH ENDSWITH
 
 rule
   predicate
@@ -49,6 +50,8 @@ rule
     | variable LT string                       { AST::StringLessThan.new val.first, val.last }
     | variable IN string_array                 { AST::StringIn.new val.first, val.last }
     | variable NOT IN string_array             { AST::StringNotIn.new val.first, val.last }
+    | variable STARTSWITH string               { AST::StringStartsWith.new val.first, val.last }
+    | variable ENDSWITH string                 { AST::StringEndsWith.new val.first, val.last }
     ;
   date_comparison_predicate
     : variable EQ date                         { AST::DateEqual.new val.first, val.last }
