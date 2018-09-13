@@ -1,4 +1,4 @@
-### 1.2.0 / TBD
+### 1.2.0 / 2018-09-13
 
 * Adds type casting to comparisons
 * Adds date type and predicates
