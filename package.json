@@ -1,0 +1,46 @@
+{
+  "name": "predicator",
+  "version": "0.1.0",
+  "description": "Safe predicate engine",
+  "main": "src/predicator.js",
+  "scripts": {
+    "generate-tests": "node ./scripts/generate-tests.js",
+    "lint": "eslint .",
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --watch",
+    "test:fix": "npm run test -- --fix"
+  },
+  "jest": {
+    "watchPlugins": ["jest-runner-eslint/watch-fix"],
+    "projects": [
+      {
+        "displayName": "test"
+      },
+      {
+        "displayName": "lint",
+        "runner": "jest-runner-eslint",
+        "testMatch": ["<rootDir>/src/**/*.js"]
+      }
+    ]
+  },
+  "author": "JohnnyT",
+  "license": "MIT",
+  "dependencies": {
+    "chevrotain": "^4.5.0",
+    "liquidjs": "^8.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.8.0",
+    "jest-runner-eslint": "^0.7.3",
+    "yaml": "^1.6.0"
+  }
+}
