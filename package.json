@@ -12,7 +12,9 @@
     "test:fix": "npm run test -- --fix"
   },
   "jest": {
-    "watchPlugins": ["jest-runner-eslint/watch-fix"],
+    "watchPlugins": [
+      "jest-runner-eslint/watch-fix"
+    ],
     "projects": [
       {
         "displayName": "test"
@@ -20,7 +22,9 @@
       {
         "displayName": "lint",
         "runner": "jest-runner-eslint",
-        "testMatch": ["<rootDir>/src/**/*.js"]
+        "testMatch": [
+          "<rootDir>/src/**/*.js"
+        ]
       }
     ]
   },

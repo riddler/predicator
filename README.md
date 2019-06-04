@@ -12,6 +12,12 @@ Simple usage:
 
 ```js
 const Predicator = import('predicator')
+
+Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 600}) // true
+
+Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 580}) // false
+
+Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 580, income: 9000}) // true
 ```
 
 ## Contributing
