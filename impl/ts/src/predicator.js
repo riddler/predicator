@@ -9,6 +9,7 @@ const {
 } = require('./parser')
 const {
   PredicatorEvaluator,
+  evaluate,
   evaluateInstructions
 } = require('./evaluator')
 
@@ -24,6 +25,7 @@ module.exports = {
   BasePredicatorCstVisitorWithDefaults,
 
   PredicatorEvaluator,
+  evaluate,
   evaluateInstructions,
 
   toInstructions

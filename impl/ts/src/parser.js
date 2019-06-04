@@ -69,33 +69,34 @@ function parse (inputText, entryPoint = 'predicate') {
   const lexResult = tokenize(inputText)
   parserInstance.input = lexResult.tokens
 
-  if (lexResult.errors.length > 0) {
-    const firstError = lexResult.errors[0]
-    throw Error(
-      'Lexing errors detected in line: ' +
-        firstError.line +
-        ', column: ' +
-        firstError.column +
-        '!\n' +
-        firstError.message
-    )
-  }
+  //if (lexResult.errors.length > 0) {
+  //  const firstError = lexResult.errors[0]
+  //  throw Error(
+  //    'Lexing errors detected in line: ' +
+  //      firstError.line +
+  //      ', column: ' +
+  //      firstError.column +
+  //      '!\n' +
+  //      firstError.message
+  //  )
+  //}
 
   const cst = parserInstance[entryPoint]()
-  if (parserInstance.errors.length > 0) {
-    const error = parserInstance.errors[0]
-    throw Error(
-      'Parsing errors detected in line: ' +
-        error.token.startLine +
-        ', column: ' +
-        error.token.startColumn +
-        '!\n' +
-        error.message +
-        '!\n\t->' +
-        // TODO: should the stack always appear on errors msg?
-        error.context.ruleStack.join('\n\t->')
-    )
-  }
+  //if (parserInstance.errors.length > 0) {
+  //  const error = parserInstance.errors[0]
+
+  //  throw Error(
+  //    'Parsing errors detected in line: ' +
+  //      error.token.startLine +
+  //      ', column: ' +
+  //      error.token.startColumn +
+  //      '!\n' +
+  //      error.message +
+  //      '!\n\t->' +
+  //      // TODO: should the stack always appear on errors msg?
+  //      error.context.ruleStack.join('\n\t->')
+  //  )
+  //}
 
   return cst
 }

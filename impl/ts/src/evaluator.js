@@ -1,3 +1,5 @@
+const { toInstructions } = require('./visitors/instructions')
+
 class PredicatorEvaluator {
   constructor (instructions, context = {}) {
     this.instructions = instructions
@@ -76,7 +78,13 @@ function evaluateInstructions (instructions, context = {}) {
   return evaluator.result()
 }
 
+function evaluate (text, context = {}) {
+  const instructions = toInstructions(text)
+  return evaluateInstructions(instructions, context)
+}
+
 module.exports = {
+  evaluate,
   evaluateInstructions,
   PredicatorEvaluator
 }
