@@ -1,0 +1,7 @@
+---
+name: int_in_array
+instructions: [ ["lit", 1], ["array", [1,2]], ["compare", "IN"] ]
+
+tests:
+  - name: with_no_context
+    result: true

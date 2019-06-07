@@ -1,0 +1,23 @@
+---
+# start_date > 3d ago
+name: variable_gt_duration_ago
+instructions: [["load", "start_date"], ["to_date"], ["lit", 259200], ["date_ago"], ["compare", "GT"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_date
+  context:
+    start_date: ""
+  result: false
+
+- name: with_future_date
+  context:
+    start_date: "2299-01-01"
+  result: true
+
+- name: with_past_date
+  context:
+    start_date: "1999-01-01"
+  result: false

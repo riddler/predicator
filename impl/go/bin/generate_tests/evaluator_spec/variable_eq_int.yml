@@ -1,0 +1,32 @@
+---
+name: variable_eq_int
+instructions: [["load", "age"], ["to_int"], ["lit", 21], ["compare", "EQ"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_string
+  context:
+    age: ""
+  result: false
+
+- name: with_correct_int
+  context:
+    age: 21
+  result: true
+
+- name: with_incorrect_int
+  context:
+    age: 5
+  result: false
+
+- name: with_correct_string
+  context:
+    age: "21"
+  result: true
+
+- name: with_incorrect_string
+  context:
+    age: "5"
+  result: false

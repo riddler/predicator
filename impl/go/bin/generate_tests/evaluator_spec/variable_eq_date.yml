@@ -1,0 +1,22 @@
+---
+name: variable_eq_date
+instructions: [["load", "start_date"], ["to_date"], ["lit", "2017-09-10"], ["compare", "EQ"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_string
+  context:
+    age: ""
+  result: false
+
+- name: with_correct_date_string
+  context:
+    start_date: "2017-09-10"
+  result: true
+
+- name: with_incorrect_date_string
+  context:
+    start_date: "2017-09-09"
+  result: false

@@ -1,0 +1,7 @@
+---
+name: false
+instructions: [["lit", false]]
+
+tests:
+  - name: with_no_context
+    result: false

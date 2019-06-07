@@ -1,0 +1,7 @@
+---
+name: and
+instructions: [["lit", true], ["jfalse", 2], ["lit", true]]
+
+tests:
+- name: with_no_context
+  result: true
