@@ -93,7 +93,7 @@ func main() {
 				log.Fatal("failed to convert instruction to json  ", err.Error())
 			}
 			testFilename := strings.Replace(info.Name(), ".yml", "_test.go", -1)
-			f, err := os.Create(testFilename)
+			f, err := os.Create("../../" + testFilename)
 			if err != nil {
 				log.Fatal("failed to create test file with name: ", testFilename, " error: ", err.Error())
 			}
