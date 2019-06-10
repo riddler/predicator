@@ -49,7 +49,16 @@ func main() {
 			{
 				"{{ .Name }}",
 				{{ .Result }},
-				{{if .Data }}{{.Data}}{{else}} map[string]interface{}{}{{end}},
+				{{if .Data }}
+				map[string]interface{}{
+					{{range $k, $v := .Data}}
+						{{$k}}:{{$v}},
+					{{end}}
+				},
+				{{.Data}}
+				{{else}}
+				 map[string]interface{}{},
+				{{end}}
 			},
 		{{end}}
 		}
