@@ -2,7 +2,7 @@ package predicator
 
 import (
 	"errors"
-	// "fmt"
+	"fmt"
 )
 
 func NewEvaluator(instructions [][]interface{}, data map[string]interface{}) *Evaluator {
@@ -62,13 +62,24 @@ const (
 	InstructionBlank       = "blank"
 	InstructionPresent     = "present"
 	InstructionCompare     = "compare"
+
+	KeywordCompareBetween = "BETWEEN"
+	KeywordCompareEqual   = "EQ"
+	KeywordCompareInclude = "IN"
 )
 
 var (
 	ErrInvalidInstruction = errors.New("invalid instruction")
 )
 
-func (e *Evaluator) result() bool {
+func (e *Evaluator) result() (output bool) {
+	defer func() {
+		r := recover()
+		if r != nil {
+			fmt.Println("recovered: ", r)
+			output = false
+		}
+	}()
 	for e.ip < len(e.instructions) {
 		e.process(e.instructions[e.ip])
 		e.ip = e.ip + 1
@@ -95,9 +106,8 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		}
 		e.jumpIfFalse(offset)
 	case InstructionJumpIfTrue:
-	case InstructionLiteral:
+	case InstructionLiteral, InstructionArray:
 		e.stack.push(instruction[len(instruction)-1])
-	case InstructionArray:
 	case InstructionLoad:
 	case InstructionToBool:
 	case InstructionToInt:
@@ -108,6 +118,15 @@ func (e *Evaluator) process(instruction []interface{}) error {
 	case InstructionBlank:
 	case InstructionPresent:
 	case InstructionCompare:
+		if instruction[len(instruction)-1] == KeywordCompareBetween {
+			// compare_between
+		} else {
+			v, ok := instruction[len(instruction)-1].(string)
+			if !ok {
+				return ErrInvalidInstruction
+			}
+			e.compare(v)
+		}
 	}
 	return nil
 }
@@ -121,5 +140,41 @@ func (e *Evaluator) jumpIfFalse(offset int) {
 		}
 	}
 	e.stack.pop()
+
+}
+
+func (e *Evaluator) compare(comparison string) {
+	right := e.stack.pop()
+	left := e.stack.pop()
+	fmt.Println("comp", comparison, right, left)
+	if left == nil || right == nil {
+		e.stack.push(false)
+	} else {
+		switch comparison {
+		case KeywordCompareEqual:
+			e.stack.push(e.compareEquality(left, right))
+		case KeywordCompareInclude:
+			e.stack.push(e.compareInclude(left, right))
+		default:
+			e.stack.push(false)
+		}
+	}
+}
+
+func (e *Evaluator) compareEquality(left, right interface{}) bool {
+	return left == right
+}
+
+func (e *Evaluator) compareInclude(left, right interface{}) bool {
+	xs, ok := right.([]interface{})
+	if !ok {
+		return false
+	}
+	for _, x := range xs {
+		if left == x {
+			return true
+		}
+	}
+	return false
 
 }
