@@ -109,6 +109,15 @@ func (e *Evaluator) process(instruction []interface{}) error {
 	case InstructionLiteral, InstructionArray:
 		e.stack.push(instruction[len(instruction)-1])
 	case InstructionLoad:
+		key, ok := instruction[len(instruction)-1].(string)
+		if !ok {
+			return ErrInvalidInstruction
+		}
+		v, ok := e.data[key]
+		if !ok {
+			return ErrInvalidInstruction
+		}
+		e.stack.push(v)
 	case InstructionToBool:
 	case InstructionToInt:
 	case InstructionToString:
