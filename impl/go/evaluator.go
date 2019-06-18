@@ -2,6 +2,7 @@ package predicator
 
 import (
 	"errors"
+	"strconv"
 )
 
 func NewEvaluator(instructions [][]interface{}, data map[string]interface{}) *Evaluator {
@@ -124,6 +125,11 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		e.stack.push(v)
 	case InstructionToBool:
 	case InstructionToInt:
+		n, err := e.toInt(e.stack.pop())
+		if err != nil {
+			return ErrInvalidInstruction
+		}
+		e.stack.push(n)
 	case InstructionToString:
 	case InstructionToDate:
 	case InstructionDateAgo:
@@ -199,5 +205,24 @@ func (e *Evaluator) compareInclude(left, right interface{}) bool {
 		}
 	}
 	return false
+}
 
+// def to_int val
+// if val.nil? || (val.is_a?(String) && val.empty?)
+//   nil
+// else
+//   val.to_i
+// end
+// end
+
+func (e *Evaluator) toInt(v interface{}) (int, error) {
+	n, ok := v.(int)
+	if ok {
+		return n, nil
+	}
+	str, ok := v.(string)
+	if ok {
+		return strconv.Atoi(str)
+	}
+	return 0, ErrInvalidInstruction
 }
