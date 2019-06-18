@@ -2,7 +2,6 @@ package predicator
 
 import (
 	"errors"
-	"fmt"
 )
 
 func NewEvaluator(instructions [][]interface{}, data map[string]interface{}) *Evaluator {
@@ -76,7 +75,7 @@ func (e *Evaluator) result() (output bool) {
 	defer func() {
 		r := recover()
 		if r != nil {
-			fmt.Println("recovered: ", r)
+			// fmt.Println("recovered: ", r)
 			output = false
 		}
 	}()
@@ -106,6 +105,11 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		}
 		e.jumpIfFalse(offset)
 	case InstructionJumpIfTrue:
+		offset, ok := instruction[len(instruction)-1].(int)
+		if !ok {
+			return ErrInvalidInstruction
+		}
+		e.jumpIfTrue(offset)
 	case InstructionLiteral, InstructionArray:
 		e.stack.push(instruction[len(instruction)-1])
 	case InstructionLoad:
@@ -149,13 +153,23 @@ func (e *Evaluator) jumpIfFalse(offset int) {
 		}
 	}
 	e.stack.pop()
+}
 
+func (e *Evaluator) jumpIfTrue(offset int) {
+	b, ok := e.stack.peek().(bool)
+	if ok {
+		if b {
+			e.ip += offset - 1
+			return
+		}
+	}
+	e.stack.pop()
 }
 
 func (e *Evaluator) compare(comparison string) {
 	right := e.stack.pop()
 	left := e.stack.pop()
-	fmt.Println("comp", comparison, right, left)
+	// fmt.Println("comp", comparison, right, left)
 	if left == nil || right == nil {
 		e.stack.push(false)
 	} else {
