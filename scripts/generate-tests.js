@@ -16,13 +16,11 @@ const templateSource = `// This file is auto-generated.
 const { PredicatorEvaluator } = require('../../src/predicator')
 {% for test in tests %}
 
-test('it evaluates {{test.name}}', () => {
-  const context = {% if test.context %}{{ test.context | json }}{% else %}{}{% endif %};
-  const instructions = {{ instructions | json }};
-  const evaluator = new PredicatorEvaluator(instructions, context);
-  const result = evaluator.result();
-
-  expect(result).toEqual({{ test.result }});
+test('it evaluates {{ name }} {{test.name}}', () => {
+  const evaluator = new PredicatorEvaluator(
+    {{ instructions | json }},
+    {% if test.context %}{{ test.context | json }}{% else %}{}{% endif %});
+  expect(evaluator.result()).toEqual({{ test.result }});
   expect(evaluator.stack).toEqual([]);
 }){% endfor %}`
 
@@ -68,11 +66,11 @@ const visitorsSpecRoot = '../predicator_spec/visitors'
 const visitorSource = `// This file is auto-generated.
 // To make changes - look in scripts/generate-tests.js
 
-const { toInstructions } = require('../../src/predicator')
+const { compile } = require('../../src/predicator')
 {% for test in tests %}
 
 test('it compiles {{test.name}}', () => {
-  expect(toInstructions('{{ test.source }}')).toEqual({{ test.instructions | json }})
+  expect(compile('{{ test.source }}')).toEqual({{ test.instructions | json }})
 }){% endfor %}`
 
 

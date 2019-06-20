@@ -1,8 +1,8 @@
 // ----------------- Lexer -----------------
+const { compile } = require('./visitors/instructions')
 const { tokenize } = require('./lexer')
 const {
   PredicatorParser,
-  parserInstance,
   parse,
   BasePredicatorCstVisitor,
   BasePredicatorCstVisitorWithDefaults
@@ -13,20 +13,15 @@ const {
   evaluateInstructions
 } = require('./evaluator')
 
-const { toInstructions } = require('./visitors/instructions')
-
 module.exports = {
-  tokenize,
-
-  PredicatorParser,
-  parserInstance,
-  parse,
   BasePredicatorCstVisitor,
   BasePredicatorCstVisitorWithDefaults,
-
+  PredicatorParser,
   PredicatorEvaluator,
-  evaluate,
-  evaluateInstructions,
 
-  toInstructions
+  tokenize,
+  parse,
+  compile,
+  evaluate,
+  evaluateInstructions
 }

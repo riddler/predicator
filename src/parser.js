@@ -33,10 +33,9 @@ class PredicatorParser extends Parser {
       $.OR([
         { ALT: () => $.SUBRULE($.paren) },
         { ALT: () => $.SUBRULE($.not) },
-        { ALT: () => $.SUBRULE($.comparison) },
+        { ALT: () => $.SUBRULE($.relationalExpression) },
         { ALT: () => $.CONSUME(t.Variable) },
-        { ALT: () => $.CONSUME(t.True) },
-        { ALT: () => $.CONSUME(t.False) }
+        { ALT: () => $.CONSUME(t.IBoolean) }
       ])
     })
 
@@ -51,9 +50,9 @@ class PredicatorParser extends Parser {
       $.SUBRULE($.predicate)
     })
 
-    $.RULE('comparison', () => {
+    $.RULE('relationalExpression', () => {
       $.CONSUME(t.Variable)
-      $.CONSUME(t.Equals)
+      $.CONSUME(t.IRelationalOperator)
       $.CONSUME(t.DecimalInt)
     })
 
@@ -69,34 +68,7 @@ function parse (inputText, entryPoint = 'predicate') {
   const lexResult = tokenize(inputText)
   parserInstance.input = lexResult.tokens
 
-  //if (lexResult.errors.length > 0) {
-  //  const firstError = lexResult.errors[0]
-  //  throw Error(
-  //    'Lexing errors detected in line: ' +
-  //      firstError.line +
-  //      ', column: ' +
-  //      firstError.column +
-  //      '!\n' +
-  //      firstError.message
-  //  )
-  //}
-
   const cst = parserInstance[entryPoint]()
-  //if (parserInstance.errors.length > 0) {
-  //  const error = parserInstance.errors[0]
-
-  //  throw Error(
-  //    'Parsing errors detected in line: ' +
-  //      error.token.startLine +
-  //      ', column: ' +
-  //      error.token.startColumn +
-  //      '!\n' +
-  //      error.message +
-  //      '!\n\t->' +
-  //      // TODO: should the stack always appear on errors msg?
-  //      error.context.ruleStack.join('\n\t->')
-  //  )
-  //}
 
   return cst
 }
