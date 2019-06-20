@@ -4,12 +4,10 @@
 const { PredicatorEvaluator } = require('../../src/predicator')
 
 
-test('it evaluates with_no_context', () => {
-  const context = {};
-  const instructions = [["lit",1],["array",[1,2]],["compare","IN"]];
-  const evaluator = new PredicatorEvaluator(instructions, context);
-  const result = evaluator.result();
-
-  expect(result).toEqual(true);
+test('it evaluates int_in_array with_no_context', () => {
+  const evaluator = new PredicatorEvaluator(
+    [["lit",1],["array",[1,2]],["compare","IN"]],
+    {});
+  expect(evaluator.result()).toEqual(true);
   expect(evaluator.stack).toEqual([]);
 })

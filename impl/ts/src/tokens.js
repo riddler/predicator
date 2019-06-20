@@ -19,11 +19,16 @@ createToken({
 createToken({ name: 'Dot', pattern: '.' })
 
 const IBoolean = createToken({ name: 'IBoolean', pattern: Lexer.NA })
-createToken({ name: 'True', pattern: /true/, categories: [IBoolean] })
-createToken({ name: 'False', pattern: /false/, categories: [IBoolean] })
+const True = createToken({ name: 'True', pattern: /true/, categories: [IBoolean] })
+const False = createToken({ name: 'False', pattern: /false/, categories: [IBoolean] })
 
-const IOperator = createToken({ name: 'IOperator', pattern: Lexer.NA })
-const Equals = createToken({ name: 'Equals', pattern: /=/, categories: [IOperator] })
+const IRelationalOperator = createToken({ name: 'IRelationalOperator', pattern: Lexer.NA })
+const EQ = createToken({ name: 'EQ', pattern: /=/, categories: [IRelationalOperator] })
+const NEQ = createToken({ name: 'NEQ', pattern: /!=/, categories: [IRelationalOperator] })
+const GTE = createToken({ name: 'GTE', pattern: />=/, categories: [IRelationalOperator] })
+const GT = createToken({ name: 'GT', pattern: />/, categories: [IRelationalOperator] })
+const LTE = createToken({ name: 'LTE', pattern: /<=/, categories: [IRelationalOperator] })
+const LT = createToken({ name: 'LT', pattern: /</, categories: [IRelationalOperator] })
 
 createToken({ name: 'Or', pattern: /or/ })
 createToken({ name: 'And', pattern: /and/ })
@@ -47,7 +52,22 @@ createToken({
 Bang.LABEL = "'!'"
 LParen.LABEL = "'('"
 RParen.LABEL = "')'"
-Equals.LABEL = "'='"
+EQ.LABEL = "'='"
+NEQ.LABEL = "'!='"
+GT.LABEL = "'>'"
+GTE.LABEL = "'>='"
+LT.LABEL = "'<'"
+LTE.LABEL = "'<='"
+
+// INSTRUCTION is used when generating instuctions
+True.INSTRUCTION = true
+False.INSTRUCTION = false
+EQ.INSTRUCTION = 'EQ'
+NEQ.INSTRUCTION = 'NEQ'
+GT.INSTRUCTION = 'GT'
+GTE.INSTRUCTION = 'GTE'
+LT.INSTRUCTION = 'LT'
+LTE.INSTRUCTION = 'LTE'
 
 module.exports = {
   tokensArray,

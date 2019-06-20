@@ -4,12 +4,10 @@
 const { PredicatorEvaluator } = require('../../src/predicator')
 
 
-test('it evaluates with_no_context', () => {
-  const context = {};
-  const instructions = [["lit",false]];
-  const evaluator = new PredicatorEvaluator(instructions, context);
-  const result = evaluator.result();
-
-  expect(result).toEqual(false);
+test('it evaluates false with_no_context', () => {
+  const evaluator = new PredicatorEvaluator(
+    [["lit",false]],
+    {});
+  expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })

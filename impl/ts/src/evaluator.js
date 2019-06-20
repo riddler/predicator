@@ -1,4 +1,4 @@
-const { toInstructions } = require('./visitors/instructions')
+const { compile } = require('./visitors/instructions')
 
 class PredicatorEvaluator {
   constructor (instructions, context = {}) {
@@ -38,7 +38,38 @@ class PredicatorEvaluator {
       case 'jtrue': this.jumpIf(true, val); break
       case 'compare': this[`compare_${val}`](); break
       case 'to_bool': this.push(!!this.pop()); break
+      case 'to_int': this.push(parseInt(this.pop())); break
+      case 'to_date': this.push(this.toDate(this.pop())); break
+      case 'to_str': this.push(this.toString(this.pop())); break
+      case 'date_ago': this.dateAgo(); break
+      case 'date_from_now': this.dateFromNow(); break
+      case 'blank': this.push(this.isBlank(this.pop())); break
+      case 'present': this.push(!this.isBlank(this.pop())); break
     }
+  }
+
+  isBlank (val) {
+    return (val === undefined || val === "")
+  }
+
+  toString (val) {
+    return val
+  }
+
+  toDate (val) {
+    return (new Date(val)).getTime()
+  }
+
+  dateAgo () {
+    const seconds = parseInt(this.pop())
+    const pastTimestamp = Date.now() - (seconds * 1000)
+    this.push(this.toDate(pastTimestamp))
+  }
+
+  dateFromNow () {
+    const seconds = parseInt(this.pop())
+    const futureTimestamp = Date.now() + (seconds * 1000)
+    this.push(this.toDate(futureTimestamp))
   }
 
   jumpIf (bool, offset) {
@@ -64,6 +95,26 @@ class PredicatorEvaluator {
     return this.compare((left, right) => left === right)
   }
 
+  compare_NEQ () {
+    return this.compare((left, right) => left !== right)
+  }
+
+  compare_GT () {
+    return this.compare((left, right) => left > right)
+  }
+
+  compare_GTE () {
+    return this.compare((left, right) => left >= right)
+  }
+
+  compare_LT () {
+    return this.compare((left, right) => left < right)
+  }
+
+  compare_LTE () {
+    return this.compare((left, right) => left <= right)
+  }
+
   compare_IN () {
     return this.compare((left, right) => right.indexOf(left) !== -1)
   }
@@ -71,6 +122,20 @@ class PredicatorEvaluator {
   compare_NOTIN () {
     return this.compare((left, right) => right.indexOf(left) === -1)
   }
+
+  compare_BETWEEN () {
+    const max = this.pop()
+    const min = this.pop()
+    const val = this.pop()
+
+    if (max === undefined || min === undefined || val === undefined) {
+      this.push(false)
+    } else {
+      const result = (val > min) && (val < max)
+      this.push(result)
+    }
+  }
+
 }
 
 function evaluateInstructions (instructions, context = {}) {
@@ -79,7 +144,7 @@ function evaluateInstructions (instructions, context = {}) {
 }
 
 function evaluate (text, context = {}) {
-  const instructions = toInstructions(text)
+  const instructions = compile(text)
   return evaluateInstructions(instructions, context)
 }
 

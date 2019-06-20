@@ -21,6 +21,11 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     return this.instructions
   }
 
+
+  comparisonForOperator (text) {
+    return this.relationalOperators[text]
+  }
+
   jumpLabel () {
     return [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
   }
@@ -90,34 +95,35 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
       this.visit(ctx.paren)
     } else if (ctx.not) {
       this.visit(ctx.not)
-    } else if (ctx.comparison) {
-      this.visit(ctx.comparison)
-    } else if (ctx.False) {
-      this.instructions.push(['lit', false])
-    } else if (ctx.True) {
-      this.instructions.push(['lit', true])
+    } else if (ctx.relationalExpression) {
+      this.visit(ctx.relationalExpression)
+    } else if (ctx.IBoolean) {
+      this.instructions.push([
+        'lit',
+        ctx.IBoolean[0].tokenType.INSTRUCTION
+      ])
     }
   }
 
-  comparison (ctx) {
+  relationalExpression (ctx) {
     this.instructions.push(['load', ctx.Variable[0].image])
     this.instructions.push(['lit', parseInt(ctx.DecimalInt[0].image)])
-
-    if (ctx.Equals) {
-      this.instructions.push(['compare', 'EQ'])
-    }
+    this.instructions.push([
+      'compare',
+      ctx.IRelationalOperator[0].tokenType.INSTRUCTION
+    ])
   }
 }
 
 const toInstructionsVisitor = new PredicatorInstructionsVisitor()
 
-function toInstructions (text) {
+function compile (text) {
   const cst = parse(text)
   const instructions = toInstructionsVisitor.accept(cst)
   return instructions
 }
 
 module.exports = {
-  toInstructions,
+  compile,
   toInstructionsVisitor
 }
