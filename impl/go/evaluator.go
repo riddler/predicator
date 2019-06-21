@@ -135,7 +135,9 @@ func (e *Evaluator) process(instruction []interface{}) error {
 	case InstructionDateAgo:
 	case InstructionDateFromNow:
 	case InstructionBlank:
+		e.stack.push(e.isBlank(e.stack.pop()))
 	case InstructionPresent:
+		e.stack.push(!e.isBlank(e.stack.pop()))
 	case InstructionCompare:
 		if instruction[len(instruction)-1] == KeywordCompareBetween {
 			// compare_between
@@ -148,6 +150,14 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		}
 	}
 	return nil
+}
+
+func (e *Evaluator) isBlank(val interface{}) bool {
+	if val == nil || val == "" {
+		return true
+	} else {
+		return false
+	}
 }
 
 func (e *Evaluator) jumpIfFalse(offset int) {
