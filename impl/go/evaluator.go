@@ -140,7 +140,7 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		e.stack.push(!e.isBlank(e.stack.pop()))
 	case InstructionCompare:
 		if instruction[len(instruction)-1] == KeywordCompareBetween {
-			// compare_between
+			e.compareBetween()
 		} else {
 			v, ok := instruction[len(instruction)-1].(string)
 			if !ok {
@@ -180,6 +180,17 @@ func (e *Evaluator) jumpIfTrue(offset int) {
 		}
 	}
 	e.stack.pop()
+}
+
+func (e *Evaluator) compareBetween() {
+	max := e.stack.pop()
+	min := e.stack.pop()
+	v := e.stack.pop()
+	if v == nil || min == nil || max == nil {
+		e.stack.push(false)
+	} else {
+		//e.stack.push((v > min) && (v < max))
+	}
 }
 
 func (e *Evaluator) compare(comparison string) {
