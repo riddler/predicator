@@ -183,13 +183,27 @@ func (e *Evaluator) jumpIfTrue(offset int) {
 }
 
 func (e *Evaluator) compareBetween() {
-	max := e.stack.pop()
-	min := e.stack.pop()
-	v := e.stack.pop()
-	if v == nil || min == nil || max == nil {
+	imax := e.stack.pop()
+	imin := e.stack.pop()
+	iv := e.stack.pop()
+	if iv == nil || imin == nil || imax == nil {
 		e.stack.push(false)
 	} else {
-		//e.stack.push((v > min) && (v < max))
+		switch imax.(type) {
+		case int:
+			max, ok := imax.(int)
+			min, ok := imin.(int)
+			if !ok {
+				e.stack.push(false)
+				return
+			}
+			v, ok := iv.(int)
+			if !ok {
+				e.stack.push(false)
+				return
+			}
+			e.stack.push((v > min) && (v < max))
+		}
 	}
 }
 
