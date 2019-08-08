@@ -3,7 +3,7 @@ const Liquid = require('liquidjs')
 const LiquidEngine = new Liquid()
 const YAML = require('yaml')
 
-LiquidEngine.registerFilter('json', v => JSON.stringify(v))
+LiquidEngine.registerFilter('json', (v) => JSON.stringify(v))
 
 //----------------- Evaluator ---------------------
 
@@ -39,8 +39,8 @@ const generateEvaluatorSpec = function(inputFilePath) {
 
     const outputPath = `test/evaluator/${specData.name}.test.js`
 
-    LiquidEngine.render(evaluatorTemplate, specData).then( outputContents => {
-      fs.writeFile(outputPath, outputContents, err => {
+    LiquidEngine.render(evaluatorTemplate, specData).then( (outputContents) => {
+      fs.writeFile(outputPath, outputContents, (err) => {
         if (err) {
           return console.error(`Could not save file: ${err.message}`)
         }
@@ -51,7 +51,7 @@ const generateEvaluatorSpec = function(inputFilePath) {
 }
 
 fs.readdir(evaluatorSpecRoot, (err, files) => {
-  files.filter(e => e.endsWith("yml")).forEach(file => generateEvaluatorSpec(file))
+  files.filter((e) => e.endsWith("yml")).forEach((file) => generateEvaluatorSpec(file))
 })
 
 
@@ -70,7 +70,7 @@ const { compile } = require('../../src/predicator')
 {% for test in tests %}
 
 test('it compiles {{test.name}}', () => {
-  expect(compile('{{ test.source }}')).toEqual({{ test.instructions | json }})
+  expect(compile('{{ test.source | replace: "'", "\\'" }}')).toEqual({{ test.instructions | json }})
 }){% endfor %}`
 
 
@@ -88,8 +88,8 @@ const generateVisitorSpec = function(inputFilePath) {
 
     const outputPath = `test/visitors/${specData.name}.test.js`
 
-    LiquidEngine.render(visitorTemplate, specData).then( outputContents => {
-      fs.writeFile(outputPath, outputContents, err => {
+    LiquidEngine.render(visitorTemplate, specData).then( (outputContents) => {
+      fs.writeFile(outputPath, outputContents, (err) => {
         if (err) {
           return console.error(`Could not save file: ${err.message}`)
         }
@@ -100,5 +100,5 @@ const generateVisitorSpec = function(inputFilePath) {
 }
 
 fs.readdir(visitorsSpecRoot, (err, files) => {
-  files.forEach(file => generateVisitorSpec(file))
+  files.forEach((file) => generateVisitorSpec(file))
 })

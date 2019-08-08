@@ -32,9 +32,17 @@ const LT = createToken({ name: 'LT', pattern: /</, categories: [IRelationalOpera
 
 createToken({ name: 'Or', pattern: /or/ })
 createToken({ name: 'And', pattern: /and/ })
+createToken({ name: 'Between', pattern: /between/ })
 const Bang = createToken({ name: 'Bang', pattern: /!/ })
 const LParen = createToken({ name: 'LParen', pattern: /\(/ })
 const RParen = createToken({ name: 'RParen', pattern: /\)/ })
+
+const IDate = createToken({ name: 'IDate', pattern: Lexer.NA })
+createToken({
+  name: 'Date',
+  pattern: /\d{4}[-/]\d{2}[-/]\d{2}/,
+  categories: [IDate]
+})
 
 const IInteger = createToken({ name: 'IInteger', pattern: Lexer.NA })
 createToken({
@@ -46,6 +54,13 @@ createToken({
   name: 'Variable',
   pattern: /[a-z]\w+(\.[a-z]\w+)*/,
   categories: [IVariable]
+})
+
+const IString = createToken({ name: 'IString', pattern: Lexer.NA })
+createToken({
+  name: 'String',
+  pattern: /(["'])([^\1]*)\1/,
+  categories: [IString]
 })
 
 // Labels only affect error messages and Diagrams.

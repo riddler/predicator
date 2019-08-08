@@ -11,13 +11,37 @@ Predicator is a safe (does not eval code), admin or business user facing predica
 Simple usage:
 
 ```js
-const Predicator = import('predicator')
+const Predicator = require('predicator');
 
-Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 600}) // true
+// Compile a list of instructions which a Predicator Evaluator can execute
 
-Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 580}) // false
+Predicator.compile('score >= 600 or (score > 580 and income > 9000)');
 
-Predicator.evaluate('score = 600 or (score = 580 and income = 9000)', {score: 580, income: 9000}) // true
+//  [
+//    [ 'load', 'score' ],
+//    [ 'to_int' ],
+//    [ 'lit', 600 ],
+//    [ 'compare', 'GTE' ],
+//    [ 'jtrue', 11 ],
+//    [ 'load', 'score' ],
+//    [ 'to_int' ],
+//    [ 'lit', 580 ],
+//    [ 'compare', 'GT' ],
+//    [ 'jfalse', 5 ],
+//    [ 'load', 'income' ],
+//    [ 'to_int' ],
+//    [ 'lit', 9000 ],
+//    [ 'compare', 'GT' ]
+//  ]
+
+
+// Evaluation
+
+Predicator.evaluate('score >= 600 or (score > 580 and income > 9000)', {score: 600}); // true
+
+Predicator.evaluate('score >= 600 or (score > 580 and income > 9000)', {score: 590}); // false
+
+Predicator.evaluate('score >= 600 or (score > 580 and income > 9000)', {score: 590, income: 10000}); // true
 ```
 
 ## Contributing

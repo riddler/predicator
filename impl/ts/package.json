@@ -1,9 +1,10 @@
 {
-  "name": "predicator",
+  "name": "@riddler/predicator",
   "version": "0.1.0",
   "description": "Safe predicate engine",
-  "main": "src/predicator.js",
+  "main": "dist/predicator.js",
   "scripts": {
+    "build": "parcel build src/predicator.js",
     "generate-tests": "node ./scripts/generate-tests.js",
     "lint": "eslint .",
     "test": "jest",
@@ -11,6 +12,24 @@
     "test:watch": "npm run test -- --watch",
     "test:fix": "npm run test -- --fix"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riddler/predicator-js.git"
+  },
+  "files": [
+    "dist",
+    "LICENSE.txt",
+    "README.md"
+  ],
+  "author": "JohnnyT",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/riddler/predicator-js/issues"
+  },
+  "homepage": "https://github.com/riddler/predicator-js#readme",
   "jest": {
     "watchPlugins": [
       "jest-runner-eslint/watch-fix"
@@ -28,11 +47,8 @@
       }
     ]
   },
-  "author": "JohnnyT",
-  "license": "MIT",
   "dependencies": {
-    "chevrotain": "^4.5.0",
-    "liquidjs": "^8.2.3"
+    "chevrotain": "^4.5.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
@@ -45,6 +61,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
     "jest-runner-eslint": "^0.7.3",
+    "liquidjs": "^8.2.3",
+    "parcel-bundler": "^1.12.3",
     "yaml": "^1.6.0"
   }
 }

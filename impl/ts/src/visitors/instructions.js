@@ -93,10 +93,16 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
   atomic (ctx) {
     if (ctx.paren) {
       this.visit(ctx.paren)
+
     } else if (ctx.not) {
       this.visit(ctx.not)
+
     } else if (ctx.relationalExpression) {
       this.visit(ctx.relationalExpression)
+
+    } else if (ctx.betweenExpression) {
+      this.visit(ctx.betweenExpression)
+
     } else if (ctx.IBoolean) {
       this.instructions.push([
         'lit',
@@ -107,11 +113,42 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
 
   relationalExpression (ctx) {
     this.instructions.push(['load', ctx.Variable[0].image])
-    this.instructions.push(['lit', parseInt(ctx.DecimalInt[0].image)])
+
+    if (ctx.IInteger) {
+      this.instructions.push(['to_int'])
+      this.instructions.push(['lit', parseInt(ctx.IInteger[0].image)])
+    } else if (ctx.IString) {
+      this.instructions.push(['to_str'])
+      const str = ctx.IString[0].image
+      this.instructions.push(['lit', str.substring(1, str.length-1)])
+    } else if (ctx.IDate) {
+      this.instructions.push(['to_date'])
+      this.instructions.push(['lit', ctx.IDate[0].image])
+      this.instructions.push(['to_date'])
+    }
+
     this.instructions.push([
       'compare',
       ctx.IRelationalOperator[0].tokenType.INSTRUCTION
     ])
+  }
+
+  betweenExpression (ctx) {
+    if (ctx.betweenIntExpression) {
+      this.visit(ctx.betweenIntExpression)
+
+    }
+  }
+
+  betweenIntExpression (ctx) {
+    this.instructions.push(['load', ctx.Variable[0].image])
+
+    this.instructions.push(['to_int'])
+    ctx.IInteger.map((intNode) => {
+      this.instructions.push(['lit', parseInt(intNode.image)])
+    })
+
+    this.instructions.push(['compare', 'BETWEEN'])
   }
 }
 
