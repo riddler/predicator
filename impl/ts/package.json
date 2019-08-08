@@ -1,12 +1,13 @@
 {
   "name": "@riddler/predicator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Safe predicate engine",
   "main": "dist/predicator.js",
   "scripts": {
     "build": "parcel build src/predicator.js",
     "generate-tests": "node ./scripts/generate-tests.js",
     "lint": "eslint .",
+    "prepublish": "yarn test && yarn build",
     "test": "jest",
     "test:coverage": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
@@ -17,7 +18,7 @@
     "url": "git+https://github.com/riddler/predicator-js.git"
   },
   "files": [
-    "dist",
+    "dist/predicator.js",
     "LICENSE.txt",
     "README.md"
   ],
