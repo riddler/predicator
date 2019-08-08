@@ -41,8 +41,8 @@ class PredicatorEvaluator {
       case 'to_int': this.push(parseInt(this.pop())); break
       case 'to_date': this.push(this.toDate(this.pop())); break
       case 'to_str': this.push(this.toString(this.pop())); break
-      case 'date_ago': this.dateAgo(); break
-      case 'date_from_now': this.dateFromNow(); break
+      case 'date_ago': this.dateDiff(-1); break
+      case 'date_from_now': this.dateDiff(1); break
       case 'blank': this.push(this.isBlank(this.pop())); break
       case 'present': this.push(!this.isBlank(this.pop())); break
     }
@@ -60,16 +60,10 @@ class PredicatorEvaluator {
     return (new Date(val)).getTime()
   }
 
-  dateAgo () {
+  dateDiff (multiplier) {
     const seconds = parseInt(this.pop())
-    const pastTimestamp = Date.now() - (seconds * 1000)
+    const pastTimestamp = Date.now() + (seconds * multiplier * 1000)
     this.push(this.toDate(pastTimestamp))
-  }
-
-  dateFromNow () {
-    const seconds = parseInt(this.pop())
-    const futureTimestamp = Date.now() + (seconds * 1000)
-    this.push(this.toDate(futureTimestamp))
   }
 
   jumpIf (bool, offset) {

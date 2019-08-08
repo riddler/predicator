@@ -34,6 +34,7 @@ class PredicatorParser extends Parser {
         { ALT: () => $.SUBRULE($.paren) },
         { ALT: () => $.SUBRULE($.not) },
         { ALT: () => $.SUBRULE($.relationalExpression) },
+        { ALT: () => $.SUBRULE($.betweenExpression) },
         { ALT: () => $.CONSUME(t.Variable) },
         { ALT: () => $.CONSUME(t.IBoolean) }
       ])
@@ -53,7 +54,25 @@ class PredicatorParser extends Parser {
     $.RULE('relationalExpression', () => {
       $.CONSUME(t.Variable)
       $.CONSUME(t.IRelationalOperator)
-      $.CONSUME(t.DecimalInt)
+      $.OR([
+        { ALT: () => $.CONSUME(t.IDate) },
+        { ALT: () => $.CONSUME(t.IInteger) },
+        { ALT: () => $.CONSUME(t.IString) }
+      ])
+    })
+
+    $.RULE('betweenExpression', () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($.betweenIntExpression) }
+      ])
+    })
+
+    $.RULE('betweenIntExpression', () => {
+      $.CONSUME(t.Variable)
+      $.CONSUME(t.Between)
+      $.CONSUME(t.IInteger)
+      $.CONSUME(t.And)
+      $.CONSUME1(t.IInteger)
     })
 
     this.performSelfAnalysis()
