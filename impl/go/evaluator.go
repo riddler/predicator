@@ -2,7 +2,9 @@ package predicator
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
+	"time"
 )
 
 func NewEvaluator(instructions [][]interface{}, data map[string]interface{}) *Evaluator {
@@ -63,9 +65,11 @@ const (
 	InstructionPresent     = "present"
 	InstructionCompare     = "compare"
 
-	KeywordCompareBetween = "BETWEEN"
-	KeywordCompareEqual   = "EQ"
-	KeywordCompareInclude = "IN"
+	KeywordCompareBetween     = "BETWEEN"
+	KeywordCompareEqual       = "EQ"
+	KeywordCompareInclude     = "IN"
+	KeywordCompareGreaterThan = "GT"
+	KeywordCompareLessThan    = "LT"
 )
 
 var (
@@ -76,7 +80,7 @@ func (e *Evaluator) result() (output bool) {
 	defer func() {
 		r := recover()
 		if r != nil {
-			// fmt.Println("recovered: ", r)
+			fmt.Println("recovered: ", r)
 			output = false
 		}
 	}()
@@ -132,15 +136,31 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		e.stack.push(n)
 	case InstructionToString:
 	case InstructionToDate:
+		t, err := e.toDate(e.stack.pop())
+		if err != nil {
+			return ErrInvalidInstruction
+		}
+		e.stack.push(t)
 	case InstructionDateAgo:
+		n, ok := e.stack.pop().(int)
+		if !ok {
+			return ErrInvalidInstruction
+		}
+		e.stack.push(e.dateAgo(n))
 	case InstructionDateFromNow:
+		n, ok := e.stack.pop().(int)
+		if !ok {
+			return ErrInvalidInstruction
+		}
+		e.stack.push(e.dateFromNow(n))
 	case InstructionBlank:
 	case InstructionPresent:
 	case InstructionCompare:
-		if instruction[len(instruction)-1] == KeywordCompareBetween {
+		next := instruction[len(instruction)-1]
+		if next == KeywordCompareBetween {
 			// compare_between
 		} else {
-			v, ok := instruction[len(instruction)-1].(string)
+			v, ok := next.(string)
 			if !ok {
 				return ErrInvalidInstruction
 			}
@@ -175,7 +195,6 @@ func (e *Evaluator) jumpIfTrue(offset int) {
 func (e *Evaluator) compare(comparison string) {
 	right := e.stack.pop()
 	left := e.stack.pop()
-	// fmt.Println("comp", comparison, right, left)
 	if left == nil || right == nil {
 		e.stack.push(false)
 	} else {
@@ -184,6 +203,10 @@ func (e *Evaluator) compare(comparison string) {
 			e.stack.push(e.compareEquality(left, right))
 		case KeywordCompareInclude:
 			e.stack.push(e.compareInclude(left, right))
+		case KeywordCompareGreaterThan:
+			e.stack.push(e.compareGreaterThan(left, right))
+		case KeywordCompareLessThan:
+			e.stack.push(e.compareLessThan(left, right))
 		default:
 			e.stack.push(false)
 		}
@@ -191,6 +214,17 @@ func (e *Evaluator) compare(comparison string) {
 }
 
 func (e *Evaluator) compareEquality(left, right interface{}) bool {
+	leftTime, ok := left.(time.Time)
+	if ok {
+		rightParsed, ok := right.(string)
+		if ok {
+			rightTime, err := time.Parse("2006-01-02", rightParsed)
+			if err != nil {
+				return false
+			}
+			return leftTime.Equal(rightTime)
+		}
+	}
 	return left == right
 }
 
@@ -207,13 +241,29 @@ func (e *Evaluator) compareInclude(left, right interface{}) bool {
 	return false
 }
 
-// def to_int val
-// if val.nil? || (val.is_a?(String) && val.empty?)
-//   nil
-// else
-//   val.to_i
-// end
-// end
+func (e *Evaluator) compareGreaterThan(left, right interface{}) bool {
+	// handle dates
+	leftTime, ok := left.(time.Time)
+	if ok {
+		rightTime, ok := right.(time.Time)
+		if ok {
+			return leftTime.After(rightTime)
+		}
+	}
+	return false
+}
+
+func (e *Evaluator) compareLessThan(left, right interface{}) bool {
+	// handle dates
+	leftTime, ok := left.(time.Time)
+	if ok {
+		rightTime, ok := right.(time.Time)
+		if ok {
+			return leftTime.Before(rightTime)
+		}
+	}
+	return false
+}
 
 func (e *Evaluator) toInt(v interface{}) (int, error) {
 	n, ok := v.(int)
@@ -226,3 +276,30 @@ func (e *Evaluator) toInt(v interface{}) (int, error) {
 	}
 	return 0, ErrInvalidInstruction
 }
+
+func (e *Evaluator) toDate(v interface{}) (time.Time, error) {
+	t, ok := v.(time.Time)
+	if ok {
+		return t, nil
+	}
+	str, ok := v.(string)
+	if ok {
+		return time.Parse("2006-01-02", str)
+	}
+	return time.Time{}, ErrInvalidInstruction
+}
+
+func (e *Evaluator) dateAgo(n int) time.Time {
+	seconds := time.Duration(n << 9)
+	return time.Now().Add(-seconds).UTC()
+}
+
+func (e *Evaluator) dateFromNow(n int) time.Time {
+	seconds := time.Duration(n << 9)
+	return time.Now().Add(seconds).UTC()
+}
+
+// def date_ago seconds
+// past_time = Time.now - seconds
+// to_date past_time.strftime "%Y-%m-%d"
+// end

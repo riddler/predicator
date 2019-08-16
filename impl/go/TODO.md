@@ -1,3 +1,3 @@
 # TODOs
 
-- fix data issues (marshal like instructions)
+- have johnny review / manually test
