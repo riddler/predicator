@@ -1,6 +1,6 @@
 ---
 name: variable_eq_date
-instructions: [["load", "start_date"], ["to_date"], ["lit", "2017-09-10"], ["compare", "EQ"]]
+instructions: [["load", "start_date"], ["to_date"], ["lit", "2017-09-10"], ["to_date"], ["compare", "EQ"]]
 
 tests:
 - name: with_no_context

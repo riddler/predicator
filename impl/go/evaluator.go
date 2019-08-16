@@ -154,13 +154,14 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		}
 		e.stack.push(e.dateFromNow(n))
 	case InstructionBlank:
+		e.stack.push(e.isBlank(e.stack.pop()))
 	case InstructionPresent:
+		e.stack.push(!e.isBlank(e.stack.pop()))
 	case InstructionCompare:
-		next := instruction[len(instruction)-1]
-		if next == KeywordCompareBetween {
-			// compare_between
+		if instruction[len(instruction)-1] == KeywordCompareBetween {
+			e.compareBetween()
 		} else {
-			v, ok := next.(string)
+			v, ok := instruction[len(instruction)-1].(string)
 			if !ok {
 				return ErrInvalidInstruction
 			}
@@ -168,6 +169,14 @@ func (e *Evaluator) process(instruction []interface{}) error {
 		}
 	}
 	return nil
+}
+
+func (e *Evaluator) isBlank(val interface{}) bool {
+	if val == nil || val == "" {
+		return true
+	} else {
+		return false
+	}
 }
 
 func (e *Evaluator) jumpIfFalse(offset int) {
@@ -190,6 +199,31 @@ func (e *Evaluator) jumpIfTrue(offset int) {
 		}
 	}
 	e.stack.pop()
+}
+
+func (e *Evaluator) compareBetween() {
+	imax := e.stack.pop()
+	imin := e.stack.pop()
+	iv := e.stack.pop()
+	if iv == nil || imin == nil || imax == nil {
+		e.stack.push(false)
+	} else {
+		switch imax.(type) {
+		case int:
+			max, ok := imax.(int)
+			min, ok := imin.(int)
+			if !ok {
+				e.stack.push(false)
+				return
+			}
+			v, ok := iv.(int)
+			if !ok {
+				e.stack.push(false)
+				return
+			}
+			e.stack.push((v > min) && (v < max))
+		}
+	}
 }
 
 func (e *Evaluator) compare(comparison string) {

@@ -1,0 +1,22 @@
+---
+name: variable_is_blank
+instructions: [["load", "foo"], ["blank"]]
+
+tests:
+- name: with_no_context
+  result: true
+
+- name: with_blank_string
+  context:
+    foo: ""
+  result: true
+
+- name: with_int
+  context:
+    foo: 1
+  result: false
+
+- name: with_string
+  context:
+    foo: "bar"
+  result: false
