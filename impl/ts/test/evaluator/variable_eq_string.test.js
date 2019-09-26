@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates variable_eq_string with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -11,7 +10,6 @@ test('it evaluates variable_eq_string with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_blank_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -19,7 +17,6 @@ test('it evaluates variable_eq_string with_blank_string', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_correct_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -27,7 +24,6 @@ test('it evaluates variable_eq_string with_correct_string', () => {
   expect(evaluator.result()).toEqual(true);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_incorrect_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -35,7 +31,6 @@ test('it evaluates variable_eq_string with_incorrect_string', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_int', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -43,7 +38,6 @@ test('it evaluates variable_eq_string with_int', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_false', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],
@@ -51,7 +45,6 @@ test('it evaluates variable_eq_string with_false', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_string with_true', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan"],["to_str"],["lit","basic"],["compare","EQ"]],

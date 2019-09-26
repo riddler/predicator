@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates variable_gt_duration_ago with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit",259200],["date_ago"],["compare","GT"]],
@@ -11,7 +10,6 @@ test('it evaluates variable_gt_duration_ago with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_gt_duration_ago with_blank_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit",259200],["date_ago"],["compare","GT"]],
@@ -19,7 +17,6 @@ test('it evaluates variable_gt_duration_ago with_blank_date', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_gt_duration_ago with_future_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit",259200],["date_ago"],["compare","GT"]],
@@ -27,7 +24,6 @@ test('it evaluates variable_gt_duration_ago with_future_date', () => {
   expect(evaluator.result()).toEqual(true);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_gt_duration_ago with_past_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit",259200],["date_ago"],["compare","GT"]],

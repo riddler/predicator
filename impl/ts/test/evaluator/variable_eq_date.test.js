@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates variable_eq_date with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit","2017-09-10"],["to_date"],["compare","EQ"]],
@@ -11,7 +10,6 @@ test('it evaluates variable_eq_date with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_date with_blank_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit","2017-09-10"],["to_date"],["compare","EQ"]],
@@ -19,7 +17,6 @@ test('it evaluates variable_eq_date with_blank_string', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_date with_correct_date_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit","2017-09-10"],["to_date"],["compare","EQ"]],
@@ -27,7 +24,6 @@ test('it evaluates variable_eq_date with_correct_date_string', () => {
   expect(evaluator.result()).toEqual(true);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_eq_date with_incorrect_date_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","start_date"],["to_date"],["lit","2017-09-10"],["to_date"],["compare","EQ"]],

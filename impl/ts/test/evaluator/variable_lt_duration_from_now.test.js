@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates variable_lt_duration_from_now with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan_end_date"],["to_date"],["lit",259200],["date_from_now"],["compare","LT"]],
@@ -11,7 +10,6 @@ test('it evaluates variable_lt_duration_from_now with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_lt_duration_from_now with_blank_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan_end_date"],["to_date"],["lit",259200],["date_from_now"],["compare","LT"]],
@@ -19,7 +17,6 @@ test('it evaluates variable_lt_duration_from_now with_blank_date', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_lt_duration_from_now with_future_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan_end_date"],["to_date"],["lit",259200],["date_from_now"],["compare","LT"]],
@@ -27,7 +24,6 @@ test('it evaluates variable_lt_duration_from_now with_future_date', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_lt_duration_from_now with_past_date', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","plan_end_date"],["to_date"],["lit",259200],["date_from_now"],["compare","LT"]],

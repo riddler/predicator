@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates false with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["lit",false]],

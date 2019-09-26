@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates variable_is_present with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","foo"],["present"]],
@@ -11,7 +10,6 @@ test('it evaluates variable_is_present with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_is_present with_blank_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","foo"],["present"]],
@@ -19,7 +17,6 @@ test('it evaluates variable_is_present with_blank_string', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_is_present with_int', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","foo"],["present"]],
@@ -27,7 +24,6 @@ test('it evaluates variable_is_present with_int', () => {
   expect(evaluator.result()).toEqual(true);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates variable_is_present with_string', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","foo"],["present"]],

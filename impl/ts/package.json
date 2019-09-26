@@ -5,7 +5,6 @@
   "main": "dist/predicator.js",
   "scripts": {
     "build": "parcel build src/predicator.js",
-    "generate-tests": "node ./scripts/generate-tests.js",
     "lint": "eslint .",
     "prepublish": "yarn test && yarn build",
     "test": "jest",

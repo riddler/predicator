@@ -3,7 +3,6 @@
 
 const { PredicatorEvaluator } = require('../../src/predicator')
 
-
 test('it evaluates load_boolean with_no_context', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","bool_var"],["to_bool"]],
@@ -11,7 +10,6 @@ test('it evaluates load_boolean with_no_context', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates load_boolean with_false', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","bool_var"],["to_bool"]],
@@ -19,7 +17,6 @@ test('it evaluates load_boolean with_false', () => {
   expect(evaluator.result()).toEqual(false);
   expect(evaluator.stack).toEqual([]);
 })
-
 test('it evaluates load_boolean with_true', () => {
   const evaluator = new PredicatorEvaluator(
     [["load","bool_var"],["to_bool"]],
