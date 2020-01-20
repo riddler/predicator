@@ -22,22 +22,31 @@ class PredicatorParser extends Parser {
     })
 
     $.RULE('and', () => {
-      $.SUBRULE($.atomic)
+      $.SUBRULE($.operand)
       $.MANY(() => {
         $.CONSUME(t.And)
         $.SUBRULE2($.predicate)
       })
     })
 
-    $.RULE('atomic', () => {
+    // An Operand is the basic value of an expression - it may be a literal or a variable
+    $.RULE('operand', () => {
       $.OR([
         { ALT: () => $.SUBRULE($.paren) },
         { ALT: () => $.SUBRULE($.not) },
-        { ALT: () => $.SUBRULE($.relationalExpression) },
-        { ALT: () => $.SUBRULE($.betweenExpression) },
-        { ALT: () => $.CONSUME(t.Variable) },
+        // { ALT: () => $.SUBRULE($.relationalExpression) },
+        // { ALT: () => $.SUBRULE($.betweenExpression) },
+        { ALT: () => $.SUBRULE($.variable) },
         { ALT: () => $.CONSUME(t.IBoolean) }
       ])
+    })
+
+    $.RULE('variable', () => {
+      $.CONSUME(t.Variable)
+      $.OPTION(() => {
+        $.CONSUME(t.ColonColon)
+        $.CONSUME(t.IType)
+      });
     })
 
     $.RULE('paren', () => {
@@ -47,33 +56,33 @@ class PredicatorParser extends Parser {
     })
 
     $.RULE('not', () => {
-      $.CONSUME(t.Bang)
+      $.CONSUME(t.Exclamation)
       $.SUBRULE($.predicate)
     })
 
-    $.RULE('relationalExpression', () => {
-      $.CONSUME(t.Variable)
-      $.CONSUME(t.IRelationalOperator)
-      $.OR([
-        { ALT: () => $.CONSUME(t.IDate) },
-        { ALT: () => $.CONSUME(t.IInteger) },
-        { ALT: () => $.CONSUME(t.IString) }
-      ])
-    })
+    // $.RULE('relationalExpression', () => {
+    //   $.CONSUME(t.Variable)
+    //   $.CONSUME(t.IRelationalOperator)
+    //   $.OR([
+    //     { ALT: () => $.CONSUME(t.IDate) },
+    //     { ALT: () => $.CONSUME(t.IInteger) },
+    //     { ALT: () => $.CONSUME(t.IString) }
+    //   ])
+    // })
 
-    $.RULE('betweenExpression', () => {
-      $.OR([
-        { ALT: () => $.SUBRULE($.betweenIntExpression) }
-      ])
-    })
+    // $.RULE('betweenExpression', () => {
+    //   $.OR([
+    //     { ALT: () => $.SUBRULE($.betweenIntExpression) }
+    //   ])
+    // })
 
-    $.RULE('betweenIntExpression', () => {
-      $.CONSUME(t.Variable)
-      $.CONSUME(t.Between)
-      $.CONSUME(t.IInteger)
-      $.CONSUME(t.And)
-      $.CONSUME1(t.IInteger)
-    })
+    // $.RULE('betweenIntExpression', () => {
+    //   $.CONSUME(t.Variable)
+    //   $.CONSUME(t.Between)
+    //   $.CONSUME(t.IInteger)
+    //   $.CONSUME(t.And)
+    //   $.CONSUME1(t.IInteger)
+    // })
 
     this.performSelfAnalysis()
   }

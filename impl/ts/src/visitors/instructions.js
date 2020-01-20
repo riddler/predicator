@@ -22,9 +22,9 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
   }
 
 
-  comparisonForOperator (text) {
-    return this.relationalOperators[text]
-  }
+  // comparisonForOperator (text) {
+  //   return this.relationalOperators[text]
+  // }
 
   jumpLabel () {
     return [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
@@ -76,7 +76,7 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
   }
 
   and (ctx) {
-    this.visit(ctx.atomic)
+    this.visit(ctx.operand)
 
     if (ctx.predicate) {
       const label = this.jumpLabel()
@@ -90,66 +90,81 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     }
   }
 
-  atomic (ctx) {
+  operand (ctx) {
     if (ctx.paren) {
       this.visit(ctx.paren)
 
     } else if (ctx.not) {
       this.visit(ctx.not)
 
-    } else if (ctx.relationalExpression) {
-      this.visit(ctx.relationalExpression)
+    // } else if (ctx.relationalExpression) {
+    //   this.visit(ctx.relationalExpression)
 
-    } else if (ctx.betweenExpression) {
-      this.visit(ctx.betweenExpression)
+    // } else if (ctx.betweenExpression) {
+    //   this.visit(ctx.betweenExpression)
 
     } else if (ctx.IBoolean) {
       this.instructions.push([
         'lit',
-        ctx.IBoolean[0].tokenType.INSTRUCTION
+        ctx.IBoolean[0].image.toLowerCase() === 'true'
       ])
+    } else if (ctx.variable) {
+      this.visit(ctx.variable)
+      const previousInstruction = this.instructions[this.instructions.length-1]
+
+      if (previousInstruction[0] !== 'to_bool') {
+        this.instructions.push(['to_bool'])
+      }
     }
   }
 
-  relationalExpression (ctx) {
+  variable (ctx) {
     this.instructions.push(['load', ctx.Variable[0].image])
-
-    if (ctx.IInteger) {
-      this.instructions.push(['to_int'])
-      this.instructions.push(['lit', parseInt(ctx.IInteger[0].image)])
-    } else if (ctx.IString) {
-      this.instructions.push(['to_str'])
-      const str = ctx.IString[0].image
-      this.instructions.push(['lit', str.substring(1, str.length-1)])
-    } else if (ctx.IDate) {
-      this.instructions.push(['to_date'])
-      this.instructions.push(['lit', ctx.IDate[0].image])
-      this.instructions.push(['to_date'])
-    }
-
-    this.instructions.push([
-      'compare',
-      ctx.IRelationalOperator[0].tokenType.INSTRUCTION
-    ])
-  }
-
-  betweenExpression (ctx) {
-    if (ctx.betweenIntExpression) {
-      this.visit(ctx.betweenIntExpression)
-
+    if (ctx.TypeCast) {
+      const operation = 'to_' + ctx.IType[0].image
+      this.instructions.push([operation])
     }
   }
 
-  betweenIntExpression (ctx) {
-    this.instructions.push(['load', ctx.Variable[0].image])
+  // relationalExpression (ctx) {
+  //   this.instructions.push(['load', ctx.Variable[0].image])
 
-    this.instructions.push(['to_int'])
-    ctx.IInteger.map((intNode) => {
-      this.instructions.push(['lit', parseInt(intNode.image)])
-    })
+  //   if (ctx.IInteger) {
+  //     this.instructions.push(['to_int'])
+  //     this.instructions.push(['lit', parseInt(ctx.IInteger[0].image)])
+  //   } else if (ctx.IString) {
+  //     this.instructions.push(['to_str'])
+  //     const str = ctx.IString[0].image
+  //     this.instructions.push(['lit', str.substring(1, str.length-1)])
+  //   } else if (ctx.IDate) {
+  //     this.instructions.push(['to_date'])
+  //     this.instructions.push(['lit', ctx.IDate[0].image])
+  //     this.instructions.push(['to_date'])
+  //   }
 
-    this.instructions.push(['compare', 'BETWEEN'])
-  }
+  //   this.instructions.push([
+  //     'compare',
+  //     ctx.IRelationalOperator[0].tokenType.INSTRUCTION
+  //   ])
+  // }
+
+  // betweenExpression (ctx) {
+  //   if (ctx.betweenIntExpression) {
+  //     this.visit(ctx.betweenIntExpression)
+
+  //   }
+  // }
+
+  // betweenIntExpression (ctx) {
+  //   this.instructions.push(['load', ctx.Variable[0].image])
+
+  //   this.instructions.push(['to_int'])
+  //   ctx.IInteger.map((intNode) => {
+  //     this.instructions.push(['lit', parseInt(intNode.image)])
+  //   })
+
+  //   this.instructions.push(['compare', 'BETWEEN'])
+  // }
 }
 
 const toInstructionsVisitor = new PredicatorInstructionsVisitor()
