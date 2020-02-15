@@ -59,18 +59,52 @@ class PredicatorParser extends Parser {
       })
     })
 
-        // { ALT: () => $.SUBRULE($.paren) },
-        // { ALT: () => $.SUBRULE($.not) },
-        // { ALT: () => $.SUBRULE($.relationalExpression) },
-        // // { ALT: () => $.SUBRULE($.betweenExpression) },
-
     // A BooleanOperand is the basic value of a BooleanExpression
     $.RULE('booleanOperand', () => {
       $.OR([
+        { ALT: () => $.SUBRULE($.relationalExpression) },
         { ALT: () => $.SUBRULE($.variable) },
         { ALT: () => $.CONSUME(t.IBoolean) },
         { ALT: () => $.SUBRULE($.booleanNot) },
         { ALT: () => $.SUBRULE($.booleanGroup) }
+      ])
+    })
+
+    $.RULE('relationalExpression', () => {
+      $.SUBRULE($.expression)
+      $.CONSUME(t.ISetOperator)
+      // $.OR([
+      //   { ALT: () => $.CONSUME(t.IRelationalOperator) },
+      //   { ALT: () => $.CONSUME(t.ISetOperator) },
+      //   { ALT: () => $.CONSUME(t.IMatchesOperator) }
+      // ])
+      $.SUBRULE1($.expression)
+    })
+
+    // $.RULE('matchesExpression', () => {
+    //   $.SUBRULE($.expression)
+    //   $.CONSUME(t.IMatchesOperator)
+    //   $.SUBRULE1($.expression)
+    // })
+
+    // $.RULE('setExpression', () => {
+    //   $.SUBRULE($.expression)
+    //   $.CONSUME(t.ISetOperator)
+    //   $.SUBRULE1($.expression)
+    // })
+
+    $.RULE('expression', () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($.operand) },
+        { ALT: () => $.SUBRULE($.list) }
+      ])
+    })
+
+    $.RULE('operand', () => {
+      $.OR([
+        { ALT: () => $.SUBRULE($.variable) },
+        { ALT: () => $.CONSUME(t.IInteger) },
+        { ALT: () => $.CONSUME(t.IString) }
       ])
     })
 
@@ -80,6 +114,18 @@ class PredicatorParser extends Parser {
         $.CONSUME(t.ColonColon)
         $.CONSUME(t.IDataType)
       });
+    })
+
+    $.RULE("list", () => {
+      $.CONSUME(t.LSquare)
+      $.AT_LEAST_ONE(() => {
+        $.SUBRULE($.operand)
+      })
+
+      // $.MANY(() => {
+      //   $.SUBRULE($.operand)
+      // })
+      $.CONSUME(t.RSquare)
     })
 
     $.RULE('booleanNot', () => {

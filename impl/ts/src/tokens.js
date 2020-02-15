@@ -29,26 +29,26 @@ const createNamedToken = function(config) {
 
 createToken({
   name: "WhiteSpace",
-  pattern: /[ \t]+/,
-  group: Lexer.SKIPPED
+  group: Lexer.SKIPPED,
+  pattern: /[ \t]+/
 })
 
 createToken({
   name: "LineTerminator",
-  pattern: /\n\r|\r|\n/,
-  group: Lexer.SKIPPED
+  group: Lexer.SKIPPED,
+  pattern: /\n\r|\r|\n/
 })
 
 createToken({
   name: "Comment",
-  pattern: /#[^\n\r]*/,
-  group: Lexer.SKIPPED
+  group: Lexer.SKIPPED,
+  pattern: /#[^\n\r]*/
 })
 
 createToken({
   name: "Comma",
-  pattern: ",",
-  group: Lexer.SKIPPED
+  // group: Lexer.SKIPPED,
+  pattern: ","
 })
 
 
@@ -61,23 +61,38 @@ const IBinaryOperator = createToken({ name: 'IBinaryOperator', pattern: Lexer.NA
 const ILogicalOperator = createToken({ name: 'ILogicalOperator', pattern: Lexer.NA })
 const ISetOperator = createToken({ name: 'ISetOperator', pattern: Lexer.NA })
 const IRelationalOperator = createToken({ name: 'IRelationalOperator', pattern: Lexer.NA })
+const IMatchesOperator = createToken({ name: 'IMatchesOperator', pattern: Lexer.NA })
+
+const IInteger = createToken({ name: 'IInteger', pattern: Lexer.NA })
+createToken({ name: 'DecimalInt', pattern: /-?(0|[1-9]\d*)/, categories: [IInteger] })
+
+const IString = createToken({ name: 'IString', pattern: Lexer.NA })
+createToken({
+  name: 'String',
+  pattern: /(["'])[^]*?\1/,
+  categories: [IString]
+})
+
+
 
 //-----
 //-----[ Lexical Tokens ]----------------------------------------
 //-----
 
 // Punctuation
-createToken({ name: "Exclamation", pattern: "!", categories: [IUnaryOperator] })
 createToken({ name: "LParen", pattern: "(" })
 createToken({ name: "RParen", pattern: ")" })
+createToken({ name: "LSquare", pattern: "[" })
+createToken({ name: "RSquare", pattern: "]" })
 createToken({ name: "Dot", pattern: "." })
 createToken({ name: "ColonColon", pattern: /::/ })
-// createToken({ name: "Equal", pattern: "=" })
-// createToken({ name: "NotEqual", pattern: "!=" })
-// createToken({ name: "GT", pattern: ">" })
-// createToken({ name: "GTE", pattern: ">=" })
-// createToken({ name: "LT", pattern: "<" })
-// createToken({ name: "LTE", pattern: "<=" })
+createToken({ name: "Equal", pattern: "=", categories: [IRelationalOperator] })
+createToken({ name: "NotEqual", pattern: "!=", categories: [IRelationalOperator] })
+createToken({ name: "GTE", pattern: ">=", categories: [IRelationalOperator] })
+createToken({ name: "GT", pattern: ">", categories: [IRelationalOperator] })
+createToken({ name: "LTE", pattern: "<=", categories: [IRelationalOperator] })
+createToken({ name: "LT", pattern: "<", categories: [IRelationalOperator] })
+createToken({ name: "Exclamation", pattern: "!", categories: [IUnaryOperator] })
 
 // Identifiers (Variables) and Keywords
 // We need to create the Identifier, but can not add it to the Token list
@@ -108,15 +123,35 @@ createNamedToken({ name: 'Bool', pattern: /bool/, categories: [IDataType] })
 // Operators and other special tokens
 createNamedToken({ name: 'Or', pattern: /or/, categories: [IBinaryOperator, ILogicalOperator] })
 createNamedToken({ name: 'And', pattern: /and/, categories: [IBinaryOperator, ILogicalOperator] })
-createNamedToken({ name: 'Contains', pattern: /contains/, categories: [IBinaryOperator, ISetOperator] })
-createNamedToken({ name: 'In', pattern: /in/, categories: [IBinaryOperator, ISetOperator] })
+
+const Contains = createNamedToken({ name: 'Contains', pattern: /contains/, categories: [IBinaryOperator, ISetOperator] })
+Contains.INSTRUCTION = "contains"
+const NotContains = createNamedToken({ name: 'NotContains', pattern: /not\s+contains/, categories: [IBinaryOperator, ISetOperator] })
+NotContains.INSTRUCTION = "not_contains"
+
+const In = createNamedToken({ name: 'In', pattern: /in/, categories: [IBinaryOperator, ISetOperator] })
+In.INSTRUCTION = "in"
+const NotIn = createNamedToken({ name: 'NotIn', pattern: /not\s+in/, categories: [IBinaryOperator, ISetOperator] })
+NotIn.INSTRUCTION = "not_in"
+
+const IsNot = createNamedToken({ name: 'IsNot', pattern: /is\s+not/, categories: [IBinaryOperator, IRelationalOperator] })
+IsNot.COMPARISON = "!="
+const Is = createNamedToken({ name: 'Is', pattern: /is/, categories: [IBinaryOperator, IRelationalOperator] })
+Is.COMPARISON = "="
+
+const Matches = createNamedToken({ name: 'Matches', pattern: /matches/, categories: [IMatchesOperator] })
+Matches.INSTRUCTION = "matches"
+const NotMatches = createNamedToken({ name: 'NotMatches', pattern: /not\s+matches/, categories: [IMatchesOperator] })
+NotMatches.INSTRUCTION = "not_matches"
 
 createNamedToken({ name: 'Not', pattern: /not/, categories: [IUnaryOperator] })
-createNamedToken({ name: 'IsNot', pattern: /is\s+not/, categories: [IBinaryOperator, IRelationalOperator] })
-createNamedToken({ name: 'Is', pattern: /is/, categories: [IBinaryOperator, IRelationalOperator] })
-createNamedToken({ name: 'Matches', pattern: /matches/, categories: [IBinaryOperator, IRelationalOperator] })
-createNamedToken({ name: 'NotMatches', pattern: /not\s+matches/, categories: [IBinaryOperator, IRelationalOperator] })
 
+// EQ.INSTRUCTION = 'EQ'
+// NEQ.INSTRUCTION = 'NEQ'
+// GT.INSTRUCTION = 'GT'
+// GTE.INSTRUCTION = 'GTE'
+// LT.INSTRUCTION = 'LT'
+// LTE.INSTRUCTION = 'LTE'
 
 
 
@@ -168,8 +203,6 @@ addToken(Variable)
 // const Colon = createToken({ name: "Colon", pattern: ":" })
 // const Equals = createToken({ name: "Equals", pattern: "=" })
 // const At = createToken({ name: "At", pattern: "@" })
-// const LSquare = createToken({ name: "LSquare", pattern: "[" })
-// const RSquare = createToken({ name: "RSquare", pattern: "]" })
 // const LCurly = createToken({ name: "LCurly", pattern: "{" })
 // const VerticalLine = createToken({ name: "VerticalLine", pattern: "|" })
 // const RCurly = createToken({ name: "RCurly", pattern: "}" })
@@ -254,12 +287,6 @@ addToken(Variable)
 // })
 
 
-// const IString = createAndAddToken({ name: 'IString', pattern: Lexer.NA })
-// createAndAddToken({
-//   name: 'String',
-//   pattern: /(["'])([^\1]*)\1/,
-//   categories: [IString]
-// })
 
 // // Labels only affect error messages and Diagrams.
 // Bang.LABEL = "'!'"

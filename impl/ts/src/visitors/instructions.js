@@ -63,8 +63,9 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     } else if (ctx.booleanNot) {
       this.visit(ctx.booleanNot)
 
-    // } else if (ctx.relationalExpression) {
-    //   this.visit(ctx.relationalExpression)
+    } else if (ctx.relationalExpression) {
+      this.visit(ctx.relationalExpression)
+
 
     // } else if (ctx.betweenExpression) {
     //   this.visit(ctx.betweenExpression)
@@ -92,9 +93,85 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     }
   }
 
-  // comparisonForOperator (text) {
-  //   return this.relationalOperators[text]
+  // matchesExpression (ctx) {
+  //   ctx.expression.forEach((expression, idx) => {
+  //     this.visit(expression)
+  //   })
+
+  //   this.instructions.push([ctx.IMatchesOperator[0].tokenType.INSTRUCTION])
   // }
+
+  // setExpression (ctx) {
+  //   ctx.expression.forEach((expression, idx) => {
+  //     this.visit(expression)
+  //   })
+
+  //   this.instructions.push([ctx.ISetOperator[0].tokenType.INSTRUCTION])
+  // }
+
+  relationalExpression (ctx) {
+    ctx.expression.forEach((expression, idx) => {
+      this.visit(expression)
+    })
+
+    console.log("relationalExpression", ctx.expression[0].children)
+    if (ctx.IRelationalOperator) {
+      this.instructions.push([
+        'compare',
+        this.comparisonForOperator(ctx.IRelationalOperator[0])
+      ])
+
+    } else if (ctx.IMatchesOperator) {
+      this.instructions.push([ctx.IMatchesOperator[0].tokenType.INSTRUCTION])
+
+    } else if (ctx.ISetOperator) {
+      this.instructions.push([ctx.ISetOperator[0].tokenType.INSTRUCTION])
+    }
+  }
+
+  expression (ctx) {
+    if (ctx.operand) {
+      this.visit(ctx.operand)
+    } else if (ctx.list) {
+      this.visit(ctx.list)
+    }
+  }
+
+  list (ctx) {
+    const array = []
+    ctx.operand.forEach((operand, idx) => {
+      console.log("list", operand.children)
+      array.push(this.extractOperandValue(operand.children))
+    })
+    this.instructions.push(['lit', array])
+  }
+
+  operand (ctx) {
+    this.instructions.push(['lit', this.extractOperandValue(ctx)])
+  }
+
+  extractOperandValue (ctx) {
+    console.log("extractOperandValue",ctx)
+    if (ctx.IInteger) {
+      return parseInt(ctx.IInteger[0].image)
+
+    } else if (ctx.IString) {
+      const str = ctx.IString[0].image
+      return str.substring(1, str.length-1)
+    // } else if (ctx.IDate) {
+    //   this.instructions.push(['to_date'])
+    //   this.instructions.push(['lit', ctx.IDate[0].image])
+    //   this.instructions.push(['to_date'])
+    }
+  }
+
+  comparisonForOperator (operator) {
+    if (operator.COMPARISON) {
+      return operator.COMPARISON
+    }
+
+    return operator.image
+  }
 
   jumpLabel () {
     return [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
@@ -102,7 +179,7 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
 
   updateJumps () {
     this.instructions.forEach((instruction, index) => {
-      if (instruction[0].startsWith('j')) {
+      if (instruction[0] && instruction[0].startsWith('j')) {
         var label = instruction.pop()
         var offset = this.calculateOffset(index, this.labelLocations[label])
         instruction.push(offset)
@@ -128,27 +205,6 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
 
 
 
-  // relationalExpression (ctx) {
-  //   this.instructions.push(['load', ctx.Variable[0].image])
-
-  //   if (ctx.IInteger) {
-  //     this.instructions.push(['to_int'])
-  //     this.instructions.push(['lit', parseInt(ctx.IInteger[0].image)])
-  //   } else if (ctx.IString) {
-  //     this.instructions.push(['to_str'])
-  //     const str = ctx.IString[0].image
-  //     this.instructions.push(['lit', str.substring(1, str.length-1)])
-  //   } else if (ctx.IDate) {
-  //     this.instructions.push(['to_date'])
-  //     this.instructions.push(['lit', ctx.IDate[0].image])
-  //     this.instructions.push(['to_date'])
-  //   }
-
-  //   this.instructions.push([
-  //     'compare',
-  //     ctx.IRelationalOperator[0].tokenType.INSTRUCTION
-  //   ])
-  // }
 
   // betweenExpression (ctx) {
   //   if (ctx.betweenIntExpression) {
