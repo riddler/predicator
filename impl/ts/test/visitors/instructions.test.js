@@ -12,8 +12,11 @@ test('it compiles false', () => {
 test('it compiles group', () => {
   expect(compile(`(true)`)).toEqual([["lit",true]])
 })
-test('it compiles not', () => {
+test('it compiles not_exclaimation', () => {
   expect(compile(`!true`)).toEqual([["lit",true],["not"]])
+})
+test('it compiles not', () => {
+  expect(compile(`not true`)).toEqual([["lit",true],["not"]])
 })
 test('it compiles or', () => {
   expect(compile(`true or true`)).toEqual([["lit",true],["jtrue",2],["lit",true]])

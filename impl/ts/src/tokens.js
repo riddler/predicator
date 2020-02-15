@@ -1,7 +1,6 @@
 const { createToken: buildToken, Lexer } = require('chevrotain')
 
 const allTokens = []
-const keywordTokens = []
 const tokensDictionary = {}
 
 function addToken (token) {
@@ -15,11 +14,11 @@ const createToken = function() {
   return newToken
 }
 
-const createKeywordToken = function(config) {
+// Create a token that may conflict with an indentifier
+const createNamedToken = function(config) {
   config.longer_alt = Variable
   const newToken = createToken(config)
-  keywordTokens.push(newToken)
-  newToken.CATEGORIES.push(Keyword)
+  // newToken.CATEGORIES.push(Keyword)
   return newToken
 }
 
@@ -52,16 +51,33 @@ createToken({
   group: Lexer.SKIPPED
 })
 
+
+// const Keyword = createToken({ name: "Keyword", pattern: Lexer.NA })
+// const ILiteral = createToken({ name: "Literal", pattern: Lexer.NA })
+const IBoolean = createToken({ name: 'IBoolean', pattern: Lexer.NA })
+const IDataType = createToken({ name: 'IDataType', pattern: Lexer.NA })
+const IUnaryOperator = createToken({ name: 'IUnaryOperator', pattern: Lexer.NA })
+const IBinaryOperator = createToken({ name: 'IBinaryOperator', pattern: Lexer.NA })
+const ILogicalOperator = createToken({ name: 'ILogicalOperator', pattern: Lexer.NA })
+const ISetOperator = createToken({ name: 'ISetOperator', pattern: Lexer.NA })
+const IRelationalOperator = createToken({ name: 'IRelationalOperator', pattern: Lexer.NA })
+
 //-----
 //-----[ Lexical Tokens ]----------------------------------------
 //-----
 
 // Punctuation
-createToken({ name: "Exclamation", pattern: "!" })
+createToken({ name: "Exclamation", pattern: "!", categories: [IUnaryOperator] })
 createToken({ name: "LParen", pattern: "(" })
 createToken({ name: "RParen", pattern: ")" })
 createToken({ name: "Dot", pattern: "." })
 createToken({ name: "ColonColon", pattern: /::/ })
+// createToken({ name: "Equal", pattern: "=" })
+// createToken({ name: "NotEqual", pattern: "!=" })
+// createToken({ name: "GT", pattern: ">" })
+// createToken({ name: "GTE", pattern: ">=" })
+// createToken({ name: "LT", pattern: "<" })
+// createToken({ name: "LTE", pattern: "<=" })
 
 // Identifiers (Variables) and Keywords
 // We need to create the Identifier, but can not add it to the Token list
@@ -78,66 +94,73 @@ const Variable = buildToken({
   pattern: /[a-z][_0-9A-Za-z]*(?:\.[a-z][_0-9A-Za-z]*)*/
 })
 
-const Keyword = createToken({ name: "Keyword", pattern: Lexer.NA })
-
-// const ILiteral = createToken({ name: "Literal", pattern: Lexer.NA })
-
-const IBoolean = createToken({ name: 'IBoolean', pattern: Lexer.NA })
-
-const IType = createToken({ name: 'IType', pattern: Lexer.NA })
 
 // Constant Literals
-createKeywordToken({ name: "True", pattern: "true", categories: [IBoolean] })
-createKeywordToken({ name: "False", pattern: "false", categories: [IBoolean] })
-createKeywordToken({ name: "Null", pattern: "null" })
-createKeywordToken({ name: "Undefined", pattern: "undefined" })
+createNamedToken({ name: "True", pattern: "true", categories: [IBoolean] })
+createNamedToken({ name: "False", pattern: "false", categories: [IBoolean] })
+createNamedToken({ name: "Null", pattern: "null" })
+createNamedToken({ name: "Undefined", pattern: "undefined" })
 
 // Keywords
-createKeywordToken({ name: 'Bool', pattern: /bool/, categories: [IType] })
-createKeywordToken({ name: 'Or', pattern: /or/ })
-createKeywordToken({ name: 'And', pattern: /and/ })
+createNamedToken({ name: 'Bool', pattern: /bool/, categories: [IDataType] })
+
+
+// Operators and other special tokens
+createNamedToken({ name: 'Or', pattern: /or/, categories: [IBinaryOperator, ILogicalOperator] })
+createNamedToken({ name: 'And', pattern: /and/, categories: [IBinaryOperator, ILogicalOperator] })
+createNamedToken({ name: 'Contains', pattern: /contains/, categories: [IBinaryOperator, ISetOperator] })
+createNamedToken({ name: 'In', pattern: /in/, categories: [IBinaryOperator, ISetOperator] })
+
+createNamedToken({ name: 'Not', pattern: /not/, categories: [IUnaryOperator] })
+createNamedToken({ name: 'IsNot', pattern: /is\s+not/, categories: [IBinaryOperator, IRelationalOperator] })
+createNamedToken({ name: 'Is', pattern: /is/, categories: [IBinaryOperator, IRelationalOperator] })
+createNamedToken({ name: 'Matches', pattern: /matches/, categories: [IBinaryOperator, IRelationalOperator] })
+createNamedToken({ name: 'NotMatches', pattern: /not\s+matches/, categories: [IBinaryOperator, IRelationalOperator] })
+
+
+
 
 // Now that all the keywords have been defined, manually add the Variable
 addToken(Variable)
 
 
 
-// const Query = createKeywordToken({ name: "Query", pattern: "query" })
-// const Mutation = createKeywordToken({
+// const Query = createNamedToken({ name: "Query", pattern: "query" })
+// const Mutation = createNamedToken({
 //   name: "Mutation",
 //   pattern: "mutation"
 // })
-// const Subscription = createKeywordToken({
+// const Subscription = createNamedToken({
 //   name: "Subscription",
 //   pattern: "subscription"
 // })
-// const Fragment = createKeywordToken({
+// const Fragment = createNamedToken({
 //   name: "Fragment",
 //   pattern: "fragment"
 // })
-// const On = createKeywordToken({ name: "On", pattern: "on" })
-// const True = createKeywordToken({ name: "True", pattern: "true" })
-// const False = createKeywordToken({ name: "False", pattern: "false" })
-// const Null = createKeywordToken({ name: "Null", pattern: "null" })
-// const Schema = createKeywordToken({ name: "Schema", pattern: "schema" })
-// const Extend = createKeywordToken({ name: "Extend", pattern: "extend" })
-// const Scalar = createKeywordToken({ name: "Scalar", pattern: "scalar" })
-// const Implements = createKeywordToken({
+// const On = createNamedToken({ name: "On", pattern: "on" })
+// const True = createNamedToken({ name: "True", pattern: "true" })
+// const False = createNamedToken({ name: "False", pattern: "false" })
+// const Null = createNamedToken({ name: "Null", pattern: "null" })
+// const Schema = createNamedToken({ name: "Schema", pattern: "schema" })
+// const Extend = createNamedToken({ name: "Extend", pattern: "extend" })
+// const Scalar = createNamedToken({ name: "Scalar", pattern: "scalar" })
+// const Implements = createNamedToken({
 //   name: "Implements",
 //   pattern: "implements"
 // })
-// const Interface = createKeywordToken({
+// const Interface = createNamedToken({
 //   name: "Interface",
 //   pattern: "interface"
 // })
-// const Union = createKeywordToken({ name: "Union", pattern: "Union" })
-// const Enum = createKeywordToken({ name: "Enum", pattern: "enum" })
-// const Input = createKeywordToken({ name: "Input", pattern: "Input" })
-// const DirectiveTok = createKeywordToken({
+// const Union = createNamedToken({ name: "Union", pattern: "Union" })
+// const Enum = createNamedToken({ name: "Enum", pattern: "enum" })
+// const Input = createNamedToken({ name: "Input", pattern: "Input" })
+// const DirectiveTok = createNamedToken({
 //   name: "DirectiveTok",
 //   pattern: "directive"
 // })
-// const TypeTok = createKeywordToken({ name: "TypeTok", pattern: "type" })
+// const TypeTok = createNamedToken({ name: "TypeTok", pattern: "type" })
 
 
 

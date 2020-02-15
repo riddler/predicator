@@ -21,6 +21,76 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     return this.instructions
   }
 
+  booleanNot (ctx) {
+    this.visit(ctx.booleanExpression)
+    this.instructions.push(['not'])
+  }
+
+  orExpression (ctx) {
+    this.visit(ctx.andExpression)
+
+    if (ctx.booleanExpression) {
+      const label = this.jumpLabel()
+
+      ctx.booleanExpression.forEach((booleanExpression, idx) => {
+        this.instructions.push(['jtrue', label])
+        this.visit(booleanExpression)
+      })
+
+      this.addLabel(label)
+    }
+  }
+
+  andExpression (ctx) {
+    this.visit(ctx.booleanOperand)
+
+    if (ctx.booleanExpression) {
+      const label = this.jumpLabel()
+
+      ctx.booleanExpression.forEach((booleanExpression, idx) => {
+        this.instructions.push(['jfalse', label])
+        this.visit(booleanExpression)
+      })
+
+      this.addLabel(label)
+    }
+  }
+
+  booleanOperand (ctx) {
+    if (ctx.booleanGroup) {
+      this.visit(ctx.booleanGroup)
+
+    } else if (ctx.booleanNot) {
+      this.visit(ctx.booleanNot)
+
+    // } else if (ctx.relationalExpression) {
+    //   this.visit(ctx.relationalExpression)
+
+    // } else if (ctx.betweenExpression) {
+    //   this.visit(ctx.betweenExpression)
+
+    } else if (ctx.IBoolean) {
+      this.instructions.push([
+        'lit',
+        ctx.IBoolean[0].image.toLowerCase() === 'true'
+      ])
+    } else if (ctx.variable) {
+      this.visit(ctx.variable)
+
+      const previousInstruction = this.instructions[this.instructions.length-1]
+      if (previousInstruction[0] !== 'to_bool') {
+        this.instructions.push(['to_bool'])
+      }
+    }
+  }
+
+  variable (ctx) {
+    this.instructions.push(['load', ctx.Variable[0].image])
+    if (ctx.TypeCast) {
+      const operation = 'to_' + ctx.IDataType[0].image.toLowerCase
+      this.instructions.push([operation])
+    }
+  }
 
   // comparisonForOperator (text) {
   //   return this.relationalOperators[text]
@@ -55,76 +125,8 @@ class PredicatorInstructionsVisitor extends BasePredicatorCstVisitorWithDefaults
     this.instructions.push(['label', label])
   }
 
-  not (ctx) {
-    this.visit(ctx.predicate)
-    this.instructions.push(['not'])
-  }
 
-  or (ctx) {
-    this.visit(ctx.and)
 
-    if (ctx.predicate) {
-      const label = this.jumpLabel()
-
-      ctx.predicate.forEach((predicate, idx) => {
-        this.instructions.push(['jtrue', label])
-        this.visit(predicate)
-      })
-
-      this.addLabel(label)
-    }
-  }
-
-  and (ctx) {
-    this.visit(ctx.operand)
-
-    if (ctx.predicate) {
-      const label = this.jumpLabel()
-
-      ctx.predicate.forEach((predicate, idx) => {
-        this.instructions.push(['jfalse', label])
-        this.visit(predicate)
-      })
-
-      this.addLabel(label)
-    }
-  }
-
-  operand (ctx) {
-    if (ctx.paren) {
-      this.visit(ctx.paren)
-
-    } else if (ctx.not) {
-      this.visit(ctx.not)
-
-    // } else if (ctx.relationalExpression) {
-    //   this.visit(ctx.relationalExpression)
-
-    // } else if (ctx.betweenExpression) {
-    //   this.visit(ctx.betweenExpression)
-
-    } else if (ctx.IBoolean) {
-      this.instructions.push([
-        'lit',
-        ctx.IBoolean[0].image.toLowerCase() === 'true'
-      ])
-    } else if (ctx.variable) {
-      this.visit(ctx.variable)
-      const previousInstruction = this.instructions[this.instructions.length-1]
-
-      if (previousInstruction[0] !== 'to_bool') {
-        this.instructions.push(['to_bool'])
-      }
-    }
-  }
-
-  variable (ctx) {
-    this.instructions.push(['load', ctx.Variable[0].image])
-    if (ctx.TypeCast) {
-      const operation = 'to_' + ctx.IType[0].image
-      this.instructions.push([operation])
-    }
-  }
 
   // relationalExpression (ctx) {
   //   this.instructions.push(['load', ctx.Variable[0].image])
