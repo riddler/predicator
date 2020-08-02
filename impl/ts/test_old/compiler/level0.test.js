@@ -1,7 +1,7 @@
 // This file is auto-generated.
 // To make changes - look in scripts/generate-tests.js
 
-const { compile } = require('../../src/predicator')
+// const { compile } = require('../../src/predicator')
 
 // test('it compiles true', () => {
 //   expect(compile(`true`)).toEqual([["lit",true]])
@@ -9,6 +9,7 @@ const { compile } = require('../../src/predicator')
 // test('it compiles false', () => {
 //   expect(compile(`false`)).toEqual([["lit",false]])
 // })
+
 // test('it compiles group', () => {
 //   expect(compile(`(true)`)).toEqual([["lit",true]])
 // })
@@ -48,9 +49,9 @@ const { compile } = require('../../src/predicator')
 // test('it compiles less_than_or_eqal', () => {
 //   expect(compile(`5 <= 5`)).toEqual([["lit",5],["lit",5],["compare","<="]])
 // })
-test('it compiles contains', () => {
-  expect(compile(`[1, 2, 3] contians 2`)).toEqual([["lit",[1,2,3]],["lit",2],["contains"]])
-})
+// test('it compiles contains', () => {
+//   expect(compile(`[1, 2, 3] contians 2`)).toEqual([["lit",[1,2,3]],["lit",2],["contains"]])
+// })
 // test('it compiles not_contains', () => {
 //   expect(compile(`[1, 2, 3] not contians 2`)).toEqual([["lit",[1,2,3]],["lit",2],["not_contains"]])
 // })

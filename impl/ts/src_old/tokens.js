@@ -1,10 +1,4 @@
-
-
 const { createToken: buildToken, Lexer } = require('chevrotain')
-
-//-----------------------------------------------------------------------------
-// Utils
-//-----------------------------------------------------------------------------
 
 const allTokens = []
 const tokensDictionary = {}
@@ -20,11 +14,46 @@ const createToken = function() {
   return newToken
 }
 
+// Create a token that may conflict with an indentifier
+const createNamedToken = function(config) {
+  config.longer_alt = Variable
+  const newToken = createToken(config)
+  // newToken.CATEGORIES.push(Keyword)
+  return newToken
+}
 
-//-----------------------------------------------------------------------------
-// Tokens
-//-----------------------------------------------------------------------------
 
+//-----
+//-----[ Ignored Tokens ]----------------------------------------
+//-----
+
+createToken({
+  name: "WhiteSpace",
+  group: Lexer.SKIPPED,
+  pattern: /[ \t]+/
+})
+
+createToken({
+  name: "LineTerminator",
+  group: Lexer.SKIPPED,
+  pattern: /\n\r|\r|\n/
+})
+
+createToken({
+  name: "Comment",
+  group: Lexer.SKIPPED,
+  pattern: /#[^\n\r]*/
+})
+
+createToken({
+  name: "Comma",
+  // group: Lexer.SKIPPED,
+  pattern: ","
+})
+
+
+// const Keyword = createToken({ name: "Keyword", pattern: Lexer.NA })
+// const ILiteral = createToken({ name: "Literal", pattern: Lexer.NA })
 const IBoolean = createToken({ name: 'IBoolean', pattern: Lexer.NA })
 const IDataType = createToken({ name: 'IDataType', pattern: Lexer.NA })
 const IUnaryOperator = createToken({ name: 'IUnaryOperator', pattern: Lexer.NA })
@@ -43,16 +72,6 @@ createToken({
   pattern: /(["'])[^]*?\1/,
   categories: [IString]
 })
-
-
-//-----------------------------------------------------------------------------
-// Public API
-//-----------------------------------------------------------------------------
-
-module.exports = {
-  tokensArray: allTokens,
-  tokensDictionary
-}
 
 
 
@@ -295,3 +314,7 @@ addToken(Variable)
 
 
 
+module.exports = {
+  tokensArray: allTokens,
+  tokensDictionary
+}
