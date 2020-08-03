@@ -1,0 +1,23 @@
+---
+# plan_end_date < 3d from now
+name: variable_lt_duration_from_now
+instructions: [["load", "plan_end_date"], ["to_date"], ["lit", 259200], ["date_from_now"], ["compare", "LT"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_date
+  context:
+    plan_end_date: ""
+  result: false
+
+- name: with_future_date
+  context:
+    plan_end_date: "2299-01-01"
+  result: false
+
+- name: with_past_date
+  context:
+    plan_end_date: "1999-01-01"
+  result: true

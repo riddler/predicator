@@ -1,0 +1,32 @@
+---
+name: variable_between_int
+instructions: [["load", "age"], ["to_int"], ["lit", 10], ["lit", 20], ["compare", "BETWEEN"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_string
+  context:
+    age: ""
+  result: false
+
+- name: with_correct_int
+  context:
+    age: 15
+  result: true
+
+- name: with_incorrect_int
+  context:
+    age: 5
+  result: false
+
+- name: with_correct_string
+  context:
+    age: "15"
+  result: true
+
+- name: with_incorrect_string
+  context:
+    age: "5"
+  result: false

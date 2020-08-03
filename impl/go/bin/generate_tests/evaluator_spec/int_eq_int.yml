@@ -1,0 +1,7 @@
+---
+name: int_eq_int
+instructions: [ ["lit", 1], ["lit", 1], ["compare", "EQ"] ]
+
+tests:
+  - name: with_no_context
+    result: true
