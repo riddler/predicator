@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "predicator"
+
+include Predicator
+
+P = Predicator
+
+def P.png source
+  ast = parse source
+  File.write "/tmp/pred.dot", ast.to_dot
+  `cd /tmp && dot -Tpng pred.dot > pred.png`
+end
+
+require "pry"
+Pry.start
