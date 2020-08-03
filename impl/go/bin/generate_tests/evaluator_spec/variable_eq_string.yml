@@ -1,0 +1,37 @@
+---
+name: variable_eq_string
+instructions: [["load", "plan"], ["to_str"], ["lit", "basic"], ["compare", "EQ"]]
+
+tests:
+- name: with_no_context
+  result: false
+
+- name: with_blank_string
+  context:
+    plan: ""
+  result: false
+
+- name: with_correct_string
+  context:
+    plan: basic
+  result: true
+
+- name: with_incorrect_string
+  context:
+    plan: free
+  result: false
+
+- name: with_int
+  context:
+    plan: 1
+  result: false
+
+- name: with_false
+  context:
+    plan: false
+  result: false
+
+- name: with_true
+  context:
+    plan: true
+  result: false

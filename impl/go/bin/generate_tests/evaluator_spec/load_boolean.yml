@@ -1,0 +1,17 @@
+---
+name: load_boolean
+instructions: [["load", "bool_var"], ["to_bool"]]
+
+tests:
+  - name: with_no_context
+    result: false
+
+  - name: with_false
+    context:
+      bool_var: false
+    result: false
+
+  - name: with_true
+    context:
+      bool_var: true
+    result: true

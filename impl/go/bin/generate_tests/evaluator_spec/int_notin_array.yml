@@ -1,0 +1,7 @@
+---
+name: int_notin_array
+instructions: [ ["lit", 0], ["array", [1,2]], ["compare", "IN"] ]
+
+tests:
+  - name: with_no_context
+    result: false
