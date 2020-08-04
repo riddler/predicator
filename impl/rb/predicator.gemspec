@@ -9,14 +9,19 @@ Gem::Specification.new do |spec|
   spec.authors       = ["JohnnyT"]
   spec.email         = ["ubergeek3141@gmail.com"]
 
-  spec.summary       = %q{Predicate Engine}
-  spec.homepage      = "https://github.com/predicator/predicator"
+  spec.summary       = %q{A secure, non-evaling condition (boolean predicate) engine for end users}
+  spec.homepage      = "https://github.com/riddler/predicator/tree/master/impl/rb"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(bin|test|spec|features)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename f }
   spec.require_paths = ["lib"]
+
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["changelog_uri"]     = "https://github.com/riddler/predicator/blob/master/impl/rb/HISTORY.md"
+  spec.metadata["source_code_uri"]   = "https://github.com/riddler/predicator/tree/master/impl/rb"
+  spec.metadata["bug_tracker_uri"]   = "https://github.com/riddler/predicator/issues"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "coveralls"
