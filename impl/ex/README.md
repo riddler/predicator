@@ -1,6 +1,6 @@
 # Predicator
 
-[predicator_elixir](https://hexdocs.pm/predicator) is a predicate evaluator for compiled rules from the [predicator](https://github.com/predicator/predicator) ruby gem
+[predicator](https://hexdocs.pm/predicator) is a predicate evaluator for compiled rules from the [predicator](https://github.com/riddler/predicator/tree/master/impl/rb) ruby gem
 
 ### Installation
 
@@ -33,4 +33,3 @@ _Currently has working Evaluator for Predicator instructions & limited lexing an
 
 - [ ] Lex and parse parens
 - [ ] Lex and parse `date`, `duration`, `ago`, `fromnow`
-

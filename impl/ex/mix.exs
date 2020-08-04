@@ -4,7 +4,7 @@ defmodule Predicator.Mixfile do
   def project() do
     [
       app: :predicator,
-      version: "0.9.0",
+      version: "0.9.1",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -15,7 +15,8 @@ defmodule Predicator.Mixfile do
     ]
   end
 
-  def description(), do: "Predicate Evaluator"
+  def description(),
+    do: "A secure, non-evaling condition (boolean predicate) engine for end users"
 
   def package() do
     [
@@ -23,7 +24,7 @@ defmodule Predicator.Mixfile do
       maintainers: ["jrichocean", "johnnyt"],
       licenses: ["MIT"],
       docs: [extras: ["README.md"]],
-      links: %{"GitHub" => "https://github.com/predicator/predicator_elixir"}
+      links: %{"GitHub" => "https://github.com/riddler/predicator/tree/master/impl/ex"}
     ]
   end
 
