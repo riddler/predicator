@@ -1,10 +1,14 @@
 # CHANGELOG
 
+### v0.9.1
+  * Documentation
+    * Moves project from [predicator/predicator_elixir](https://github.com/predicator/predicator_elixir) to [riddler/predicator](https://github.com/riddler/predicator/tree/master/impl/ex)
+
 ## v0.9.0
   * BREAKING CHANGE
     * Evaluates `compare` instead of `comparator` to be compatible with ruby predicator lib.
 
-## v0.8.1
+### v0.8.1
 * Enhancements
   * Adds leex and parsing for `and` and `or`.
   * Adds leex and parsing for `!` and boolean.
@@ -18,11 +22,11 @@
   * Fix
     * `in` and `notin` accept list of strings.
 
-## v0.7.3
+### v0.7.3
   * Enhancements
     * Adds leex and parsing for `in`, `notin`, `between`, `startswith`, `endswith` instructions
 
-## v0.7.1
+### v0.7.1
   * New
     * Adds `between` instruction for eval on dates
 
