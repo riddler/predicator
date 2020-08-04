@@ -1,3 +1,7 @@
+### 1.2.1 / 2020-08-04
+
+* Moves project to riddler/predicator
+
 ### 1.2.0 / 2018-09-13
 
 * Adds type casting to comparisons
