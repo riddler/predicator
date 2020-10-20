@@ -26,8 +26,6 @@ defmodule Predicator.Mixfile do
       aliases: aliases(),
       description: @description,
       deps: @deps,
-
-      # Docs
       docs: docs()
     ]
   end

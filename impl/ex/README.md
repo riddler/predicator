@@ -1,10 +1,10 @@
 # Predicator
 
-Predicator is a safe (does not eval code), user facing boolean predicate engine.
+Predicator is a secure, non-evaling condition (boolean predicate) engine for end users.
 
 It turns a string like `"score > 600 or income > 9000"` along with a supplied context into a `true` or `false`.
 
-This predicate can be stored as an attribute of a model (ex: an Offer model could store a predicate indicating if it is available to a customer).
+This condition can be stored as an attribute of a model (ex: an Offer model could store a condition indicating if it is available to a customer).
 
 ## Usage
 
@@ -13,7 +13,7 @@ This predicate can be stored as an attribute of a model (ex: an Offer model coul
 The source code can be compiled down to list of instructions.
 
 ```elixir
-Predicator.compile "score > 600 or income > 9000"
+Predicator.compile! "score > 600 or income > 9000"
 
 # [
 #   ["load", "score"],
@@ -36,18 +36,19 @@ Predicator.compile!("score > 600 or income > 9000") |> Predicator.evaluate_instr
 )
 # false
 
-Predicator.compile!("score > 600 or income > 9000")
-|> Predicator.evaluate_instructions!(%{"score" => 590, "income" => 9500})
+Predicator.compile!("score > 600 or income > 9000") |> Predicator.evaluate_instructions!(
+  %{"score" => 590, "income" => "9500"}
+)
 # true
 ```
 
 It is also possible to combine these steps:
 
 ```elixir
-Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590})
+Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590, "income" => "7500"})
 # false
 
-Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590, "income" => 9500})
+Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590, "income" => "9500"})
 # true
 ```
 
