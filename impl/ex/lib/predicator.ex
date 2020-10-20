@@ -19,8 +19,58 @@ defmodule Predicator do
 
   @type predicate :: String.t() | charlist
 
+  @typedoc """
+  The source code of the predicate.
+  This will be lexed, parsed and compiled into an array of instructions which can
+  be evaluated by a `Predicator.Evaluator`.
+  """
+  @type source :: String.t()
+
+  @typedoc """
+  The data provided to predicates as they are evaluated.
+  """
+  @type context :: Map.t()
+
+  @typedoc """
+  A list of instructions.
+  Each instruction in encoded as a list. This is a list of these lists which can be
+  evaluated by a `Predicator.Evaluator`.
+  """
+  @type instructions :: list(list())
+
+  @type error :: {:error, String.t()}
+
   # ---------------------------------------------------------------------------
   # Public API
+
+  @spec compile(source :: source()) :: {:ok, instructions()} | error()
+  @doc """
+  Compiles the `source` string into a list of instructions.
+
+  These instructions can be evaluated by a `Predicator.Evaluator`.
+
+  ### Examples
+      iex> Predicator.compile "score > 600 or income > 9000"
+      {:ok,
+       [
+         ["load", "score"],
+         ["lit", 600],
+         ["compare", "GT"],
+         ["jtrue", 4],
+         ["load", "income"],
+         ["lit", 9000],
+         ["compare", "GT"]
+       ]}
+  """
+  def compile(source, token_type \\ :string_key_inst) do
+    with {:ok, tokens, _} <- leex_string(source),
+         {:ok, instructions} <- parse_lexed(tokens, token_type) do
+      {:ok, instructions}
+    else
+      {:error, _} = err -> err
+      {:error, left, right} -> {:error, {left, right}}
+    end
+  end
 
   @doc """
   leex_string/1 takes string or charlist and returns a lexed tuple for parsing.
@@ -84,16 +134,6 @@ defmodule Predicator do
   """
   def eval(inst, context \\ %{}, opts \\ [map_type: :string])
   def eval(inst, context, opts), do: Evaluator.execute(inst, context, opts)
-
-  def compile(predicate, token_type \\ :string_key_inst) do
-    with {:ok, tokens, _} <- leex_string(predicate),
-         {:ok, predicate} <- parse_lexed(tokens, token_type) do
-      {:ok, predicate}
-    else
-      {:error, _} = err -> err
-      {:error, left, right} -> {:error, {left, right}}
-    end
-  end
 
   def matches?(predicate), do: matches?(predicate, [])
 
