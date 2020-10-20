@@ -10,11 +10,17 @@ defmodule Predicator do
   @atom_parser :atom_instruction_parser
   @string_parser :string_instruction_parser
 
+  # ---------------------------------------------------------------------------
+  # Types
+
   @type token_key_t ::
           :atom_key_inst
           | :string_key_inst
 
   @type predicate :: String.t() | charlist
+
+  # ---------------------------------------------------------------------------
+  # Public API
 
   @doc """
   leex_string/1 takes string or charlist and returns a lexed tuple for parsing.
@@ -33,14 +39,14 @@ defmodule Predicator do
   parse_lexed/1 takes a leexed token(list or tup) and returns a predicate. It also
   can take optional atom for type of token keys to return. options are `:string_ey_inst` & `:atom_key_inst`
 
-  iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1})
-  {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
+      iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1})
+      {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
 
-  iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1}, :string_key_inst)
-  {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
+      iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1}, :string_key_inst)
+      {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
 
-  iex> parse_lexed([{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], :atom_key_inst)
-  {:ok, [[:load, :apple], [:lit, 5532], [:compare, :GT]]}
+      iex> parse_lexed([{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], :atom_key_inst)
+      {:ok, [[:load, :apple], [:lit, 5532], [:compare, :GT]]}
   """
   @spec parse_lexed(list, token_key_t) :: {:ok | :error, list | tuple}
   def parse_lexed(token, opt \\ :string_key_inst)

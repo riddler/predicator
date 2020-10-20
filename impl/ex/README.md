@@ -1,8 +1,57 @@
 # Predicator
 
-[predicator](https://hexdocs.pm/predicator) is a predicate evaluator for compiled rules from the [predicator](https://github.com/riddler/predicator/tree/master/impl/rb) ruby gem
+Predicator is a safe (does not eval code), user facing boolean predicate engine.
 
-### Installation
+It turns a string like `"score > 600 or income > 9000"` along with a supplied context into a `true` or `false`.
+
+This predicate can be stored as an attribute of a model (ex: an Offer model could store a predicate indicating if it is available to a customer).
+
+## Usage
+
+### Compilation
+
+The source code can be compiled down to list of instructions.
+
+```elixir
+Predicator.compile "score > 600 or income > 9000"
+
+# [
+#   ["load", "score"],
+#   ["lit", 600],
+#   ["compare", "GT"],
+#   ["jtrue", 4],
+#   ["load", "income"],
+#   ["lit", 9000],
+#   ["compare", "GT"]
+# ]
+```
+
+### Evaluating
+
+These instructions can be executed with a Predicator Evaluator in any available language (currently Elixir, and Ruby with others in progress).
+
+```elixir
+Predicator.compile!("score > 600 or income > 9000") |> Predicator.evaluate_instructions!(
+  %{"score" => 590, "income" => "6000"}
+)
+# false
+
+Predicator.compile!("score > 600 or income > 9000")
+|> Predicator.evaluate_instructions!(%{"score" => 590, "income" => 9500})
+# true
+```
+
+It is also possible to combine these steps:
+
+```elixir
+Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590})
+# false
+
+Predicator.evaluate!("score > 600 or income > 9000", %{"score" => 590, "income" => 9500})
+# true
+```
+
+## Installation
 
 The package can be installed by:
 
@@ -24,10 +73,6 @@ The package can be installed by:
     ]
   end
   ```
-
-### Using
-
-_Currently has working Evaluator for Predicator instructions & limited lexing and parsing_
 
 ### TODO:
 
