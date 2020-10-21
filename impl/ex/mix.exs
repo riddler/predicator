@@ -9,6 +9,9 @@ defmodule Predicator.Mixfile do
   @deps [
     # Required
 
+    # Optional
+    {:ecto, "~> 3.0", optional: true},
+
     # Development, Documentation, Testing, ...
     {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
     {:ex_doc, "~> 0.23", only: :dev, runtime: false}
