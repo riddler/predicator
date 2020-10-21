@@ -9,12 +9,227 @@ defmodule Predicator do
   @lexer :predicate_lexer
   @atom_parser :atom_instruction_parser
   @string_parser :string_instruction_parser
+  @default_opts [map_type: :string, nil_values: ["", nil]]
+
+  # ---------------------------------------------------------------------------
+  # Types
 
   @type token_key_t ::
           :atom_key_inst
           | :string_key_inst
 
   @type predicate :: String.t() | charlist
+
+  @typedoc """
+  The source code of the predicate.
+  This will be lexed, parsed and compiled into an array of instructions which can
+  be evaluated by a `Predicator.Evaluator`.
+  """
+  @type source :: String.t()
+
+  @typedoc """
+  The data map provided to predicates as they are evaluated.
+  """
+  @type context :: Map.t()
+
+  @typedoc """
+  Each instruction in encoded as a list. This is a list of these lists which can be
+  evaluated by a `Predicator.Evaluator`.
+  """
+  @type instructions :: list(list())
+
+  # ---------------------------------------------------------------------------
+  # Public API
+
+  @spec compile(source :: source()) :: {:ok, instructions()} | {:error, any()}
+  @doc """
+  Compiles the `source` string into a list of instructions.
+
+  These instructions can be evaluated by a `Predicator.Evaluator`.
+
+  ### Examples
+      iex> Predicator.compile "score > 600 or income > 9000"
+      {:ok,
+       [
+         ["load", "score"],
+         ["lit", 600],
+         ["compare", "GT"],
+         ["jtrue", 4],
+         ["load", "income"],
+         ["lit", 9000],
+         ["compare", "GT"]
+       ]}
+  """
+  def compile(source, token_type \\ :string_key_inst) do
+    with {:ok, tokens, _} <- leex_string(source),
+         {:ok, instructions} <- parse_lexed(tokens, token_type) do
+      {:ok, instructions}
+    else
+      {:error, _} = err -> err
+      {:error, left, right} -> {:error, {left, right}}
+    end
+  end
+
+  @spec compile!(source :: source()) :: instructions()
+  @doc """
+  Compiles the `source` string into a list of instructions.
+
+  Returns the unwarpped compiled instructions, or raises if an error occurs.
+  These instructions can be evaluated by a `Predicator.Evaluator`.
+
+  ### Examples
+      iex> Predicator.compile! "score > 600 or income > 9000"
+      [
+        ["load", "score"],
+        ["lit", 600],
+        ["compare", "GT"],
+        ["jtrue", 4],
+        ["load", "income"],
+        ["lit", 9000],
+        ["compare", "GT"]
+      ]
+  """
+  def compile!(source, token_type \\ :string_key_inst) do
+    case compile(source, token_type) do
+      {:ok, instructions} -> instructions
+      {:error, error} when is_binary(error) -> raise error
+      {:error, error} -> raise "Unknown error: #{inspect(error)}"
+    end
+  end
+
+  @doc """
+  Compiles the `source` into instructions, which are then evaluated, along with
+  the provided `context` to return a boolean.
+
+  ### Options:
+  * `:map_type`: type of keys for context map, `:atom` or `:string`. Defaults to `:string`.
+  * `:nil_values`: list of values considered "blank" for `isblank` comparison. Defaults to `["", nil]`.
+
+  ### Examples
+      iex> Predicator.evaluate "score > 600", %{"score" => 590}
+      {:ok, false}
+
+      iex> Predicator.evaluate "score > 600", %{"score" => 610}
+      {:ok, true}
+  """
+  @spec evaluate(
+          source :: source(),
+          context :: context(),
+          opts :: Keyword.t()
+        ) ::
+          {:ok, boolean()} | {:error, any()}
+  def evaluate(
+        source,
+        context \\ Map.new(),
+        opts \\ @default_opts
+      ) do
+    source
+    |> compile!()
+    |> evaluate_instructions(context, opts)
+  end
+
+  @spec evaluate!(
+          source :: source(),
+          context :: context(),
+          opts :: Keyword.t()
+        ) ::
+          boolean()
+  @doc """
+  Compiles the `source` into instructions, which are then evaluated, along with
+  the provided `context` to return a boolean.
+
+  Returns the unwarpped boolean, or raises if an error occurs.
+
+  ### Options:
+  * `:map_type`: type of keys for context map, `:atom` or `:string`. Defaults to `:string`.
+  * `:nil_values`: list of values considered "blank" for `isblank` comparison. Defaults to `["", nil]`.
+
+  ### Examples
+      iex> Predicator.evaluate! "score > 600", %{"score" => 590}
+      false
+
+      iex> Predicator.evaluate! "score > 600", %{"score" => 610}
+      true
+  """
+  def evaluate!(
+        source,
+        context \\ Map.new(),
+        opts \\ @default_opts
+      ) do
+    case evaluate(source, context, opts) do
+      {:ok, bool} -> bool
+      {:error, error} when is_binary(error) -> raise error
+      {:error, error} -> raise "Unknown error: #{inspect(error)}"
+    end
+  end
+
+  @spec evaluate_instructions(
+          instructions :: instructions(),
+          context :: context(),
+          opts :: Keyword.t()
+        ) ::
+          {:ok, boolean()} | {:error, any()}
+  @doc """
+  Evaluates the `instructions` array, along with the provided `context`, and
+  returns a boolean.
+
+  ### Options:
+  * `:map_type`: type of keys for context map, `:atom` or `:string`. Defaults to `:string`.
+  * `:nil_values`: list of values considered "blank" for `isblank` comparison. Defaults to `["", nil]`.
+
+  ### Examples
+      iex> Predicator.evaluate_instructions [["load", "score"], ["lit", 600], ["compare", "GT"]], %{"score" => 590}
+      {:ok, false}
+
+      iex> Predicator.evaluate_instructions [["load", "score"], ["lit", 600], ["compare", "GT"]], %{"score" => 610}
+      {:ok, true}
+  """
+  def evaluate_instructions(
+        instructions,
+        context \\ Map.new(),
+        opts \\ @default_opts
+      ) do
+    instructions
+    |> eval(context, opts)
+    |> case do
+      bool when is_boolean(bool) -> {:ok, bool}
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @spec evaluate_instructions!(
+          instructions :: instructions(),
+          context :: context(),
+          opts :: Keyword.t()
+        ) ::
+          boolean()
+  @doc """
+  Evaluates the `instructions` with the `context` to return a boolean.
+
+  Returns the unwarpped boolean, or raises if an error occurs.
+
+  ### Options:
+  * `:map_type`: type of keys for context map, `:atom` or `:string`. Defaults to `:string`.
+  * `:nil_values`: list of values considered "blank" for `isblank` comparison. Defaults to `["", nil]`.
+
+  ### Examples
+      iex> Predicator.evaluate_instructions! [["load", "score"], ["lit", 600], ["compare", "GT"]], %{"score" => 590}
+      false
+
+      iex> Predicator.evaluate_instructions! [["load", "score"], ["lit", 600], ["compare", "GT"]], %{"score" => 610}
+      true
+  """
+  def evaluate_instructions!(
+        instructions,
+        context \\ Map.new(),
+        opts \\ @default_opts
+      ) do
+    case evaluate_instructions(instructions, context, opts) do
+      {:ok, bool} -> bool
+      {:error, error} when is_binary(error) -> raise error
+      {:error, error} -> raise "Unknown error: #{inspect(error)}"
+    end
+  end
 
   @doc """
   leex_string/1 takes string or charlist and returns a lexed tuple for parsing.
@@ -33,14 +248,14 @@ defmodule Predicator do
   parse_lexed/1 takes a leexed token(list or tup) and returns a predicate. It also
   can take optional atom for type of token keys to return. options are `:string_ey_inst` & `:atom_key_inst`
 
-  iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1})
-  {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
+      iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1})
+      {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
 
-  iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1}, :string_key_inst)
-  {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
+      iex> parse_lexed({:ok, [{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], 1}, :string_key_inst)
+      {:ok, [["load", "apple"], ["lit", 5532], ["compare", "GT"]]}
 
-  iex> parse_lexed([{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], :atom_key_inst)
-  {:ok, [[:load, :apple], [:lit, 5532], [:compare, :GT]]}
+      iex> parse_lexed([{:load, 1, :apple}, {:compare, 1, :GT}, {:lit, 1, 5532}], :atom_key_inst)
+      {:ok, [[:load, :apple], [:lit, 5532], [:compare, :GT]]}
   """
   @spec parse_lexed(list, token_key_t) :: {:ok | :error, list | tuple}
   def parse_lexed(token, opt \\ :string_key_inst)
@@ -78,16 +293,6 @@ defmodule Predicator do
   """
   def eval(inst, context \\ %{}, opts \\ [map_type: :string])
   def eval(inst, context, opts), do: Evaluator.execute(inst, context, opts)
-
-  def compile(predicate, token_type \\ :string_key_inst) do
-    with {:ok, tokens, _} <- leex_string(predicate),
-         {:ok, predicate} <- parse_lexed(tokens, token_type) do
-      {:ok, predicate}
-    else
-      {:error, _} = err -> err
-      {:error, left, right} -> {:error, {left, right}}
-    end
-  end
 
   def matches?(predicate), do: matches?(predicate, [])
 

@@ -1,22 +1,34 @@
 defmodule Predicator.Mixfile do
   use Mix.Project
 
+  @name "Predicator"
+  @app :predicator
+  @description "A secure, non-evaling condition (boolean predicate) engine for end users"
+  @version "0.9.1"
+
+  @deps [
+    # Required
+
+    # Development, Documentation, Testing, ...
+    {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
+    {:ex_doc, "~> 0.23", only: :dev, runtime: false}
+  ]
+
   def project() do
     [
-      app: :predicator,
-      version: "0.9.1",
+      app: @app,
+      name: @name,
+      version: @version,
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
       aliases: aliases(),
-      description: description(),
-      deps: deps()
+      description: @description,
+      deps: @deps,
+      docs: docs()
     ]
   end
-
-  def description(),
-    do: "A secure, non-evaling condition (boolean predicate) engine for end users"
 
   def package() do
     [
@@ -24,7 +36,10 @@ defmodule Predicator.Mixfile do
       maintainers: ["jrichocean", "johnnyt"],
       licenses: ["MIT"],
       docs: [extras: ["README.md"]],
-      links: %{"GitHub" => "https://github.com/riddler/predicator/tree/master/impl/ex"}
+      links: %{
+        "Predicator Project" => "https://github.com/riddler/predicator",
+        "GitHub" => "https://github.com/riddler/predicator/tree/master/impl/ex"
+      }
     ]
   end
 
@@ -41,10 +56,12 @@ defmodule Predicator.Mixfile do
     ]
   end
 
-  defp deps() do
+  defp docs() do
     [
-      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.21.0", only: :dev}
+      main: "readme",
+      source_url: "https://github.com/riddler/predicator",
+      source_ref: "ex-v#{@version}/impl/ex",
+      extras: ["README.md"]
     ]
   end
 end
