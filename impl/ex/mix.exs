@@ -4,7 +4,7 @@ defmodule Predicator.Mixfile do
   @name "Predicator"
   @app :predicator
   @description "A secure, non-evaling condition (boolean predicate) engine for end users"
-  @version "0.9.1"
+  @version "0.9.2"
 
   @deps [
     # Required

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+### v0.9.2
+  * Documentation
+    * Adds additional information to README
+    * Adds documentation to functions in Predicator
+  * Enhancements
+    * Adds `compile!`, `evaluate`, `evaluate!`, `evaluate_instructions`, `evaluate_instructions!` functions to Predicator
+    * Adds `Ecto.PredicatorInstructions` Ecto type
+
 ### v0.9.1
   * Documentation
     * Moves project from [predicator/predicator_elixir](https://github.com/predicator/predicator_elixir) to [riddler/predicator](https://github.com/riddler/predicator/tree/master/impl/ex)
