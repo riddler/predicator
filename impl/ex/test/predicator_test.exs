@@ -219,6 +219,7 @@ defmodule PredicatorTest do
     test "returns false if the inequality is untrue" do
       assert Predicator.matches?("0 > 1") == false
       assert Predicator.matches?("foo > 1", foo: 0) == false
+      assert Predicator.matches?("foo > 1", foo: nil) == false
       assert Predicator.matches?("!3 > 1") == false
       assert Predicator.matches?("!foo > 1", foo: 2) == false
     end
