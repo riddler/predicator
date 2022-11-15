@@ -240,6 +240,12 @@ defmodule Predicator.Machine do
     put_instruction(machine, false, increment: false)
   end
 
+  def accept_instruction(machine = %__MODULE__{stack: [_second | [first | _rest_of_stack]]}, [
+        "compare" | ["GT" | _]
+      ]) when is_nil(first) do
+    put_instruction(machine, false)
+  end
+
   def accept_instruction(machine = %__MODULE__{stack: [second | [first | _rest_of_stack]]}, [
         "compare" | ["GT" | _]
       ]) do
