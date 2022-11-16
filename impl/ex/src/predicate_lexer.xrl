@@ -27,8 +27,8 @@ Rules.
 {GREATER_THAN} : {token, {compare, TokenLine, 'GT'}}.
 {LESS_THAN}    : {token, {compare, TokenLine, 'LT'}}.
 {EQUAL}        : {token, {compare, TokenLine, 'EQ'}}.
-{IN}           : {token, {compare, TokenLine, 'IN'}}.
-{NOTIN}        : {token, {compare, TokenLine, 'NOTIN'}}.
+{IN}           : {token, {listcompare, TokenLine, 'IN'}}.
+{NOTIN}        : {token, {listcompare, TokenLine, 'NOTIN'}}.
 {ENDS_WITH}    : {token, {compare, TokenLine, 'ENDSWITH'}}.
 {STARTS_WITH}  : {token, {compare, TokenLine, 'STARTSWITH'}}.
 {BETWEEN}      : {token, {between, TokenLine, 'BETWEEN'}}.

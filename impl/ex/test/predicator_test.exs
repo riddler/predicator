@@ -280,6 +280,11 @@ defmodule PredicatorTest do
                Predicator.compile("!foo in ['foo', 'bar']")
     end
 
+    test "returns compilation error when trying to compare to string" do
+      assert {:error, _error} = Predicator.compile("foo in 'foo'")
+      assert {:error, _error} = Predicator.compile("foo in 1", :atom_key_inst)
+    end
+
     test "evaluates to true" do
       assert Predicator.matches?("2 in [0, 1, 2, 3]") == true
       assert Predicator.matches?("!666 in [0, 1, 2, 3]") == true
@@ -320,6 +325,11 @@ defmodule PredicatorTest do
 
       assert {:ok, [["load", "foo"], ["array", ["foo", "bar"]], ["compare", "NOTIN"], ["not"]]} =
                Predicator.compile("!foo not in ['foo', 'bar']")
+    end
+
+    test "returns compilation error when trying to compare to string" do
+      assert {:error, _error} = Predicator.compile("!foo in 'foo'")
+      assert {:error, _error} = Predicator.compile("!foo in 1", :atom_key_inst)
     end
 
     test "evaluates to true" do

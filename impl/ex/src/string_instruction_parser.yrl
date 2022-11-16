@@ -1,7 +1,7 @@
 Header
 "%% Predicator Elixir".
 
-Terminals lit load compare endcompare bang between 'or' '[' ']' ',' 'and'.
+Terminals lit load compare listcompare endcompare bang between 'or' '[' ']' ',' 'and'.
 
 Nonterminals predicates predicate_group predicate variable array array_elements array_value.
 
@@ -20,6 +20,7 @@ predicate -> variable endcompare : ['$1', unwrap('$2')].
 predicate -> variable compare variable : ['$1', '$3', unwrap('$2')].
 predicate -> variable between lit 'and' lit : ['$1', unwrap('$3'), unwrap('$5'), unwrap('$2')].
 predicate -> variable compare array : ['$1', [<<"array">>, '$3'], unwrap('$2')].
+predicate -> variable listcompare array : ['$1', [<<"array">>, '$3'], unwrap('$2')].
 
 variable -> lit : unwrap('$1').
 variable -> load : unwrap('$1').
@@ -43,10 +44,10 @@ unwrap({INST,_,V='LT'}) ->
   [tobin(INST), tobin(V)];
 unwrap({INST,_,V='EQ'}) ->
   [tobin(INST), tobin(V)];
-unwrap({INST,_,V='IN'}) ->
-  [tobin(INST), tobin(V)];
-unwrap({INST,_,V='NOTIN'}) ->
-  [tobin(INST), tobin(V)];
+unwrap({_INST,_,V='IN'}) ->
+  [tobin(compare), tobin(V)];
+unwrap({_INST,_,V='NOTIN'}) ->
+  [tobin(compare), tobin(V)];
 unwrap({_INST,_,V='BETWEEN'}) ->
   [tobin(compare), tobin(V)];
 unwrap({INST,_,V='ENDS_WITH'}) ->
