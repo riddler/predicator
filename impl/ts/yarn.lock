@@ -4523,10 +4523,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-liquidjs@^8.2.3:
-  version "8.5.3"
-  resolved "https://registry.yarnpkg.com/liquidjs/-/liquidjs-8.5.3.tgz#ddf47712819900975343da10e695c75216329df7"
-  integrity sha512-RIWauK5EydIQ0W/83W4emfZAWTGxL/+MN0sR0f7nJyhDHSy2HCY5QbujgmUfVsPDH8x8Fkmtu7/KW4A7Mssgkw==
+liquidjs@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/liquidjs/-/liquidjs-10.0.0.tgz#282579e9f90f4bfd92ef7d09ad4f5aac3ec9fd61"
+  integrity sha512-uY3fKqBSRmnat0wB5qWk0W5N5iT78OUhuIXNRiMfhYQ3p35al9mEWKQ68/Z+WD54V2upaxEM8nHaZ6o1B8WCMA==
 
 load-json-file@^2.0.0:
   version "2.0.0"
