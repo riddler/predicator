@@ -61,7 +61,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
     "jest-runner-eslint": "^0.7.3",
-    "liquidjs": "^8.2.3",
+    "liquidjs": "^10.0.0",
     "parcel-bundler": "^1.12.3",
     "yaml": "^1.6.0"
   }
