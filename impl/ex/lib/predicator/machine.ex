@@ -289,10 +289,21 @@ defmodule Predicator.Machine do
     put_instruction(machine, val in min..max)
   end
 
+  def accept_instruction(machine = %__MODULE__{stack: [_match | [nil | _rest_of_stack]]}, [
+        "compare" | ["STARTSWITH" | _]
+      ]), do: put_instruction(machine, false)
+
   def accept_instruction(machine = %__MODULE__{stack: [match | [stack_val | _rest_of_stack]]}, [
         "compare" | ["STARTSWITH" | _]
       ]) do
     put_instruction(machine, String.starts_with?(stack_val, match))
+  end
+
+  def accept_instruction(
+        machine = %__MODULE__{stack: [_end_match | [nil | _rest_of_stack]]},
+        ["compare" | ["ENDSWITH" | _]]
+      ) do
+    put_instruction(machine, false)
   end
 
   def accept_instruction(
