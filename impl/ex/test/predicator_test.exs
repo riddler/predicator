@@ -66,6 +66,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!7 between 5 and 10") == false
       assert Predicator.matches?("age between 5 and 10", age: 14) == false
       assert Predicator.matches?("!age between 5 and 10", age: 7) == false
+      assert Predicator.matches?("age between 5 and 10", age: nil) == false
     end
   end
 
@@ -113,6 +114,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!'joaquin' starts with 'joa'") == false
       assert Predicator.matches?("name starts with 'stuff'", name: "joaquin") == false
       assert Predicator.matches?("!name starts with 'joa'", name: "joaquin") == false
+      assert Predicator.matches?("name starts with 'joa'", name: nil) == false
     end
   end
 
@@ -157,6 +159,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!'foobar' ends with 'bar'") == false
       assert Predicator.matches?("foobar ends with 'bar'", foobar: "world") == false
       assert Predicator.matches?("!foobar ends with 'bar'", foobar: "foobar") == false
+      assert Predicator.matches?("foobar ends with 'bar'", foobar: nil) == false
     end
   end
 
@@ -189,6 +192,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("foo = 1", foo: 2) == false
       assert Predicator.matches?("!1 = 1") == false
       assert Predicator.matches?("!foo = 1", foo: 1) == false
+      assert Predicator.matches?("foo = 1", foo: nil) == false
     end
   end
 
@@ -254,6 +258,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("12 < 1") == false
       assert Predicator.matches?("!foo < 1", foo: 0) == false
       assert Predicator.matches?("foo < 1", foo: 1) == false
+      assert Predicator.matches?("foo < 1", foo: nil) == false
     end
   end
 
@@ -301,6 +306,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!foo in [0, 1, 2, 3]", foo: 0) == false
       assert Predicator.matches?("foo in ['foo', 'bar']", foo: "foobar") == false
       assert Predicator.matches?("!foo in ['foo', 'bar']", foo: "foo") == false
+      assert Predicator.matches?("foo in ['foo', 'bar']", foo: nil) == false
     end
   end
 
@@ -338,6 +344,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("foo not in [1, 2, 3]", foo: 0) == true
       assert Predicator.matches?("foo not in ['foo', 'bar']", foo: "foobar") == true
       assert Predicator.matches?("!foo not in ['foo', 'bar']", foo: "foo") == true
+      assert Predicator.matches?("foo not in ['foo', 'bar']", foo: nil) == true
     end
 
     test "evaluates to false" do
@@ -487,6 +494,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!'foo' is present", [], eval_opts) == false
       assert Predicator.matches?("foo is present", [foo: ""], eval_opts) == false
       assert Predicator.matches?("!foo is present", [foo: "bar"], eval_opts) == false
+      assert Predicator.matches?("foo is present", [foo: nil], eval_opts) == false
     end
   end
 
@@ -512,6 +520,7 @@ defmodule PredicatorTest do
       assert Predicator.matches?("!'foo' is blank", [], eval_opts) == true
       assert Predicator.matches?("foo is blank", [foo: ""], eval_opts) == true
       assert Predicator.matches?("!foo is blank", [foo: "bar"], eval_opts) == true
+      assert Predicator.matches?("foo is blank", [foo: nil], eval_opts) == true
     end
 
     test "evaluates to false", %{eval_opts: eval_opts} do
